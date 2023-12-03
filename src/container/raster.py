@@ -1,7 +1,14 @@
+from typing import TypedDict
+
 import numpy as np
 from osgeo import gdal
 
-CONFIG_SCHEMA = {'id': int, 'name': str, 'min': int, 'max': int}
+
+class RasterImportConfig(TypedDict):
+    id: int
+    name: str
+    min: int
+    max: int
 
 
 class Raster:
@@ -16,17 +23,10 @@ class Raster:
         self.transform = None
         self.projection = None
 
-    def add_layers(self, path: str, config: list[dict]):
+    def import_layers(self, path: str, config: list[RasterImportConfig]):
         dataset = gdal.Open(path, gdal.GA_ReadOnly)
 
         for item in config:
-
-            if set(list(CONFIG_SCHEMA.keys())) != set(item.keys()):
-                raise KeyError('Import configuration keys are not correct.')
-
-            for key, type_id in CONFIG_SCHEMA.items():
-                if not isinstance(item[key], type_id):
-                    raise TypeError('{0} must be {1}'.format(key, type_id))
 
             band = dataset.GetRasterBand(item['id']).ReadAsArray()
             band = np.clip(band, item['min'], item['max'])
