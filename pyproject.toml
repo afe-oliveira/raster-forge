@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "NABU_RS"
+version = "0.0.1"
+description = "Multispectral processing software."
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["multispectral", "remote sensing"]
+license = {text = "MIT"}
+authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
+dependencies = [ ]
+
+[tool.setuptools.packages]
+find = {}
