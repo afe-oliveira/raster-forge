@@ -3,15 +3,14 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "NABU_RS"
+name = "project_nabu"
 version = "0.0.1"
 description = "Multispectral processing software."
 readme = "README.md"
 requires-python = ">=3.9"
-keywords = ["multispectral", "remote sensing"]
+keywords = ["multispectral"]
 license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
-dependencies = [ ]
+dependencies = [ "gdal-bin", "libgdal-dev", "numpy", "GDAl == 3.4.1", "richdem"]
 
-[tool.setuptools.packages]
-find = {}
+[project.entry-points."plugin.group"]
