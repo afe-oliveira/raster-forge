@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def cir(nir: np.ndarray, red: np.ndarray, green: np.ndarray, alpha: np.ndarray = None) -> np.ndarray:
+def _cir(nir: np.ndarray, red: np.ndarray, green: np.ndarray, alpha: np.ndarray = None) -> np.ndarray:
     """Creates an RGB(A) array.
 
     Args:

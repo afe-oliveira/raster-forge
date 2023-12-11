@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def rgb(red: np.ndarray, green: np.ndarray, blue: np.ndarray, alpha: np.ndarray = None, gamma: tuple[float, float, float] = None) -> np.ndarray:
+def _rgb(red: np.ndarray, green: np.ndarray, blue: np.ndarray, alpha: np.ndarray = None, gamma: tuple[float, float, float] = None) -> np.ndarray:
     """Creates an RGB(A) array.
 
     Args:

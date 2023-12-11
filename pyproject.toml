@@ -14,8 +14,8 @@ authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt"
 dependencies = [ "numpy", "GDAl", "richdem"]
 
 [project.entry-points."composite.basic"]
-rgb = "project_nabu.rgb:rgb"
-cir = "project_nabu.cir:cir"
+rgb = "project_nabu.rgb:_rgb"
+cir = "project_nabu.cir:_cir"
 
 [project.entry-points."index.vegetation"]
-ndvi = "project_nabu.vegetation_indices:ndvi"
+ndvi = "project_nabu.vegetation_indices:_ndvi"
