@@ -3,39 +3,44 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "project_nabu"
+name = "ProjectNabu"
 version = "0.0.1"
 description = "Multispectral processing software."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 keywords = ["multispectral"]
 license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
-dependencies = []
+dependencies = ["mypy", "rasterio"]
 
 [project.entry-points."composite.base"]
-rgb = "project_nabu.composite_base:rgb"
-cir = "project_nabu.composite_base:cir"
+rgb = "ProjectNabu.composite_base:rgb"
+cir = "ProjectNabu.composite_base:cir"
 
 [project.entry-points."index.base"]
-sr = "project_nabu.index_base:sr"
-ndvi = "project_nabu.index_base:ndvi"
-dvi = "project_nabu.index_base:dvi"
-rdvi = "project_nabu.index_base:rdvi"
-msr = "project_nabu.index_base:msr"
-gndvi = "project_nabu.index_base:gndvi"
-gari = "project_nabu.index_base:gari"
-idvi = "project_nabu.index_base:idvi"
-ndre = "project_nabu.index_base:ndre"
-dvi2 = "project_nabu.index_base:dvi2"
-grvi = "project_nabu.index_base:grvi"
-ndwi = "project_nabu.index_base:ndwi"
-ari = "project_nabu.index_base:ari"
-mari = "project_nabu.index_base:mari"
-evi = "project_nabu.index_base:evi"
-evi2 = "project_nabu.index_base:evi2"
-savi = "project_nabu.index_base:savi"
-msavi = "project_nabu.index_base:msavi"
-osavi = "project_nabu.index_base:osavi"
-tavi = "project_nabu.index_base:tavi"
-rei = "project_nabu.index_base:rei"
+sr = "ProjectNabu.index_base:sr"
+ndvi = "ProjectNabu.index_base:ndvi"
+dvi = "ProjectNabu.index_base:dvi"
+rdvi = "ProjectNabu.index_base:rdvi"
+msr = "ProjectNabu.index_base:msr"
+gndvi = "ProjectNabu.index_base:gndvi"
+gari = "ProjectNabu.index_base:gari"
+idvi = "ProjectNabu.index_base:idvi"
+ndre = "ProjectNabu.index_base:ndre"
+dvi2 = "ProjectNabu.index_base:dvi2"
+grvi = "ProjectNabu.index_base:grvi"
+ndwi = "ProjectNabu.index_base:ndwi"
+ari = "ProjectNabu.index_base:ari"
+mari = "ProjectNabu.index_base:mari"
+evi = "ProjectNabu.index_base:evi"
+evi2 = "ProjectNabu.index_base:evi2"
+savi = "ProjectNabu.index_base:savi"
+msavi = "ProjectNabu.index_base:msavi"
+osavi = "ProjectNabu.index_base:osavi"
+tavi = "ProjectNabu.index_base:tavi"
+rei = "ProjectNabu.index_base:rei"
+
+[tool.mypy]
+python_version = "3.8"
+#warn_unused_ignores = true
+#ignore_missing_imports = true

@@ -15,6 +15,6 @@ def _find_composites() -> dict[str, Callable[..., np.ndarray]]:
     else:
         from importlib.metadata import entry_points
 
-    plugin_entrypoints = entry_points(group="composite.basic")
+    plugin_entrypoints = entry_points(group="composite.base")
 
     return {ep.name: ep.load() for ep in plugin_entrypoints}

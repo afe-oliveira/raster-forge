@@ -15,6 +15,6 @@ def _find_indices() -> dict[str, Callable[..., np.ndarray]]:
     else:
         from importlib.metadata import entry_points
 
-    plugin_entrypoints = entry_points(group="index.vegetation_indices")
+    plugin_entrypoints = entry_points(group="index.base")
 
     return {ep.name: ep.load() for ep in plugin_entrypoints}

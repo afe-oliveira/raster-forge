@@ -1,7 +1,7 @@
 from typing import TypedDict
 
 import numpy as np
-from osgeo import gdal
+import rasterio
 
 
 class RasterImportConfig(TypedDict):
@@ -35,12 +35,11 @@ class Raster:
     # ****************
 
     def import_layers(self, path: str, config: list[RasterImportConfig]):
-        dataset = gdal.Open(path, gdal.GA_ReadOnly)
-
-        for item in config:
-            band = dataset.GetRasterBand(item["id"]).ReadAsArray()
-            band = np.interp(band, (band.min(), band.max()), (item['min'], item['max']))
-            self.layers[item["name"]] = band.astype(np.uint8)
+        with rasterio.open(path) as dataset:
+            for item in config:
+                band = dataset.read(item["id"])
+                band = np.interp(band, (band.min(), band.max()), (item['min'], item['max']))
+                self.layers[item["name"]] = band.astype(np.uint8)
 
     def add_layer(self, data: np.ndarray, name: str):
         if name not in self.layers.keys():
