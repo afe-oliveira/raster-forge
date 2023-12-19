@@ -11,7 +11,7 @@ requires-python = ">=3.8"
 keywords = ["multispectral"]
 license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
-dependencies = ["mypy", "rasterio"]
+dependencies = ["mypy", "rasterio", "PySide6"]
 
 [project.entry-points."composite.base"]
 rgb = "ProjectNabu.composite_base:rgb"
