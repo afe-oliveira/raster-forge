@@ -3,17 +3,6 @@ from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QL
 
 from .layers_panel import LayersPanel
 
-LABELS = {
-    'labels': {
-        'layers': "Layers",
-        'processes': 'Processes',
-        'viewer': 'Image Viewer'
-    },
-    'buttons': {
-        'import-layer': 'Import Layer'
-
-    }
-}
 
 class OuterFrame(QFrame):
     def __init__(self, widget):
