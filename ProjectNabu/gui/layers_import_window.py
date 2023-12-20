@@ -1,6 +1,7 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog, QGridLayout, QPushButton, QLabel, QFrame,
-    QSpinBox, QFileDialog, QCheckBox, QVBoxLayout, QWidget, QLineEdit, QScrollArea
+    QSpinBox, QFileDialog, QCheckBox, QVBoxLayout, QWidget, QLineEdit, QScrollArea, QHBoxLayout
 )
 
 import rasterio
@@ -11,31 +12,39 @@ class LayersImportWindow(QDialog):
 
         self.setWindowTitle("Import Layers")
         self.layout = QGridLayout(self)
+        self.setGeometry(100, 100, 500, 600)
 
         # Add Open File Button
         self.open_file_button = QPushButton("Open File")
         self.open_file_button.clicked.connect(self.open_file_dialog)
-        self.layout.addWidget(self.open_file_button, 0, 0, 1, 9)
+        self.layout.addWidget(self.open_file_button, 0, 0, 1, 1)
 
         # Add File Explorer
         self.selected_file_label = QLabel("None")
-        self.layout.addWidget(self.selected_file_label, 0, 9, 1, 1)
+        self.layout.addWidget(self.selected_file_label, 0, 1, 1, 23)
 
         # Add Separator
         separator = QFrame()
         separator.setFrameShape(QFrame.HLine)
         separator.setFrameShadow(QFrame.Sunken)
-        self.layout.addWidget(separator, 1, 0, 1, 10)
+        self.layout.addWidget(separator, 1, 0, 1, 25)
 
-        # Add Scale Input
+        # Add Scale / Metadata Input
+        scale_layout = QHBoxLayout()
+
         self.scale_label = QLabel("Scale")
-        self.layout.addWidget(self.scale_label, 2, 0, 1, 1)
+        scale_layout.addWidget(self.scale_label, alignment=Qt.AlignRight)
 
         self.scale_spinbox = QSpinBox()
         self.scale_spinbox.setMinimum(1)
         self.scale_spinbox.setMaximum(100000)
         self.scale_spinbox.setValue(1)
-        self.layout.addWidget(self.scale_spinbox, 2, 9, 1, 1)
+        scale_layout.addWidget(self.scale_spinbox, stretch=1)
+
+        self.layout.addLayout(scale_layout, 2, 0, 1, 2) 
+
+        self.metadata_checkbox = QCheckBox(f"Metadata")
+        self.layout.addWidget(self.metadata_checkbox, 2, 24, 1, 1)
 
         # Add Bands Checklist
         self.bands_label = QLabel("Bands")
@@ -47,9 +56,14 @@ class LayersImportWindow(QDialog):
         self.scroll_widget = QWidget()
         self.scroll_layout = QVBoxLayout(self.scroll_widget)
         self.scroll_area.setWidget(self.scroll_widget)
-        self.layout.addWidget(self.scroll_area, 4, 0, 1, 10)
+        self.layout.addWidget(self.scroll_area, 4, 0, 45, 25)
 
         self.band_checkboxes = []
+
+        # Add Import Button
+        self.import_button = QPushButton("Import")
+        # self.open_file_button.clicked.connect(self.open_file_dialog)
+        self.layout.addWidget(self.import_button, 49, 24, 1, 1)
 
     def open_file_dialog(self):
         file_dialog = QFileDialog(self)
