@@ -1,12 +1,16 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QDialog, QGridLayout, QPushButton, QLabel, QFrame,
-    QSpinBox, QFileDialog, QCheckBox, QVBoxLayout, QWidget, QLineEdit, QScrollArea, QHBoxLayout
+    QSpinBox, QFileDialog, QCheckBox, QVBoxLayout, QWidget, QLineEdit, QScrollArea, QHBoxLayout, QComboBox, QProgressBar
 )
 
 import rasterio
+from .data import layer_data
 
 class LayersImportWindow(QDialog):
+
+    layer_data_changed = Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -29,7 +33,7 @@ class LayersImportWindow(QDialog):
         separator.setFrameShadow(QFrame.Sunken)
         self.layout.addWidget(separator, 1, 0, 1, 25)
 
-        # Add Scale / Metadata Input
+        # Add Scale / Metadata / Geographic Transform Input
         scale_layout = QHBoxLayout()
 
         self.scale_label = QLabel("Scale")
@@ -41,7 +45,10 @@ class LayersImportWindow(QDialog):
         self.scale_spinbox.setValue(1)
         scale_layout.addWidget(self.scale_spinbox, stretch=1)
 
-        self.layout.addLayout(scale_layout, 2, 0, 1, 2) 
+        self.layout.addLayout(scale_layout, 2, 0, 1, 2)
+
+        self.transform_checkbox = QCheckBox(f"Geographic Data")
+        self.layout.addWidget(self.transform_checkbox, 2, 23, 1, 1)
 
         self.metadata_checkbox = QCheckBox(f"Metadata")
         self.layout.addWidget(self.metadata_checkbox, 2, 24, 1, 1)
@@ -60,9 +67,15 @@ class LayersImportWindow(QDialog):
 
         self.band_checkboxes = []
 
+        # Add Progress Bar
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setValue(0)
+        self.progress_bar.setVisible(True)
+        self.layout.addWidget(self.progress_bar, 49, 0, 1, 24)
+
         # Add Import Button
         self.import_button = QPushButton("Import")
-        # self.open_file_button.clicked.connect(self.open_file_dialog)
+        self.import_button.clicked.connect(self.submit_import_request)
         self.layout.addWidget(self.import_button, 49, 24, 1, 1)
 
     def open_file_dialog(self):
@@ -73,25 +86,58 @@ class LayersImportWindow(QDialog):
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_paths = file_dialog.selectedFiles()
             if file_paths:
-                selected_file_path = file_paths[0]
-                self.selected_file_label.setText(f"{selected_file_path}")
+                self.selected_file_path = file_paths[0]
+                self.selected_file_label.setText(f"{self.selected_file_path}")
 
-                with rasterio.open(selected_file_path) as dataset:
+                with rasterio.open(self.selected_file_path) as dataset:
                     num_bands = dataset.count
                     self.populate_bands_checklist(num_bands)
 
     def populate_bands_checklist(self, num_bands):
-        # Clear Existing Checkboxes
-        for checkbox in self.band_checkboxes:
-            checkbox[0].setParent(None)
-            checkbox[1].setParent(None)
+        # Clear Existing Checkboxes, Line Edits, and Combo Boxes
+        for checkbox, line_edit, combo_box in self.band_checkboxes:
+            checkbox.setParent(None)
+            line_edit.setParent(None)
+            combo_box.setParent(None)
 
         self.band_checkboxes = []
 
-        # Add Checkboxes
+        # Add Checkboxes, Line Edits, and Combo Boxes
         for i in range(num_bands):
-            checkbox = QCheckBox(f"Band {i + 1}")
+            # Create a Horizontal Layout for Each Band
+            band_layout = QHBoxLayout()
+
+            checkbox = QCheckBox()
             line_edit = QLineEdit(f"Band {i + 1}")
-            self.band_checkboxes.append((checkbox, line_edit))
-            self.scroll_layout.addWidget(checkbox)
-            self.scroll_layout.addWidget(line_edit)
+            combo_box = QComboBox()
+            combo_box.addItems(["Relative", "Absolute"])
+
+            # Add Widgets to the Horizontal Layout
+            band_layout.addWidget(checkbox)
+            band_layout.addWidget(line_edit)
+            band_layout.addWidget(combo_box)
+
+            # Add the Horizontal Layout to the Scroll Layout
+            self.scroll_layout.addLayout(band_layout)
+
+            self.band_checkboxes.append((checkbox, line_edit, combo_box))
+
+    def submit_import_request(self):
+        selected_layers = []
+
+        for index, (checkbox, line_edit, combo_box) in enumerate(self.band_checkboxes):
+            if checkbox.isChecked():
+                band_name = line_edit.text()
+                data_type = combo_box.currentText()
+
+                selected_layers.append({'id': index + 1, 'name': band_name, 'type': data_type.lower()})
+
+        if self.metadata_checkbox.isChecked():
+            layer_data.import_metadata(self.selected_file_path)
+        if self.transform_checkbox.isChecked():
+            layer_data.import_transform(self.selected_file_path)
+
+        if selected_layers is not {}:
+            layer_data.import_layers(self.selected_file_path, selected_layers)
+            self.layer_data_changed.emit()
+

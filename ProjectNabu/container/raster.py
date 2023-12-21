@@ -17,12 +17,12 @@ class LayerFormat(TypedDict):
 
 class Raster:
 
-    layers: Dict[str, np.ndarray[Union[np.uint8, np.int32]]] = {}
+    _layers: Dict[str, np.ndarray[Union[np.uint8, np.int32]]] = {}
 
     _scale: int = None
     _transform: Optional[Tuple[float, float, float, float, float, float]] = None
-    _projection = Optional[str] = None
-    _metadata = Optional[Dict[str, str]] = None
+    _projection: Optional[str] = None
+    _metadata: Optional[Dict[str, str]] = None
 
     def __init__(self, scale: int):
         self._scale = scale
@@ -30,7 +30,11 @@ class Raster:
     # ****************
 
     @property
-    def scale(self):
+    def layers(self) -> Dict[str, np.ndarray[Union[np.uint8, np.int32]]]:
+        return self._layers
+
+    @property
+    def scale(self) -> int:
         return self._scale
 
     @property
@@ -68,10 +72,7 @@ class Raster:
                     band = np.interp(band, (band.min(), band.max()), (0, 255))
                     self.layers[item["name"]] = band.astype(np.uint8)
                 elif item['type'] == 'absolute':
-                    pass
-
-                band = np.interp(band, (band.min(), band.max()), (item['min'], item['max']))
-                self.layers[item["name"]] = band.astype(np.uint8)
+                    self.layers[item["name"]] = band.astype(np.int32)
 
     def add_layer(self, data: np.ndarray, name: str):
         if name not in self.layers.keys():
@@ -84,3 +85,17 @@ class Raster:
     def edit_layer(self, current_name: str, new_name: str):
         if current_name in self.layers.keys():
             self.layers[new_name] = self.layers.pop(current_name)
+
+    # ****************
+
+    def import_transform(self, path: str):
+        with rasterio.open(path) as dataset:
+            self.transform = dataset.transform
+
+    def import_projection(self, path: str):
+        with rasterio.open(path) as dataset:
+            self.projection = dataset.crs.to_string()
+
+    def import_metadata(self, path: str):
+        with rasterio.open(path) as dataset:
+            self.metadata = dataset.meta.copy()

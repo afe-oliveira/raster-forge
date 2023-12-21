@@ -1,17 +1,37 @@
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLayout, QFrame, QGridLayout, \
     QScrollArea, QDialog
 from .data import layer_data
 from .layers_import_window import LayersImportWindow
+from .show_matadata_window import MetadataWindow
 
 
 class LayersPanel(QWidget):
+
+    layer_data_changed = Signal()
+
     def __init__(self):
         super().__init__()
+
+        self.layer_data_changed.connect(self.update_layers)
 
         self.layout = QGridLayout(self)
 
         # Inner Title Panel Label
-        self.layout.addWidget(QLabel("Layers"), 0, 0, 1, 8)
+        self.layout.addWidget(QLabel("Layers"), 0, 0, 1, 5)
+
+        # Add the Projection, Transform and Metadata Buttons
+        self.metadata_button = QPushButton("Metadata")
+        self.transform_button = QPushButton("Transform")
+        self.projection_button = QPushButton("Projection")
+
+        self.layout.addWidget(self.metadata_button, 0, 5, 1, 1)
+        self.layout.addWidget(self.transform_button, 0, 6, 1, 1)
+        self.layout.addWidget(self.projection_button, 0, 7, 1, 1)
+
+        self.metadata_button.clicked.connect(self.show_metadata_clicked)
+        self.transform_button.clicked.connect(self.show_transform_clicked)
+        self.projection_button.clicked.connect(self.show_projection_clicked)
 
         # Add the Import Layers Button
         self.import_layers_button = QPushButton("Import Layers")
@@ -42,9 +62,20 @@ class LayersPanel(QWidget):
 
     def import_layers_clicked(self):
         import_dialog = LayersImportWindow(self)
+        import_dialog.layer_data_changed.connect(self.layer_data_changed)
         result = import_dialog.exec_()
         if result == QDialog.Accepted:
             self.update_layers()
+
+    def show_metadata_clicked(self):
+        metadata_window = MetadataWindow(layer_data.metadata)
+        metadata_window.exec_()
+
+    def show_transform_clicked(self):
+        pass
+
+    def show_projection_clicked(self):
+        pass
 
 
 class LayerElement(QWidget):

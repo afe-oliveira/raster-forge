@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QLabel, QFrame, QPushButton
 
 from .layers_panel import LayersPanel
@@ -12,8 +12,6 @@ class OuterFrame(QFrame):
         layout.addWidget(widget)
 
 class MainWindow(QMainWindow):
-
-    layers = []
 
     def __init__(self):
         super().__init__()
