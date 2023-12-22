@@ -1,4 +1,5 @@
 from PySide6.QtCore import Signal
+from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLayout, QFrame, QGridLayout, \
     QScrollArea, QDialog, QLineEdit
 from ProjectNabu.gui.data import layer_data
@@ -55,6 +56,9 @@ class LayersPanel(QWidget):
         for key, value in layer_data.layers.items():
             layer = LayerElement(key, self.layer_data_changed)
             self.list_layout.addWidget(layer)
+
+        # Set the alignment to the top
+        self.list_layout.setAlignment(Qt.AlignTop)
 
     def import_layers_clicked(self):
         import_dialog = LayersImportWindow(self)

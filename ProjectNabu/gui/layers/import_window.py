@@ -122,6 +122,8 @@ class LayersImportWindow(QDialog):
 
             self.band_checkboxes.append((checkbox, line_edit, combo_box))
 
+        self.scroll_layout.setAlignment(Qt.AlignTop)
+
     def submit_import_request(self):
         selected_layers = []
 
