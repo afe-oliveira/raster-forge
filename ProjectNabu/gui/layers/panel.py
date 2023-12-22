@@ -1,6 +1,6 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLayout, QFrame, QGridLayout, \
-    QScrollArea, QDialog
+    QScrollArea, QDialog, QLineEdit
 from ProjectNabu.gui.data import layer_data
 from .import_window import LayersImportWindow
 
@@ -53,7 +53,7 @@ class LayersPanel(QWidget):
 
         # Add Updated Layers
         for key, value in layer_data.layers.items():
-            layer = LayerElement(key)
+            layer = LayerElement(key, self.layer_data_changed)
             self.list_layout.addWidget(layer)
 
     def import_layers_clicked(self):
@@ -68,17 +68,60 @@ class LayersPanel(QWidget):
         pass
 
 
+
 class LayerElement(QWidget):
 
     name = None
+    layer_data_changed = Signal()
 
-    def __init__(self, name):
+    def __init__(self, name, layer_data_changed):
         super().__init__()
         self.name = name
+        self.layer_data_changed.connect(layer_data_changed)
 
-        layout = QGridLayout(self)
+        self.layout = QGridLayout(self)
 
-        layout.addWidget(QLabel(self.name), 0, 0, 1, 7)
-        layout.addWidget(QPushButton("V"), 0, 8, 1, 1)
-        layout.addWidget(QPushButton("E"), 0, 9, 1, 1)
-        layout.addWidget(QPushButton("D"), 0, 10, 1, 1)
+        self.label = QLabel(self.name)
+        self.layout.addWidget(self.label, 0, 0, 1, 7)
+
+        # View Button
+        v_button = QPushButton("V")
+        v_button.clicked.connect(self.handle_view_button_click)
+        self.layout.addWidget(v_button, 0, 8, 1, 1)
+
+        # Edit Button
+        self.edit_button = QPushButton("E")
+        self.edit_button.clicked.connect(self.handle_edit_button_click)
+        self.layout.addWidget(self.edit_button, 0, 9, 1, 1)
+
+        # Delete Button
+        d_button = QPushButton("D")
+        d_button.clicked.connect(self.handle_delete_button_click)
+        self.layout.addWidget(d_button, 0, 10, 1, 1)
+
+        self.edit_line = None  # Placeholder for QLineEdit
+
+    def handle_view_button_click(self):
+        print(f'View button clicked for {self.name}')
+
+    def handle_edit_button_click(self):
+        self.edit_line = QLineEdit(self.name)
+        self.layout.replaceWidget(self.label, self.edit_line)
+        self.label.setParent(None)
+
+        self.edit_line.editingFinished.connect(self.handle_edit_finished)
+
+        self.edit_line.setFocus()
+
+    def handle_edit_finished(self):
+        new_name = self.edit_line.text()
+        if new_name != self.name:
+            layer_data.edit_layer(self.name, new_name)
+            self.layer_data_changed.emit()
+
+        self.layout.replaceWidget(self.edit_line, self.label)
+        self.edit_line.setParent(None)
+
+    def handle_delete_button_click(self):
+        layer_data.remove_layer(self.name)
+        self.layer_data_changed.emit()

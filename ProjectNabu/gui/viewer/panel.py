@@ -9,7 +9,7 @@ from ProjectNabu.gui.data import layer_data
 
 class ViewerPanel(QWidget):
 
-    current_zoom = 1.0
+    current_zoom = 0.5
 
     def __init__(self):
         super().__init__()
@@ -33,9 +33,9 @@ class ViewerPanel(QWidget):
         # Add Zoom Slider
         self.zoom_slider = QSlider()
         self.zoom_slider.setOrientation(Qt.Horizontal)
-        self.zoom_slider.setMinimum(-100)
-        self.zoom_slider.setMaximum(2000)
-        self.zoom_slider.setValue(0)
+        self.zoom_slider.setMinimum(-50)
+        self.zoom_slider.setMaximum(1950)
+        self.zoom_slider.setValue(-50)
 
         self.zoom_label = QLabel("Zoom:")
         self.zoom_value_label = QLabel("1.0")
@@ -64,6 +64,7 @@ class ViewerPanel(QWidget):
         layout.addWidget(self.lat_lng_coordinates_label, 50, 20, 1, 5)
 
         self.graphics_view.mouseMoveEvent = self.update_coordinates
+        self.update_zoom()
 
     def update_coordinates(self, event):
         pos_in_scene = self.graphics_view.mapToScene(event.pos())
@@ -84,8 +85,8 @@ class ViewerPanel(QWidget):
         zoom_value = self.zoom_slider.value()
         self.current_zoom = 1.0 + zoom_value / 100.0
         self.graphics_view.setTransform(QTransform().scale(self.current_zoom, self.current_zoom))
-        self.zoom_value_label.setText(f"{self.current_zoom:.2f}")
+        self.zoom_value_label.setText(f"{(self.current_zoom - 0.5):.2f}")
 
     def restore_zoom(self):
-        self.zoom_slider.setValue(0)
+        self.zoom_slider.setValue(-50)
         self.update_zoom()
