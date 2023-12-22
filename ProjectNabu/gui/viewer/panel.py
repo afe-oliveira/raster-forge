@@ -1,8 +1,9 @@
+import numpy as np
 from PySide6.QtWidgets import (
     QGraphicsView, QGraphicsScene, QLabel, QVBoxLayout, QHBoxLayout,
     QGraphicsPixmapItem, QWidget, QPushButton, QGridLayout, QSlider, QFrame
 )
-from PySide6.QtGui import QPixmap, QTransform
+from PySide6.QtGui import QPixmap, QTransform, QImage
 from PySide6.QtCore import Qt, QRectF, QPointF
 
 from ProjectNabu.gui.data import layer_data
@@ -17,18 +18,15 @@ class ViewerPanel(QWidget):
         layout = QGridLayout(self)
 
         # Add Graphics Scene and Graphics View
-        scene = QGraphicsScene(self)
-        self.graphics_view = QGraphicsView(scene)
+        self.scene = QGraphicsScene(self)
+        self.graphics_view = QGraphicsView(self.scene)
         self.graphics_view.setMouseTracking(True)
         layout.addWidget(self.graphics_view, 0, 0, 47, 25)
 
-        self.graphics_view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
+        self.graphics_view.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
 
         # Load Test Image
-        image_path = 'C:\\Users\\afeol\Documents\PyCharm Projects\Software RS23\local_in\mario.png'
-        pixmap = QPixmap(image_path)
-        item = QGraphicsPixmapItem(pixmap)
-        scene.addItem(item)
+        self.load_image(np.random.rand(1000, 1000))
 
         # Add Zoom Slider
         self.zoom_slider = QSlider()
@@ -90,3 +88,16 @@ class ViewerPanel(QWidget):
     def restore_zoom(self):
         self.zoom_slider.setValue(-50)
         self.update_zoom()
+
+    def load_image(self, image_array):
+        # Convert the NumPy array to a QImage
+        height, width = image_array.shape
+        bytes_per_line = 3 * width
+        q_image = QImage(image_array.data, width, height, bytes_per_line, QImage.Format_RGB888)
+
+        # Convert the QImage to a QPixmap
+        pixmap = QPixmap.fromImage(q_image)
+
+        # Add the QPixmap item to the scene
+        item = QGraphicsPixmapItem(pixmap)
+        self.scene.addItem(item)

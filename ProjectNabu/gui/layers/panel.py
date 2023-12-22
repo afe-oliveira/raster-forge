@@ -72,7 +72,6 @@ class LayersPanel(QWidget):
         pass
 
 
-
 class LayerElement(QWidget):
 
     name = None
@@ -86,22 +85,22 @@ class LayerElement(QWidget):
         self.layout = QGridLayout(self)
 
         self.label = QLabel(self.name)
-        self.layout.addWidget(self.label, 0, 0, 1, 7)
+        self.layout.addWidget(self.label, 0, 0, 1, 17)
 
         # View Button
         v_button = QPushButton("V")
         v_button.clicked.connect(self.handle_view_button_click)
-        self.layout.addWidget(v_button, 0, 8, 1, 1)
+        self.layout.addWidget(v_button, 0, 18, 1, 1)
 
         # Edit Button
         self.edit_button = QPushButton("E")
         self.edit_button.clicked.connect(self.handle_edit_button_click)
-        self.layout.addWidget(self.edit_button, 0, 9, 1, 1)
+        self.layout.addWidget(self.edit_button, 0, 19, 1, 1)
 
         # Delete Button
         d_button = QPushButton("D")
         d_button.clicked.connect(self.handle_delete_button_click)
-        self.layout.addWidget(d_button, 0, 10, 1, 1)
+        self.layout.addWidget(d_button, 0, 20, 1, 1)
 
         self.edit_line = None  # Placeholder for QLineEdit
 
