@@ -22,7 +22,6 @@ class Raster:
     _scale: int = None
     _transform: Optional[Tuple[float, float, float, float, float, float]] = None
     _projection: Optional[str] = None
-    _metadata: Optional[Dict[str, str]] = None
 
     def __init__(self, scale: int):
         self._scale = scale
@@ -52,14 +51,6 @@ class Raster:
     @projection.setter
     def projection(self, value: Optional[str]):
         self._projection = value
-
-    @property
-    def metadata(self) -> Optional[Dict[str, str]]:
-        return self._metadata
-
-    @metadata.setter
-    def metadata(self, value: Optional[Dict[str, str]]):
-        self._metadata = value
 
     # ****************
 

@@ -1,9 +1,8 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLayout, QFrame, QGridLayout, \
     QScrollArea, QDialog
-from .data import layer_data
-from .layers_import_window import LayersImportWindow
-from .show_matadata_window import MetadataWindow
+from ProjectNabu.gui.data import layer_data
+from .import_window import LayersImportWindow
 
 
 class LayersPanel(QWidget):
@@ -21,15 +20,12 @@ class LayersPanel(QWidget):
         self.layout.addWidget(QLabel("Layers"), 0, 0, 1, 5)
 
         # Add the Projection, Transform and Metadata Buttons
-        self.metadata_button = QPushButton("Metadata")
         self.transform_button = QPushButton("Transform")
         self.projection_button = QPushButton("Projection")
 
-        self.layout.addWidget(self.metadata_button, 0, 5, 1, 1)
         self.layout.addWidget(self.transform_button, 0, 6, 1, 1)
         self.layout.addWidget(self.projection_button, 0, 7, 1, 1)
 
-        self.metadata_button.clicked.connect(self.show_metadata_clicked)
         self.transform_button.clicked.connect(self.show_transform_clicked)
         self.projection_button.clicked.connect(self.show_projection_clicked)
 
@@ -51,11 +47,11 @@ class LayersPanel(QWidget):
         self.layout.addWidget(self.scroll_list, 2, 0, 18, 10)
 
     def update_layers(self):
-        # Clear existing layers
+        # Clear Existing Layers
         for i in reversed(range(self.list_layout.count())):
             self.list_layout.itemAt(i).widget().setParent(None)
 
-        # Add updated layers
+        # Add Updated Layers
         for key, value in layer_data.layers.items():
             layer = LayerElement(key)
             self.list_layout.addWidget(layer)
@@ -63,13 +59,7 @@ class LayersPanel(QWidget):
     def import_layers_clicked(self):
         import_dialog = LayersImportWindow(self)
         import_dialog.layer_data_changed.connect(self.layer_data_changed)
-        result = import_dialog.exec_()
-        if result == QDialog.Accepted:
-            self.update_layers()
-
-    def show_metadata_clicked(self):
-        metadata_window = MetadataWindow(layer_data.metadata)
-        metadata_window.exec_()
+        import_dialog.exec_()
 
     def show_transform_clicked(self):
         pass

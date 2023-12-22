@@ -1,8 +1,7 @@
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QLabel, QFrame, QPushButton
+from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QFrame, QPushButton
 
-from .layers_panel import LayersPanel
-
+from .layers.panel import LayersPanel
+from ProjectNabu.gui.viewer.panel import ViewerPanel
 
 class OuterFrame(QFrame):
     def __init__(self, widget):
@@ -22,13 +21,19 @@ class MainWindow(QMainWindow):
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
-        pannels = {
+        panels = {
             'layers': OuterFrame(LayersPanel()),
             'processes': OuterFrame(QPushButton('Button 2')),
-            'viewer': OuterFrame(QPushButton('Button 3'))
+            'viewer': OuterFrame(ViewerPanel())
         }
 
         grid_layout = QGridLayout(central_widget)
-        grid_layout.addWidget(pannels['layers'], 0, 0, 5, 8)
-        grid_layout.addWidget(pannels['processes'], 5, 0, 5, 8)
-        grid_layout.addWidget(pannels['viewer'], 0, 8, 10, 12)
+        grid_layout.addWidget(panels['layers'], 0, 0, 50, 40)
+        grid_layout.addWidget(panels['processes'], 50, 0, 50, 40)
+        grid_layout.addWidget(panels['viewer'], 0, 40, 100, 60)
+
+        # Lock Proportions
+        for i in range(100):
+            grid_layout.setRowStretch(i, 1)
+        for i in range(100):
+            grid_layout.setColumnStretch(i, 1)

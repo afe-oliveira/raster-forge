@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
 )
 
 import rasterio
-from .data import layer_data
+from ProjectNabu.gui.data import layer_data
 
 class LayersImportWindow(QDialog):
 
