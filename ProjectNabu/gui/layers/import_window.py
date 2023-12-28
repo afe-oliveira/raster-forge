@@ -5,11 +5,11 @@ from PySide6.QtWidgets import (
 )
 
 import rasterio
-from ProjectNabu.gui.data import layer_data
+
+from ProjectNabu.container.raster import Raster
+from ProjectNabu.gui.data import data
 
 class LayersImportWindow(QDialog):
-
-    layer_data_changed = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -42,16 +42,15 @@ class LayersImportWindow(QDialog):
         self.scale_spinbox = QSpinBox()
         self.scale_spinbox.setMinimum(1)
         self.scale_spinbox.setMaximum(100000)
-        self.scale_spinbox.setValue(1)
+        if data.raster is not None:
+            self.scale_spinbox.setValue(data.raster.scale)
+            self.scale_spinbox.setEnabled(False)
+        else:
+            self.scale_spinbox.setValue(1)
+            self.scale_spinbox.setEnabled(True)
         scale_layout.addWidget(self.scale_spinbox, stretch=1)
 
         self.layout.addLayout(scale_layout, 2, 0, 1, 2)
-
-        self.transform_checkbox = QCheckBox(f"Geographic Data")
-        self.layout.addWidget(self.transform_checkbox, 2, 23, 1, 1)
-
-        self.metadata_checkbox = QCheckBox(f"Metadata")
-        self.layout.addWidget(self.metadata_checkbox, 2, 24, 1, 1)
 
         # Add Bands Checklist
         self.bands_label = QLabel("Bands")
@@ -127,6 +126,9 @@ class LayersImportWindow(QDialog):
     def submit_import_request(self):
         selected_layers = []
 
+        if data.raster is None:
+            data.raster = Raster(scale=self.scale_spinbox.value())
+
         for index, (checkbox, line_edit, combo_box) in enumerate(self.band_checkboxes):
             if checkbox.isChecked():
                 band_name = line_edit.text()
@@ -134,12 +136,7 @@ class LayersImportWindow(QDialog):
 
                 selected_layers.append({'id': index + 1, 'name': band_name, 'type': data_type.lower()})
 
-        if self.metadata_checkbox.isChecked():
-            layer_data.import_metadata(self.selected_file_path)
-        if self.transform_checkbox.isChecked():
-            layer_data.import_transform(self.selected_file_path)
-
         if selected_layers is not {}:
-            layer_data.import_layers(self.selected_file_path, selected_layers)
-            self.layer_data_changed.emit()
+            data.raster.import_layers(self.selected_file_path, selected_layers)
+            data.raster_changed.emit()
 

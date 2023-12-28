@@ -1,13 +1,22 @@
+import numpy as np
+from PySide6.QtCore import Signal, QObject
+
+from ProjectNabu.container.layer import Layer
 from ProjectNabu.container.raster import Raster
 
-"""
-in_file = 'local_in/orthophoto.tif'
-import_config = [{'id': 3, 'name': 'red', 'min': 0, 'max': 254},
-                 {'id': 2, 'name': 'blue', 'min': 0, 'max': 254},
-                 {'id': 1, 'name': 'green', 'min': 0, 'max': 254},
-                 {'id': 4, 'name': 'nir', 'min': 0, 'max': 254},
-                 {'id': 5, 'name': 'red_edge', 'min': 0, 'max': 254},
-                 {'id': 6, 'name': 'alpha', 'min': 0, 'max': 254}]
-"""
-layer_data = Raster(1)
-#layer_data.import_layers(in_file, import_config)
+
+class DataGUI(QObject):
+
+    # General Data
+    raster: Raster = None
+    viewer: Layer = None
+
+    # Signals
+    raster_changed = Signal()
+    viewer_changed = Signal()
+
+    def __init__(self):
+        super().__init__()
+
+
+data = DataGUI()
