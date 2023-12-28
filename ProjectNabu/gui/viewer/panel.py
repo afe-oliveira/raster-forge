@@ -4,7 +4,7 @@ import tempfile
 import numpy as np
 from PySide6.QtWidgets import (
     QGraphicsView, QGraphicsScene, QLabel, QVBoxLayout, QHBoxLayout,
-    QGraphicsPixmapItem, QWidget, QPushButton, QGridLayout, QSlider, QFrame
+    QGraphicsPixmapItem, QWidget, QPushButton, QGridLayout, QSlider, QFrame, QComboBox
 )
 from PySide6.QtGui import QPixmap, QTransform, QImage
 from PySide6.QtCore import Qt, QRectF, QPointF
@@ -12,6 +12,32 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_template import FigureCanvas
 
 from ProjectNabu.gui.data import data
+
+COLORMAPS = {
+    'Viridis': 'viridis',
+    'Viridis (Reversed)': 'viridis_r',
+    'Plasma': 'plasma',
+    'Plasma (Reversed)': 'plasma_r',
+    'Inferno': 'inferno',
+    'Inferno (Reversed)': 'inferno_r',
+    'Magma': 'magma',
+    'Magma (Reversed)': 'magma_r',
+    'Cividis': 'cividis',
+    'Cividis (Reversed)': 'cividis_r',
+    'Twilight': 'twilight',
+    'Twilight (Reversed)': 'twilight_r',
+    'Gray': 'gray',
+    'Gray (Reversed)': 'gray_r',
+    'Autumn': 'autumn',
+    'Autumn (Reversed)': 'autumn_r',
+    'Cool-Warm': 'coolwarm',
+    'Red-Blue': 'RdBu',
+    'Spectral': 'Spectral',
+    'Jet': 'jet',
+    'Ocean': 'ocean',
+    'Terrain': 'terrain'
+}
+
 
 class ViewerPanel(QWidget):
 
@@ -25,11 +51,25 @@ class ViewerPanel(QWidget):
 
         data.viewer_changed.connect(self.update_viewer)
 
+        # Add Colormap ComboBox
+        self.colormap_label = QLabel("Colormap:")
+        self.colormap_combobox = QComboBox()
+        self.colormap_combobox.addItems(list(COLORMAPS.keys()))
+        self.colormap_combobox.setCurrentText("gray")
+        layout.addWidget(self.colormap_label, 0, 22, 1, 1)
+        layout.addWidget(self.colormap_combobox, 0, 23, 1, 1)
+        self.colormap_combobox.currentIndexChanged.connect(self.update_viewer)
+
+        # Add Info Button
+        self.info_button = QPushButton("Info")
+        layout.addWidget(self.info_button, 0, 24, 1, 1)
+        self.info_button.clicked.connect(self.show_info)
+
         # Add Graphics Scene and Graphics View
         self.scene = QGraphicsScene(self)
         self.graphics_view = QGraphicsView(self.scene)
         self.graphics_view.setMouseTracking(True)
-        layout.addWidget(self.graphics_view, 0, 0, 47, 25)
+        layout.addWidget(self.graphics_view, 1, 0, 47, 25)
 
         self.graphics_view.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
 
@@ -119,13 +159,17 @@ class ViewerPanel(QWidget):
         self.update_zoom()
 
     def update_viewer(self):
+        self.colormap_combobox.setEnabled(False)
         if data.viewer is not None and data.viewer.data is not None:
+            num_channels = data.viewer.data.shape[-1] if len(data.viewer.data.shape) == 3 else 1
+            self.colormap_combobox.setEnabled(num_channels == 1)
+
             temp_file_path = tempfile.mktemp(suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir())
 
             fig, ax = plt.subplots()
             fig.patch.set_alpha(0)
 
-            ax.imshow(data.viewer.data, cmap='gray')
+            ax.imshow(data.viewer.data, cmap=COLORMAPS[self.colormap_combobox.currentText()])
             ax.axis('off')
             ax.set_frame_on(False)
 
@@ -142,3 +186,6 @@ class ViewerPanel(QWidget):
             self.scene.addItem(image_item)
 
             self.update_zoom()
+
+    def show_info(self):
+        pass
