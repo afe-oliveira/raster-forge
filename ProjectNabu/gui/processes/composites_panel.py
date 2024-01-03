@@ -8,8 +8,6 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QP
 from ProjectNabu.container.layer import Layer
 
 from ProjectNabu.gui.data import data
-from ProjectNabu.indices.index import index
-
 
 class CompositesPanel(QWidget):
     def __init__(self, plugins, parent=None):
@@ -89,6 +87,7 @@ class CompositesPanel(QWidget):
                 for i, subtype in enumerate(tuple_types):
                     sub_label = QLabel(f"{param_name.upper()}[{i}]", self)
                     sub_widget = QLineEdit(self)
+                    sub_widget.setText("1")
                     sub_widget.setObjectName(f"{param_name.upper()}_{i}")
                     group_layout.addWidget(sub_label)
                     group_layout.addWidget(sub_widget)
@@ -108,9 +107,9 @@ class CompositesPanel(QWidget):
 
     def build_clicked(self):
         # Get the Selected Plugin Function
-        selected_function = list(self.plugins.values())[self.indices_combo.currentIndex()]
+        function = list(self.plugins.values())[self.indices_combo.currentIndex()]
 
-        parameters = inspect.signature(selected_function).parameters
+        parameters = inspect.signature(function).parameters
         input_values = []
 
         for param_name, param in parameters.items():
@@ -132,10 +131,7 @@ class CompositesPanel(QWidget):
                 if isinstance(widget, QLineEdit):
                     input_values.append(float(widget.text()))
 
-        # Use the index function to compute the index
-        computed_index = index(selected_function, input_values)
-
         layer = Layer()
-        layer.data = computed_index
+        layer.data = function(*input_values)
         data.viewer = layer
         data.viewer_changed.emit()

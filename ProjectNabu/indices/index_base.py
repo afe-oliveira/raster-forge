@@ -8,7 +8,7 @@ def sr() -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
 
 
 def ndvi() -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
-    return lambda nir, red: (nir - red) / (nir + red)
+    return lambda nir, red: np.where((nir + red) == 0, 0, (nir - red) / (nir + red))
 
 
 def dvi() -> Callable[[np.ndarray, np.ndarray], np.ndarray]:

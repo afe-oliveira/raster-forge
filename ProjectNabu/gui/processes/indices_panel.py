@@ -4,13 +4,14 @@ from typing import Callable, get_args
 import numpy as np
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QProgressBar, QComboBox, QLineEdit, \
-    QLabel, QGroupBox, QGridLayout
+    QLabel, QGroupBox, QGridLayout, QFrame, QHBoxLayout, QSlider, QDoubleSpinBox
 
 from ProjectNabu.container.layer import Layer
 
 from ProjectNabu.gui.data import data
 from ProjectNabu.indices.index import index
 
+from qtrangeslider import QRangeSlider
 
 class IndicesPanel(QWidget):
     def __init__(self, plugins, parent=None):
@@ -66,9 +67,17 @@ class IndicesPanel(QWidget):
     def update_scroll_content(self, index):
         # Clear Existing Widgets
         for i in reversed(range(self.scroll_layout.count())):
-            widget = self.scroll_layout.takeAt(i).widget()
-            if widget:
-                widget.deleteLater()
+            item = self.scroll_layout.itemAt(i)
+            if item:
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()
+                else:
+                    sublayout = item.layout()
+                    while sublayout.count() > 0:
+                        subwidget = sublayout.takeAt(0).widget()
+                        if subwidget:
+                            subwidget.deleteLater()
 
         selected_function = list(self.plugins.values())[index]
 
@@ -107,6 +116,13 @@ class IndicesPanel(QWidget):
 
             self.input_values[param_name] = widget
 
+        # Add Separator
+        separator = QFrame(self)
+        separator.setFrameShape(QFrame.HLine)
+        separator.setFrameShadow(QFrame.Sunken)
+        self.scroll_layout.addWidget(separator)
+
+        # Add ALPHA parameter
         alpha_label = QLabel("ALPHA", self)
         alpha_widget = QComboBox(self)
         alpha_widget.addItem('None')
@@ -119,6 +135,32 @@ class IndicesPanel(QWidget):
         self.scroll_layout.addWidget(alpha_widget)
 
         self.input_values["ALPHA"] = alpha_widget
+
+        # Add Range Selector
+        alpha_range_label = QLabel("RANGE", self)
+        alpha_range_layout = QHBoxLayout()
+
+        alpha_min_label = QLabel("Min:", self)
+        alpha_min_spinbox = QDoubleSpinBox(self)
+        alpha_min_spinbox.setRange(-1, 1)
+        alpha_min_spinbox.setSingleStep(0.05)
+        alpha_min_spinbox.setValue(-1)
+
+        alpha_max_label = QLabel("Max:", self)
+        alpha_max_spinbox = QDoubleSpinBox(self)
+        alpha_max_spinbox.setRange(-1, 1)
+        alpha_max_spinbox.setSingleStep(0.05)
+        alpha_max_spinbox.setValue(1)
+
+        alpha_range_layout.addWidget(alpha_min_label)
+        alpha_range_layout.addWidget(alpha_min_spinbox)
+        alpha_range_layout.addWidget(alpha_max_label)
+        alpha_range_layout.addWidget(alpha_max_spinbox)
+
+        self.scroll_layout.addWidget(alpha_range_label)
+        self.scroll_layout.addLayout(alpha_range_layout)
+
+        self.input_values["RANGE"] = (alpha_min_spinbox, alpha_max_spinbox)
 
     def back_clicked(self):
         data.process_main.emit()
@@ -156,7 +198,11 @@ class IndicesPanel(QWidget):
 
         alpha_value = self.input_values.get("ALPHA").currentText()
         alpha_value = None if alpha_value == 'None' else data.raster.layers[alpha_value].data
+
+        min_spinbox, max_spinbox = self.input_values["RANGE"]
+
         layer = Layer()
-        layer.data = index(function(), alpha_value, *input_values)
+        layer.data = index(function(), alpha_value, (min_spinbox.value(), max_spinbox.value()), *input_values)
+
         data.viewer = layer
         data.viewer_changed.emit()
