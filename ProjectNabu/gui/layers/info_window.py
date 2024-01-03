@@ -32,9 +32,11 @@ class LayerInfoWindow(QDialog):
         metadata_tab.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         metadata_layout = QVBoxLayout(metadata_tab)
-        metadata_layout.setAlignment(Qt.AlignTop)  # Align content to the top
+        metadata_layout.setAlignment(Qt.AlignTop)
 
         metadata_dict = data.raster.layers[self.name].metadata
+        del metadata_dict['crs']
+        del metadata_dict['transform']
 
         grid_layout = QGridLayout()
         row = 0
@@ -42,7 +44,6 @@ class LayerInfoWindow(QDialog):
             key_label = QLabel(str(key).upper())
             value_label = QLabel(str(value).upper())
 
-            # Allow horizontal expansion for the labels
             key_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             value_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 

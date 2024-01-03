@@ -2,6 +2,8 @@ from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QF
 
 from .layers.panel import LayersPanel
 from ProjectNabu.gui.viewer.panel import ViewerPanel
+from .processes.panel import ProcessPanel
+
 
 class OuterFrame(QFrame):
     def __init__(self, widget):
@@ -23,7 +25,7 @@ class MainWindow(QMainWindow):
 
         panels = {
             'layers': OuterFrame(LayersPanel()),
-            'processes': OuterFrame(QPushButton('Button 2')),
+            'processes': OuterFrame(ProcessPanel()),
             'viewer': OuterFrame(ViewerPanel())
         }
 

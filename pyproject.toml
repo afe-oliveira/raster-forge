@@ -13,32 +13,38 @@ license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
 dependencies = ["mypy", "rasterio", "PySide6"]
 
+[tool.setuptools.packages]
+find = {}
+
 [project.entry-points."composite.base"]
-rgb = "ProjectNabu.composite_base:rgb"
-cir = "ProjectNabu.composite_base:cir"
+rgb = "ProjectNabu.composites.composite_base:rgb"
+cir = "ProjectNabu.composites.composite_base:cir"
 
 [project.entry-points."index.base"]
-sr = "ProjectNabu.index_base:sr"
-ndvi = "ProjectNabu.index_base:ndvi"
-dvi = "ProjectNabu.index_base:dvi"
-rdvi = "ProjectNabu.index_base:rdvi"
-msr = "ProjectNabu.index_base:msr"
-gndvi = "ProjectNabu.index_base:gndvi"
-gari = "ProjectNabu.index_base:gari"
-idvi = "ProjectNabu.index_base:idvi"
-ndre = "ProjectNabu.index_base:ndre"
-dvi2 = "ProjectNabu.index_base:dvi2"
-grvi = "ProjectNabu.index_base:grvi"
-ndwi = "ProjectNabu.index_base:ndwi"
-ari = "ProjectNabu.index_base:ari"
-mari = "ProjectNabu.index_base:mari"
-evi = "ProjectNabu.index_base:evi"
-evi2 = "ProjectNabu.index_base:evi2"
-savi = "ProjectNabu.index_base:savi"
-msavi = "ProjectNabu.index_base:msavi"
-osavi = "ProjectNabu.index_base:osavi"
-tavi = "ProjectNabu.index_base:tavi"
-rei = "ProjectNabu.index_base:rei"
+sr = "ProjectNabu.indices.index_base:sr"
+ndvi = "ProjectNabu.indices.index_base:ndvi"
+dvi = "ProjectNabu.indices.index_base:dvi"
+rdvi = "ProjectNabu.indices.index_base:rdvi"
+msr = "ProjectNabu.indices.index_base:msr"
+gndvi = "ProjectNabu.indices.index_base:gndvi"
+gari = "ProjectNabu.indices.index_base:gari"
+idvi = "ProjectNabu.indices.index_base:idvi"
+ndre = "ProjectNabu.indices.index_base:ndre"
+dvi2 = "ProjectNabu.indices.index_base:dvi2"
+grvi = "ProjectNabu.indices.index_base:grvi"
+ndwi = "ProjectNabu.indices.index_base:ndwi"
+ari = "ProjectNabu.indices.index_base:ari"
+mari = "ProjectNabu.indices.index_base:mari"
+evi = "ProjectNabu.indices.index_base:evi"
+evi2 = "ProjectNabu.indices.index_base:evi2"
+savi = "ProjectNabu.indices.index_base:savi"
+msavi = "ProjectNabu.indices.index_base:msavi"
+osavi = "ProjectNabu.indices.index_base:osavi"
+tavi = "ProjectNabu.indices.index_base:tavi"
+rei = "ProjectNabu.indices.index_base:rei"
+
+[project.gui-scripts]
+nabu = "ProjectNabu.gui.app:run"
 
 [tool.mypy]
 python_version = "3.8"

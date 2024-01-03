@@ -13,7 +13,7 @@ def stacked_composite(data: list[np.ndarray]) -> np.ndarray:
 
     Args:
       data:
-        List of process data layers.
+        List of processes data layers.
 
     Returns:
       Stacked composite array.
@@ -28,7 +28,7 @@ def weighted_composite(data: list[WeightedCompositeConfig]) -> np.ndarray:
 
     Args:
       data:
-        List of dictionaries containing process data with the format {layer: np.ndarray, weight: float}.
+        List of dictionaries containing processes data with the format {layer: np.ndarray, weight: float}.
 
     Returns:
       Weighted composite array.
