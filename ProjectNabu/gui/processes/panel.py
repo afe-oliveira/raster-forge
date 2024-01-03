@@ -2,7 +2,8 @@ from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QScrollArea, QStackedWidget
 
 from ProjectNabu.composites.composite_finder import _find_composites
-from ProjectNabu.gui.processes.adaptative_panel import AdaptativePanel
+from ProjectNabu.gui.processes.composites_panel import CompositesPanel
+from ProjectNabu.gui.processes.indices_panel import IndicesPanel
 from ProjectNabu.indices.index_finder import _find_indices
 
 from ProjectNabu.gui.data import data
@@ -16,6 +17,7 @@ class ProcessPanel(QWidget):
         # Panel 1: Main Process Panel
         main_process_panel = QWidget(self)
         main_process_layout = QVBoxLayout(main_process_panel)
+        main_process_layout.setAlignment(Qt.AlignTop)
 
         composites_button = QPushButton(f'Composites', self)
         composites_button.clicked.connect(self.composites_clicked)
@@ -33,15 +35,15 @@ class ProcessPanel(QWidget):
         data.process_main.connect(self.show_main_panel)
 
         # Panel 2: Composites Panel
-        self.composites_panel = AdaptativePanel(_find_composites())
+        self.composites_panel = CompositesPanel(_find_composites())
         self.stacked_widget.addWidget(self.composites_panel)
 
         # Panel 3: Indices Panel
-        self.indices_panel = AdaptativePanel(_find_indices())
+        self.indices_panel = IndicesPanel(_find_indices())
         self.stacked_widget.addWidget(self.indices_panel)
 
         # Panel 4: Topographical Features Panel
-        self.topo_panel = AdaptativePanel(_find_indices())
+        self.topo_panel = CompositesPanel(_find_indices())
         self.stacked_widget.addWidget(self.topo_panel)
 
         layout = QVBoxLayout(self)

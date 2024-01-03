@@ -1,14 +1,17 @@
 import inspect
 
 import numpy as np
+from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QProgressBar, QComboBox, QLineEdit, \
     QLabel, QGroupBox, QGridLayout
 
 from ProjectNabu.container.layer import Layer
 
 from ProjectNabu.gui.data import data
+from ProjectNabu.indices.index import index
 
-class AdaptativePanel(QWidget):
+
+class CompositesPanel(QWidget):
     def __init__(self, plugins, parent=None):
         super().__init__(parent)
         self.plugins = plugins
@@ -28,6 +31,7 @@ class AdaptativePanel(QWidget):
 
         # Create a layout for the scroll content
         self.scroll_layout = QVBoxLayout(self.scroll_content)
+        self.scroll_layout.setAlignment(Qt.AlignTop)
 
         # Add ComboBox and Scroll Area to the main layout
         layout = QVBoxLayout(self)
@@ -104,9 +108,9 @@ class AdaptativePanel(QWidget):
 
     def build_clicked(self):
         # Get the Selected Plugin Function
-        function = list(self.plugins.values())[self.indices_combo.currentIndex()]
+        selected_function = list(self.plugins.values())[self.indices_combo.currentIndex()]
 
-        parameters = inspect.signature(function).parameters
+        parameters = inspect.signature(selected_function).parameters
         input_values = []
 
         for param_name, param in parameters.items():
@@ -128,7 +132,10 @@ class AdaptativePanel(QWidget):
                 if isinstance(widget, QLineEdit):
                     input_values.append(float(widget.text()))
 
+        # Use the index function to compute the index
+        computed_index = index(selected_function, input_values)
+
         layer = Layer()
-        layer.data = function(*input_values)
+        layer.data = computed_index
         data.viewer = layer
         data.viewer_changed.emit()

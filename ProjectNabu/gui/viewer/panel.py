@@ -160,16 +160,24 @@ class ViewerPanel(QWidget):
 
     def update_viewer(self):
         self.colormap_combobox.setEnabled(False)
+
         if data.viewer is not None and data.viewer.data is not None:
             num_channels = data.viewer.data.shape[-1] if len(data.viewer.data.shape) == 3 else 1
-            self.colormap_combobox.setEnabled(num_channels == 1)
+            self.colormap_combobox.setEnabled(num_channels == 1 or num_channels == 2)
 
             temp_file_path = tempfile.mktemp(suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir())
 
             fig, ax = plt.subplots()
             fig.patch.set_alpha(0)
 
-            ax.imshow(data.viewer.data, cmap=COLORMAPS[self.colormap_combobox.currentText()])
+            if num_channels == 2:
+                normal_data = data.viewer.data[..., 0]
+                alpha_channel = np.interp(data.viewer.data[..., 1], (data.viewer.data[..., 1].min(), data.viewer.data[..., 1].max()), (0, 1))
+
+                ax.imshow(normal_data, cmap=COLORMAPS[self.colormap_combobox.currentText()], alpha=alpha_channel)
+            else:
+                ax.imshow(data.viewer.data, cmap=COLORMAPS[self.colormap_combobox.currentText()])
+
             ax.axis('off')
             ax.set_frame_on(False)
 
