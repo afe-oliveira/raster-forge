@@ -58,9 +58,10 @@ class CompositesPanel(QWidget):
 
         self.setLayout(layout)
         self.indices_combo.currentIndexChanged.connect(self.update_scroll_content)
+        data.raster_changed.connect(self.update_scroll_content)
         self.update_scroll_content(0)
 
-    def update_scroll_content(self, index):
+    def update_scroll_content(self, index=0):
         # Clear Existing Widgets
         for i in reversed(range(self.scroll_layout.count())):
             widget = self.scroll_layout.takeAt(i).widget()

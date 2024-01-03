@@ -1,10 +1,11 @@
 import os
+import shutil
 import tempfile
 
 import numpy as np
 from PySide6.QtWidgets import (
     QGraphicsView, QGraphicsScene, QLabel, QVBoxLayout, QHBoxLayout,
-    QGraphicsPixmapItem, QWidget, QPushButton, QGridLayout, QSlider, QFrame, QComboBox
+    QGraphicsPixmapItem, QWidget, QPushButton, QGridLayout, QSlider, QFrame, QComboBox, QFileDialog
 )
 from PySide6.QtGui import QPixmap, QTransform, QImage
 from PySide6.QtCore import Qt, QRectF, QPointF
@@ -50,6 +51,19 @@ class ViewerPanel(QWidget):
         layout = QGridLayout(self)
 
         data.viewer_changed.connect(self.update_viewer)
+
+        # Add Save Buttons
+        self.save_layer_button = QPushButton("Layer")
+        layout.addWidget(self.save_layer_button, 0, 0, 1, 1)
+        self.save_layer_button.clicked.connect(self.save_as_layer)
+
+        self.save_image_button = QPushButton("Image")
+        layout.addWidget(self.save_image_button, 0, 1, 1, 1)
+        self.save_image_button.clicked.connect(self.save_as_image)
+
+        self.save_tif_button = QPushButton("TIFF")
+        layout.addWidget(self.save_tif_button, 0, 2, 1, 1)
+        self.save_tif_button.clicked.connect(self.save_as_geotiff)
 
         # Add Colormap ComboBox
         self.colormap_label = QLabel("Colormap:")
@@ -197,3 +211,33 @@ class ViewerPanel(QWidget):
 
     def show_info(self):
         pass
+
+    def save_as_layer(self):
+        if data.viewer is not None and data.raster is not None:
+            data.raster.add_layer(data.viewer, "Layer")
+
+    def save_as_geotiff(self):
+        if data.viewer is not None and data.raster is not None:
+            file_dialog = QFileDialog()
+            file_path, _ = file_dialog.getSaveFileName(self, "Save as TIFF", "", "TIFF Files (*.tif *.tiff)")
+
+            if file_path:
+                tiff_data = data.viewer.data.astype(np.uint8)
+                import tifffile
+                tifffile.imwrite(file_path, tiff_data)
+
+    def save_as_image(self):
+        if data.viewer is not None and data.raster is not None:
+            file_dialog = QFileDialog()
+            file_path, _ = file_dialog.getSaveFileName(self, "Save as Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp)")
+
+            if file_path:
+                temp_file_path = tempfile.mktemp(suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir())
+
+                image_data = data.viewer.data.astype(np.uint8)
+                plt.imshow(image_data, cmap=COLORMAPS[self.colormap_combobox.currentText()])
+                plt.axis('off')
+                plt.savefig(temp_file_path, format='png', transparent=True)
+                plt.close()
+
+                shutil.move(temp_file_path, file_path)
