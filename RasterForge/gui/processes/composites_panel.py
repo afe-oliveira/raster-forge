@@ -5,9 +5,9 @@ from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QProgressBar, QComboBox, QLineEdit, \
     QLabel, QGroupBox, QGridLayout
 
-from ProjectNabu.container.layer import Layer
+from RasterForge.container.layer import Layer
 
-from ProjectNabu.gui.data import data
+from RasterForge.gui.data import data
 
 class CompositesPanel(QWidget):
     def __init__(self, plugins, parent=None):

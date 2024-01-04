@@ -6,8 +6,8 @@ from PySide6.QtWidgets import (
 
 import rasterio
 
-from ProjectNabu.container.raster import Raster
-from ProjectNabu.gui.data import data
+from RasterForge.container.raster import Raster
+from RasterForge.gui.data import data
 
 class LayersImportWindow(QDialog):
 

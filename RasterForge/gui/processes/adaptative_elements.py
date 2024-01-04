@@ -1,7 +1,7 @@
 import numpy as np
 from PySide6.QtWidgets import QComboBox, QVBoxLayout, QGroupBox, QLabel, QLineEdit
 
-from ProjectNabu.gui.data import data
+from RasterForge.gui.data import data
 
 def adaptative_input(name, type):
 

@@ -1,12 +1,12 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QScrollArea, QStackedWidget
 
-from ProjectNabu.composites.composite_finder import _find_composites
-from ProjectNabu.gui.processes.composites_panel import CompositesPanel
-from ProjectNabu.gui.processes.indices_panel import IndicesPanel
-from ProjectNabu.indices.index_finder import _find_indices
+from RasterForge.composites.composite_finder import _find_composites
+from RasterForge.gui.processes.composites_panel import CompositesPanel
+from RasterForge.gui.processes.indices_panel import IndicesPanel
+from RasterForge.indices.index_finder import _find_indices
 
-from ProjectNabu.gui.data import data
+from RasterForge.gui.data import data
 
 class ProcessPanel(QWidget):
     def __init__(self):
@@ -35,6 +35,7 @@ class ProcessPanel(QWidget):
         data.process_main.connect(self.show_main_panel)
 
         # Panel 2: Composites Panel
+        print(_find_composites())
         self.composites_panel = CompositesPanel(_find_composites())
         self.stacked_widget.addWidget(self.composites_panel)
 

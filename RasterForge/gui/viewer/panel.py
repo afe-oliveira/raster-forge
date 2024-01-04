@@ -12,7 +12,7 @@ from PySide6.QtCore import Qt, QRectF, QPointF
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_template import FigureCanvas
 
-from ProjectNabu.gui.data import data
+from RasterForge.gui.data import data
 
 COLORMAPS = {
     'Viridis': 'viridis',

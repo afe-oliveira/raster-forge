@@ -1,7 +1,7 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QTabWidget, QWidget, QGridLayout, QSizePolicy
 
-from ProjectNabu.gui.data import data
+from RasterForge.gui.data import data
 
 class LayerInfoWindow(QDialog):
     def __init__(self, layer_name, parent=None):

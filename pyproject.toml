@@ -3,48 +3,53 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ProjectNabu"
+name = "RasterForge"
 version = "0.0.1"
-description = "Multispectral processing software."
+description = "RasterForge is an package for the manipulation of raster data. It includes a library and a graphical user interface (GUI) application."
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = ["multispectral"]
+keywords = ["raster, gui"]
 license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
-dependencies = ["mypy", "rasterio", "PySide6"]
+dependencies = [
+    "mypy",
+    "rasterio",
+    "PySide6",
+    "matplotlib"
+]
 
 [tool.setuptools.packages]
 find = {}
 
 [project.entry-points."composite.base"]
-rgb = "ProjectNabu.composites.composite_base:rgb"
-cir = "ProjectNabu.composites.composite_base:cir"
+rgb = "RasterForge.composites.composite_base:rgb"
+cir = "RasterForge.composites.composite_base:cir"
 
 [project.entry-points."index.base"]
-sr = "ProjectNabu.indices.index_base:sr"
-ndvi = "ProjectNabu.indices.index_base:ndvi"
-dvi = "ProjectNabu.indices.index_base:dvi"
-rdvi = "ProjectNabu.indices.index_base:rdvi"
-msr = "ProjectNabu.indices.index_base:msr"
-gndvi = "ProjectNabu.indices.index_base:gndvi"
-gari = "ProjectNabu.indices.index_base:gari"
-idvi = "ProjectNabu.indices.index_base:idvi"
-ndre = "ProjectNabu.indices.index_base:ndre"
-dvi2 = "ProjectNabu.indices.index_base:dvi2"
-grvi = "ProjectNabu.indices.index_base:grvi"
-ndwi = "ProjectNabu.indices.index_base:ndwi"
-ari = "ProjectNabu.indices.index_base:ari"
-mari = "ProjectNabu.indices.index_base:mari"
-evi = "ProjectNabu.indices.index_base:evi"
-evi2 = "ProjectNabu.indices.index_base:evi2"
-savi = "ProjectNabu.indices.index_base:savi"
-msavi = "ProjectNabu.indices.index_base:msavi"
-osavi = "ProjectNabu.indices.index_base:osavi"
-tavi = "ProjectNabu.indices.index_base:tavi"
-rei = "ProjectNabu.indices.index_base:rei"
+sr = "RasterForge.indices.index_base:sr"
+ndvi = "RasterForge.indices.index_base:ndvi"
+dvi = "RasterForge.indices.index_base:dvi"
+rdvi = "RasterForge.indices.index_base:rdvi"
+msr = "RasterForge.indices.index_base:msr"
+gndvi = "RasterForge.indices.index_base:gndvi"
+gari = "RasterForge.indices.index_base:gari"
+idvi = "RasterForge.indices.index_base:idvi"
+ndre = "RasterForge.indices.index_base:ndre"
+dvi2 = "RasterForge.indices.index_base:dvi2"
+grvi = "RasterForge.indices.index_base:grvi"
+ndwi = "RasterForge.indices.index_base:ndwi"
+ari = "RasterForge.indices.index_base:ari"
+mari = "RasterForge.indices.index_base:mari"
+evi = "RasterForge.indices.index_base:evi"
+evi2 = "RasterForge.indices.index_base:evi2"
+savi = "RasterForge.indices.index_base:savi"
+msavi = "RasterForge.indices.index_base:msavi"
+osavi = "RasterForge.indices.index_base:osavi"
+tavi = "RasterForge.indices.index_base:tavi"
+rei = "RasterForge.indices.index_base:rei"
 
 [project.gui-scripts]
-nabu = "ProjectNabu.gui.app:run"
+nabu = "RasterForge.gui.app:run"
 
 [tool.mypy]
 python_version = "3.8"

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QFrame, QPushButton
 
 from .layers.panel import LayersPanel
-from ProjectNabu.gui.viewer.panel import ViewerPanel
+from RasterForge.gui.viewer.panel import ViewerPanel
 from .processes.panel import ProcessPanel
 
 
