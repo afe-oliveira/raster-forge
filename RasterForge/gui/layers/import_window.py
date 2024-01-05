@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
 
 import rasterio
 
-from RasterForge.container.raster import Raster
+from RasterForge.containers.raster import Raster
 from RasterForge.gui.data import data
 
 class LayersImportWindow(QDialog):

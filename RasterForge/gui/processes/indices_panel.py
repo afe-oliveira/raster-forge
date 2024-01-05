@@ -6,7 +6,7 @@ from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QProgressBar, QComboBox, QLineEdit, \
     QLabel, QGroupBox, QGridLayout, QFrame, QHBoxLayout, QSlider, QDoubleSpinBox
 
-from RasterForge.container.layer import Layer
+from RasterForge.containers.layer import Layer
 
 from RasterForge.gui.data import data
 from RasterForge.indices.index import index

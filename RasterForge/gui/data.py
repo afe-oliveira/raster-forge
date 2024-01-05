@@ -1,8 +1,8 @@
 import numpy as np
 from PySide6.QtCore import Signal, QObject
 
-from RasterForge.container.layer import Layer
-from RasterForge.container.raster import Raster
+from RasterForge.containers.layer import Layer
+from RasterForge.containers.raster import Raster
 
 class DataGUI(QObject):
 

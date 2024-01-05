@@ -13,6 +13,7 @@ license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
 dependencies = [
     "numpy",
+    "rasterio",
     "mypy",
     "rasterio",
     "PySide6",
