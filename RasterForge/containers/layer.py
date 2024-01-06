@@ -17,7 +17,7 @@ class Layer:
 
     def __init__(
         self,
-        array: np.ndarray[Union[np.uint8, np.int32]],
+        array: np.ndarray[np.int32],
         bounds: Optional[Dict[str, float]] = None,
         crs: Optional[str] = None,
         driver: Optional[str] = None,
@@ -25,6 +25,32 @@ class Layer:
         transform: Optional[Tuple[float, float, float, float, float, float]] = None,
         units: Optional[str] = None
     ):
+
+        if (not isinstance(array, np.ndarray) or
+                not np.issubdtype(array.dtype, np.number)):
+            raise TypeError("The 'array' argument must be a NumPy array.")
+
+        if (bounds is not None and
+                not isinstance(bounds, dict) and
+                set(bounds.keys()) == {'left', 'bottom', 'right', 'top'} and
+                not all(isinstance(value, np.number) for value in bounds.values())):
+            raise TypeError("The 'bounds' argument must be a dictionary.")
+
+        if crs is not None and not isinstance(crs, str):
+            raise TypeError("The 'crs' argument must be a string.")
+
+        if driver is not None and not isinstance(driver, str):
+            raise TypeError("The 'driver' argument must be a string.")
+
+        if no_data is not None and not isinstance(no_data, (int, float)):
+            raise TypeError("The 'no_data' argument must be an integer or float.")
+
+        if transform is not None and not isinstance(transform, tuple) and len(transform) == 6:
+            raise TypeError("The 'transform' argument must be a tuple of six floats.")
+
+        if units is not None and not isinstance(units, str):
+            raise TypeError("The 'units' argument must be a string.")
+
         self._array = array
         self._bounds = bounds
         self._crs = crs
@@ -33,7 +59,7 @@ class Layer:
         self._transform = transform
         self._units = units
 
-    def __call__(self, new_array: Optional[np.ndarray[Union[np.uint8, np.int32]]] = None) -> (
+    def __call__(self, new_array: Optional[np.ndarray[np.int32]] = None) -> (
             Optional)[np.ndarray[Union[np.uint8, np.int32]]]:
         if new_array is not None:
             self._array = new_array

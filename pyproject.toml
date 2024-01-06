@@ -2,6 +2,9 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+packages = [ "RasterForge" ]
+
 [project]
 name = "RasterForge"
 version = "0.0.1"
@@ -14,15 +17,15 @@ authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt"
 dependencies = [
     "numpy",
     "rasterio",
-    "richdem",
-    "mypy",
-    "rasterio",
-    "PySide6",
+    #"PySide6",
     "matplotlib"
 ]
 
-[tool.setuptools.packages]
-find = {}
+[project.optional-dependencies]
+devel = [
+    "mypy",
+    "pytest >= 7.0.0"
+]
 
 [project.entry-points."rforge.indices"]
 sr = "RasterForge.indices.index_base:sr"
@@ -47,8 +50,15 @@ osavi = "RasterForge.indices.index_base:osavi"
 tavi = "RasterForge.indices.index_base:tavi"
 rei = "RasterForge.indices.index_base:rei"
 
-[project.gui-scripts]
-nabu = "RasterForge.gui.app:run"
+#[project.gui-scripts]
+#nabu = "RasterForge.gui.app:run"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-v --tb=short --strict-markers"
+testpaths = [ "tests" ]
+xfail_strict = "true"
+markers = []
 
 [tool.mypy]
 python_version = "3.8"
