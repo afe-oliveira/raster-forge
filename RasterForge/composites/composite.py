@@ -1,41 +1,40 @@
-from typing import TypedDict
+from enum import Enum
 
 import numpy as np
 
-
-class WeightedCompositeConfig(TypedDict):
-    layer: np.ndarray
-    weight: float
+from RasterForge.containers.layer import Layer
 
 
-def stacked_composite(data: list[np.ndarray]) -> np.ndarray:
-    """Stacks all provided layers into a single array in order.
+class CompositeType(Enum):
+    """Enumerates types of composite bands and their dispositions.
+    """
+    TRUE_COLOR = ['Red', 'Green', 'Blue']
+    CIR = ['NIR', 'Red', 'Green']
+
+
+def composite(layers: list[Layer], alpha: Layer = None, gamma: list[float] = None) -> Layer:
+    """Stacks all provided layers into a single array in order. Applies gamma correction.
 
     Args:
-      data:
-        List of processes data layers.
-
+      layers:
+        List of raster layers.
+      alpha:
+        Alpha layer.
+      gamma:
+        List of gamma values.
     Returns:
-      Stacked composite array.
+      Stacked composite layer.
     """
-    result = np.dstack(data)
+    result = np.dstack([layer() for layer in layers])
 
-    return result
+    if gamma is not None:
+        aux_result = np.zeros_like(result)
+        for i in range(len(gamma)):
+            aux_result[:, :, i] = np.power(result[:, :, i], gamma[i])
 
+        # result = (aux_result * 255.0 / np.max(aux_result)).astype(np.uint8)
 
-def weighted_composite(data: list[WeightedCompositeConfig]) -> np.ndarray:
-    """Creates a weighted composite array based on provided layers and weights.
+    if alpha is not None:
+        result = np.dstack([result, alpha])
 
-    Args:
-      data:
-        List of dictionaries containing processes data with the format {layer: np.ndarray, weight: float}.
-
-    Returns:
-      Weighted composite array.
-    """
-    layers = [entry['layer'] for entry in data]
-    weights = [entry['weight'] for entry in data]
-
-    result = np.average(layers, axis=0, weights=weights)
-
-    return result
+    return Layer(result)
