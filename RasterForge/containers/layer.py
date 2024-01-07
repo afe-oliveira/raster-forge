@@ -1,9 +1,13 @@
+import os
 from typing import Union, Dict, Optional, Tuple, List
 
 import numpy as np
+import rasterio
 
+from RasterForge.tools.rescale_dataset import _rescale_dataset
 
 ERROR_MESSAGES = {
+    'no_file': 'Error: The file {file_path} does not exist.',
     'array': 'ERROR: \'array\' argument is {array_type}, but it must be a NumPy array of numeric type.',
     'bounds_type': 'ERROR: \'bounds\' argument is {bounds_type}, but it must be a dictionary.',
     'bounds_values': 'ERROR: All values in \'bounds\' must be numeric.',
@@ -92,6 +96,40 @@ class Layer:
             'standard_deviation': self.std_dev,
         })
 
+    def import_layer(self, path: str, id: int = 1, scale: int = 1):
+        if not os.path.exists(path):
+            raise FileNotFoundError(ERROR_MESSAGES['no_file'].format(file_path=path))
+
+        with rasterio.open(path) as dataset:
+            dataset = _rescale_dataset(dataset, scale)
+
+            array = dataset.read(id)
+
+            bounds = {'left': dataset.bounds[0],
+                      'bottom': dataset.bounds[1],
+                      'right': dataset.bounds[2],
+                      'top': dataset.bounds[3]
+                      }
+            crs = str(dataset.crs)
+            driver = dataset.meta['driver'].upper()
+            no_data = dataset.nodata
+            transform = (dataset.transform.c,
+                         dataset.transform.a,
+                         dataset.transform.b,
+                         dataset.transform.f,
+                         dataset.transform.d,
+                         dataset.transform.e)
+            units = dataset.units[id]
+
+            self.array = array
+
+            self.bounds = bounds
+            self.crs = crs
+            self.driver = driver
+            self.no_data = no_data
+            self.transform = transform
+            self.units = units
+
     @property
     def array(self) -> Optional[np.ndarray[np.int32]]:
         return self._array
@@ -154,7 +192,7 @@ class Layer:
     @transform.setter
     def transform(self, value: Tuple[float, float, float, float, float, float]):
         if value is not None and not (isinstance(value, tuple) and len(value) == 6 and
-                                      all((isinstance(value, (int, float)) for value in value))):
+                                      all((isinstance(v, (int, float)) for v in value))):
             raise TypeError(ERROR_MESSAGES['transform'].format(transform_type=type(value)))
         self._transform = value
 
