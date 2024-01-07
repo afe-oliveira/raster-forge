@@ -2,9 +2,6 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = [ "RasterForge" ]
-
 [project]
 name = "RasterForge"
 version = "0.0.1"
@@ -23,9 +20,24 @@ dependencies = [
 
 [project.optional-dependencies]
 devel = [
-    "mypy",
-    "pytest >= 7.0.0"
+    "black",
+    "coverage",
+    "flake8",
+    "flake8-black",
+    "flake8-builtins",
+    "flake8-bugbear",
+    "flake8-docstrings",
+    "flake8-isort",
+    "Flake8-pyproject",
+    "isort",
+    "pdoc",
+    "pre-commit",
+    "pytest >= 7.0.0",
+    "pytest-cov",
 ]
+
+#[project.gui-scripts]
+#nabu = "RasterForge.gui.app:run"
 
 [project.entry-points."rforge.indices"]
 sr = "RasterForge.indices.index_base:sr"
@@ -50,8 +62,41 @@ osavi = "RasterForge.indices.index_base:osavi"
 tavi = "RasterForge.indices.index_base:tavi"
 rei = "RasterForge.indices.index_base:rei"
 
-#[project.gui-scripts]
-#nabu = "RasterForge.gui.app:run"
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+src_paths = ["RasterForge", "tests"]
+line_length = 88
+skip_gitignore = "True"
+
+[tool.flake8]
+max-line-length = 88
+max-doc-length = 88
+ignore = [
+    "E203",
+    "W503",
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    ".*cache",
+    "build",
+    "dist",
+    "env",
+    "venv",
+    ".eggs",
+    "*.egg",
+    "docs",
+]
+docstring-convention = "google"
+
+[tool.mypy]
+python_version = "3.8"
+#warn_unused_ignores = true
+#ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
@@ -59,8 +104,3 @@ addopts = "-v --tb=short --strict-markers"
 testpaths = [ "tests" ]
 xfail_strict = "true"
 markers = []
-
-[tool.mypy]
-python_version = "3.8"
-#warn_unused_ignores = true
-#ignore_missing_imports = true

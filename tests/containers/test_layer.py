@@ -1,3 +1,5 @@
+import os.path
+
 import numpy as np
 import pytest
 
@@ -98,7 +100,7 @@ def test_init_errors(data_layer_init_errors):
 
 
 def test_init_setter_errors(data_layer_init_errors):
-    """Test layer initialization function for expected errors."""
+    """Test Layer initialization function and variable setting for expected errors."""
     array = data_layer_init_errors[0].get('array', None)
     bounds = data_layer_init_errors[0].get('bounds', None)
     crs = data_layer_init_errors[0].get('crs', None)

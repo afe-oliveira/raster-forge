@@ -28,7 +28,9 @@ def gndvi() -> Callable[[np.ndarray, np.ndarray, np.ndarray], np.ndarray]:
 
 
 def gari() -> Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray], np.ndarray]:
-    return lambda nir, green, blue, red: ((nir - green - 1.7 * (blue - red)) / (nir + green - 1.7 * (blue - red)))
+    return lambda nir, green, blue, red: (
+        (nir - green - 1.7 * (blue - red)) / (nir + green - 1.7 * (blue - red))
+    )
 
 
 def idvi() -> Callable[[np.ndarray, np.ndarray], np.ndarray]:

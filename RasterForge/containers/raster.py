@@ -3,6 +3,7 @@ from typing import TypedDict, Dict
 import rasterio
 
 from .layer import Layer
+from RasterForge.tools.rescale_dataset import _rescale_dataset
 
 
 class RasterImportConfig(TypedDict):
@@ -11,7 +12,6 @@ class RasterImportConfig(TypedDict):
 
 
 class Raster:
-
     _layers: Dict[str, Layer] = {}
     _scale: int = None
 
@@ -30,26 +30,28 @@ class Raster:
 
     def import_layers(self, path: str, config: list[RasterImportConfig]):
         with rasterio.open(path) as dataset:
-            dataset = self.__rescale_dataset(dataset, self.scale)
+            dataset = _rescale_dataset(dataset, self.scale)
 
             for item in config:
-
                 array = dataset.read(item["id"])
 
-                bounds = {'left': dataset.bounds[0],
-                          'bottom': dataset.bounds[1],
-                          'right': dataset.bounds[2],
-                          'top': dataset.bounds[3]
-                          }
+                bounds = {
+                    "left": dataset.bounds[0],
+                    "bottom": dataset.bounds[1],
+                    "right": dataset.bounds[2],
+                    "top": dataset.bounds[3],
+                }
                 crs = str(dataset.crs)
-                driver = dataset.meta['driver'].upper()
+                driver = dataset.meta["driver"].upper()
                 no_data = dataset.nodata
-                transform = (dataset.transform.c,
-                             dataset.transform.a,
-                             dataset.transform.b,
-                             dataset.transform.f,
-                             dataset.transform.d,
-                             dataset.transform.e)
+                transform = (
+                    dataset.transform.c,
+                    dataset.transform.a,
+                    dataset.transform.b,
+                    dataset.transform.f,
+                    dataset.transform.d,
+                    dataset.transform.e,
+                )
                 units = dataset.units[item["id"]]
 
                 layer = Layer(
@@ -59,7 +61,7 @@ class Raster:
                     driver=driver,
                     no_data=no_data,
                     transform=transform,
-                    units=units
+                    units=units,
                 )
 
                 self._layers[item["name"]] = layer

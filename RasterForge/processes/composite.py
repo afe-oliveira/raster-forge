@@ -6,13 +6,15 @@ from RasterForge.containers.layer import Layer
 
 
 class CompositeType(Enum):
-    """Enumerates types of composite bands and their dispositions.
-    """
-    TRUE_COLOR = ['Red', 'Green', 'Blue']
-    CIR = ['NIR', 'Red', 'Green']
+    """Enumerates types of composite bands and their dispositions."""
+
+    TRUE_COLOR = ["Red", "Green", "Blue"]
+    CIR = ["NIR", "Red", "Green"]
 
 
-def composite(layers: list[Layer], alpha: Layer = None, gamma: list[float] = None) -> Layer:
+def composite(
+    layers: list[Layer], alpha: Layer = None, gamma: list[float] = None
+) -> Layer:
     """Stacks all provided layers into a single array in order. Applies gamma correction.
 
     Args:

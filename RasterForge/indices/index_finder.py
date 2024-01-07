@@ -7,8 +7,8 @@ import numpy as np
 def _find_indices() -> dict[str, Callable[..., np.ndarray]]:
     """Find multi-spectral index functions registered as plugins.
 
-        Returns:
-          A dictionary containing the found multi-spectral index functions.
+    Returns:
+      A dictionary containing the found multi-spectral index functions.
     """
     if sys.version_info < (3, 10):
         from importlib_metadata import entry_points
