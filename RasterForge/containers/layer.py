@@ -3,6 +3,19 @@ from typing import Union, Dict, Optional, Tuple, List
 import numpy as np
 
 
+ERROR_MESSAGES = {
+    'array': 'ERROR: \'array\' argument is {array_type}, but it must be a NumPy array of numeric type.',
+    'bounds_type': 'ERROR: \'bounds\' argument is {bounds_type}, but it must be a dictionary.',
+    'bounds_values': 'ERROR: All values in \'bounds\' must be numeric.',
+    'bounds_keys': 'ERROR: \'bounds\' argument has keys {bounds_keys}, but must contain the keys {{\'left\', \'bottom\', \'right\', \'top\'}}.',
+    'crs': 'ERROR: \'crs\' argument is {crs_type}, but it must be a string.',
+    'driver': 'ERROR: \'driver\' argument is {driver_type}, but it must be a string.',
+    'no_data': 'ERROR: \'no_data\' argument is {no_data_type}, but it must be an integer or float.',
+    'transform': 'ERROR: \'transform\' argument is {transform_type}, but it must be a tuple of six floats.',
+    'units': 'ERROR: \'units\' argument is {units_type}, but it must be a string.'
+}
+
+
 class Layer:
 
     _array: Optional[np.ndarray[Union[np.uint8, np.int32]]] = None
@@ -17,7 +30,7 @@ class Layer:
 
     def __init__(
         self,
-        array: np.ndarray[np.int32],
+        array: Optional[np.ndarray[np.int32]] = None,
         bounds: Optional[Dict[str, float]] = None,
         crs: Optional[str] = None,
         driver: Optional[str] = None,
@@ -26,32 +39,32 @@ class Layer:
         units: Optional[str] = None
     ):
 
-        if not (isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.number)):
-            raise TypeError(f"ERROR: 'array' argument is {type(array)}, but it must be a NumPy array of numeric type.")
+        if array is not None and not (isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.number)):
+            raise TypeError(ERROR_MESSAGES['array'].format(array_type=type(array)))
 
         if bounds is not None:
             if not isinstance(bounds, dict):
-                raise TypeError("ERROR: 'bounds' argument is {type(bounds)}, but it must be a dictionary.")
+                raise TypeError(ERROR_MESSAGES['bounds_type'].format(bounds_type=type(bounds)))
             if not all(isinstance(value, (int, float)) for value in bounds.values()):
-                raise TypeError(f"ERROR: All values in 'bounds' must be numeric.")
+                raise TypeError(ERROR_MESSAGES['bounds_values'])
             if not (set(bounds.keys()) == {'left', 'bottom', 'right', 'top'}):
-                raise TypeError(f"ERROR: 'bounds' argument has keys {set(bounds.keys())}, but must have the keys {{'left', 'bottom', 'right', 'top'}}.")
+                raise TypeError(ERROR_MESSAGES['bounds_keys'].format(bounds_keys=set(bounds.keys())))
 
         if crs is not None and not isinstance(crs, str):
-            raise TypeError(f"ERROR: 'crs' argument is {type(crs)}, but it must be a string.")
+            raise TypeError(ERROR_MESSAGES['crs'].format(crs_type=type(crs)))
 
         if driver is not None and not isinstance(driver, str):
-            raise TypeError(f"ERROR: 'driver' argument is {type(driver)}, but it must be a string.")
+            raise TypeError(ERROR_MESSAGES['driver'].format(driver_type=type(driver)))
 
         if no_data is not None and not isinstance(no_data, (int, float)):
-            raise TypeError(f"ERROR: 'no_data' argument is {type(no_data)}, but it must be an integer or float.")
+            raise TypeError(ERROR_MESSAGES['no_data'].format(no_data_type=type(no_data)))
 
         if transform is not None and not (isinstance(transform, tuple) and len(transform) == 6 and
                                           all((isinstance(value, (int, float)) for value in transform))):
-            raise TypeError(f"ERROR: 'transform' argument is {type(transform)}, but it must be a tuple of six floats.")
+            raise TypeError(ERROR_MESSAGES['transform'].format(transform_type=type(transform)))
 
         if units is not None and not isinstance(units, str):
-            raise TypeError(f"ERROR: 'units' argument is {type(units)}, but it must be a string.")
+            raise TypeError(ERROR_MESSAGES['units'].format(units_type=type(units)))
 
         self._array = array
         self._bounds = bounds
@@ -60,12 +73,6 @@ class Layer:
         self._no_data = no_data
         self._transform = transform
         self._units = units
-
-    def __call__(self, new_array: Optional[np.ndarray[np.int32]] = None) -> (
-            Optional)[np.ndarray[Union[np.uint8, np.int32]]]:
-        if new_array is not None:
-            self._array = new_array
-        return self._array
 
     def __str__(self):
         return str({
@@ -86,28 +93,80 @@ class Layer:
         })
 
     @property
+    def array(self) -> Optional[np.ndarray[np.int32]]:
+        return self._array
+
+    @array.setter
+    def array(self, value: np.ndarray[np.int32]):
+        if value is not None and not (isinstance(value, np.ndarray) and np.issubdtype(value.dtype, np.number)):
+            raise TypeError(ERROR_MESSAGES['array'].format(array_type=type(value)))
+        self._array = value
+
+    @property
     def bounds(self) -> Optional[Dict[str, float]]:
         return self._bounds
+
+    @bounds.setter
+    def bounds(self, value: Dict[str, float]):
+        if value is not None:
+            if not isinstance(value, dict):
+                raise TypeError(ERROR_MESSAGES['bounds_type'].format(bounds_type=type(value)))
+            if not all(isinstance(value, (int, float)) for value in value.values()):
+                raise TypeError(ERROR_MESSAGES['bounds_values'])
+            if not (set(value.keys()) == {'left', 'bottom', 'right', 'top'}):
+                raise TypeError(ERROR_MESSAGES['bounds_keys'].format(bounds_keys=set(value.keys())))
+        self._bounds = value
 
     @property
     def crs(self) -> Optional[str]:
         return self._crs
 
+    @crs.setter
+    def crs(self, value: str):
+        if value is not None and not isinstance(value, str):
+            raise TypeError(ERROR_MESSAGES['crs'].format(crs_type=type(value)))
+        self._crs = value
+
     @property
     def driver(self) -> Optional[str]:
         return self._driver
+
+    @driver.setter
+    def driver(self, value: str):
+        if value is not None and not isinstance(value, str):
+            raise TypeError(ERROR_MESSAGES['driver'].format(driver_type=type(value)))
+        self._driver = value
 
     @property
     def no_data(self) -> Optional[Union[int, float]]:
         return self._no_data
 
+    @no_data.setter
+    def no_data(self, value: Union[int, float]):
+        if value is not None and not isinstance(value, (int, float)):
+            raise TypeError(ERROR_MESSAGES['no_data'].format(no_data_type=type(value)))
+        self._no_data = value
+
     @property
     def transform(self) -> Optional[Tuple[float, float, float, float, float, float]]:
         return self._transform
 
+    @transform.setter
+    def transform(self, value: Tuple[float, float, float, float, float, float]):
+        if value is not None and not (isinstance(value, tuple) and len(value) == 6 and
+                                      all((isinstance(value, (int, float)) for value in value))):
+            raise TypeError(ERROR_MESSAGES['transform'].format(transform_type=type(value)))
+        self._transform = value
+
     @property
     def units(self) -> Optional[str]:
         return self._units
+
+    @units.setter
+    def units(self, value: str):
+        if value is not None and not isinstance(value, str):
+            raise TypeError(ERROR_MESSAGES['units'].format(units_type=type(value)))
+        self._units = value
 
     @property
     def width(self) -> int:

@@ -4,6 +4,7 @@ import pytest
 
 @pytest.fixture(
     params=[
+        {},
         {'array': np.random.rand(10, 10)},
         {'array': np.random.rand(10, 10, 2)},
         {'array': np.random.rand(10, 10, 3)},
