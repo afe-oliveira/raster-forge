@@ -26,30 +26,32 @@ class Layer:
         units: Optional[str] = None
     ):
 
-        if (not isinstance(array, np.ndarray) or
-                not np.issubdtype(array.dtype, np.number)):
-            raise TypeError("The 'array' argument must be a NumPy array.")
+        if not (isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.number)):
+            raise TypeError(f"ERROR: 'array' argument is {type(array)}, but it must be a NumPy array of numeric type.")
 
-        if (bounds is not None and
-                not isinstance(bounds, dict) and
-                set(bounds.keys()) == {'left', 'bottom', 'right', 'top'} and
-                not all(isinstance(value, np.number) for value in bounds.values())):
-            raise TypeError("The 'bounds' argument must be a dictionary.")
+        if bounds is not None:
+            if not isinstance(bounds, dict):
+                raise TypeError("ERROR: 'bounds' argument is {type(bounds)}, but it must be a dictionary.")
+            if not all(isinstance(value, (int, float)) for value in bounds.values()):
+                raise TypeError(f"ERROR: All values in 'bounds' must be numeric.")
+            if not (set(bounds.keys()) == {'left', 'bottom', 'right', 'top'}):
+                raise TypeError(f"ERROR: 'bounds' argument has keys {set(bounds.keys())}, but must have the keys {{'left', 'bottom', 'right', 'top'}}.")
 
         if crs is not None and not isinstance(crs, str):
-            raise TypeError("The 'crs' argument must be a string.")
+            raise TypeError(f"ERROR: 'crs' argument is {type(crs)}, but it must be a string.")
 
         if driver is not None and not isinstance(driver, str):
-            raise TypeError("The 'driver' argument must be a string.")
+            raise TypeError(f"ERROR: 'driver' argument is {type(driver)}, but it must be a string.")
 
         if no_data is not None and not isinstance(no_data, (int, float)):
-            raise TypeError("The 'no_data' argument must be an integer or float.")
+            raise TypeError(f"ERROR: 'no_data' argument is {type(no_data)}, but it must be an integer or float.")
 
-        if transform is not None and not isinstance(transform, tuple) and len(transform) == 6:
-            raise TypeError("The 'transform' argument must be a tuple of six floats.")
+        if transform is not None and not (isinstance(transform, tuple) and len(transform) == 6 and
+                                          all((isinstance(value, (int, float)) for value in transform))):
+            raise TypeError(f"ERROR: 'transform' argument is {type(transform)}, but it must be a tuple of six floats.")
 
         if units is not None and not isinstance(units, str):
-            raise TypeError("The 'units' argument must be a string.")
+            raise TypeError(f"ERROR: 'units' argument is {type(units)}, but it must be a string.")
 
         self._array = array
         self._bounds = bounds

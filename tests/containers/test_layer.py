@@ -1,10 +1,11 @@
 import numpy as np
+import pytest
 
 from RasterForge.containers.layer import Layer
 
 
 def test_init(data_layer_init):
-    """Test Layer initialization function for expected output type."""
+    """Test Layer initialization function and variable setting."""
     array = data_layer_init['array']
     bounds = data_layer_init.get('bounds', None)
     crs = data_layer_init.get('crs', None)
@@ -36,3 +37,17 @@ def test_init(data_layer_init):
         np.array_equal(l.max, [np.max(array[:, :, i]) for i in range(array.shape[2])]))
     assert np.array_equal(l.std_dev, np.std(array)) if len(array.shape) <= 2 else (
         np.array_equal(l.std_dev, [np.std(array[:, :, i]) for i in range(array.shape[2])]))
+
+
+def test_init_errors(data_layer_init_errors):
+    """Test layer initialization function for expected errors."""
+    array = data_layer_init_errors[0]['array']
+    bounds = data_layer_init_errors[0].get('bounds', None)
+    crs = data_layer_init_errors[0].get('crs', None)
+    driver = data_layer_init_errors[0].get('driver', None)
+    no_data = data_layer_init_errors[0].get('no_data', None)
+    transform = data_layer_init_errors[0].get('transform', None)
+    units = data_layer_init_errors[0].get('units', None)
+
+    with pytest.raises(data_layer_init_errors[1]):
+        Layer(array=array, bounds=bounds, crs=crs, driver=driver, transform=transform, no_data=no_data, units=units)
