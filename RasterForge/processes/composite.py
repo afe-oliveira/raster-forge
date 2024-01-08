@@ -5,6 +5,7 @@ import numpy as np
 from numpy import ndarray, dtype, generic
 
 from RasterForge.containers.layer import Layer
+from RasterForge.tools.exceptions import ErrorMessages
 
 
 class CompositeType(Enum):
@@ -32,7 +33,6 @@ def composite(
       Stacked composite layer.
     """
     is_array = False
-
     if all((isinstance(layer, Layer) and layer.array is not None) for layer in layers):
         arrays = [layer.array for layer in layers]
     elif all(
@@ -46,9 +46,8 @@ def composite(
         arrays = [layer for layer in layers]
         is_array = True
     else:
-        raise TypeError(
-            "All layers must be instances of Layer or numpy.ndarray and all data must be numeric."
-        )
+        raise TypeError(ErrorMessages.bad_input(name='layers',
+                                                expected_type='a list of numerical Layers or arrays'))
 
     result = np.dstack(arrays)
 
@@ -61,9 +60,8 @@ def composite(
                 aux[:, :, i] = np.power(result[:, :, i], gamma[i])
             result = aux
         else:
-            raise TypeError(
-                "Gamma must be a tuple of numeric values of the for each layer."
-            )
+            raise TypeError(ErrorMessages.bad_input(name='gamma',
+                                                    expected_type='a tuple of numeric values'))
 
     if alpha is not None:
         if isinstance(alpha, Layer) and alpha.array is not None:
@@ -75,9 +73,8 @@ def composite(
         ):
             result = np.dstack([result, alpha])
         else:
-            raise TypeError(
-                "Alpha must be a Layer or numpy.ndarray and all data must be numeric."
-            )
+            raise TypeError(ErrorMessages.bad_input(name='gamma',
+                                                    expected_type='a numerical Layer or array'))
 
     if is_array:
         return result

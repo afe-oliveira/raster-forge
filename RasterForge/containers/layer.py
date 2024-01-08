@@ -5,6 +5,7 @@ import numpy as np
 import rasterio
 
 from RasterForge.tools.rescale_dataset import rescale_dataset
+from RasterForge.tools.exceptions import ErrorMessages
 
 ERROR_MESSAGES = {
     "no_file": "Error: The file {file_path} does not exist.",
@@ -43,13 +44,15 @@ class Layer:
         if array is not None and not (
             isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.number)
         ):
-            raise TypeError(ERROR_MESSAGES["array"].format(array_type=type(array)))
+            raise TypeError(ErrorMessages.bad_input(name='array',
+                                                    provided_type=type(array),
+                                                    expected_type='a numeric array'))
 
         if bounds is not None:
             if not isinstance(bounds, dict):
-                raise TypeError(
-                    ERROR_MESSAGES["bounds_type"].format(bounds_type=type(bounds))
-                )
+                raise TypeError(ErrorMessages.bad_input(name='bounds',
+                                                        provided_type=type(bounds),
+                                                        expected_type='a dictionary'))
             if not all(isinstance(value, (int, float)) for value in bounds.values()):
                 raise TypeError(ERROR_MESSAGES["bounds_values"])
             if not (set(bounds.keys()) == {"left", "bottom", "right", "top"}):
