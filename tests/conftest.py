@@ -1,6 +1,8 @@
 import numpy as np
 import pytest
 
+from RasterForge.containers.layer import Layer
+
 
 @pytest.fixture(
     params=[
@@ -39,5 +41,35 @@ def data_layer_init(request):
 )
 def data_layer_init_errors(request):
     """Fixture that defines the layer initialization data to be tested."""
+    print(request)
+    return request.param
+
+@pytest.fixture(
+    params=[
+        {'scale': 1, 'layers': 0},
+        {'scale': 1, 'layers': 1},
+        {'scale': 1, 'layers': 10},
+        {'scale': 10, 'layers': 0},
+        {'scale': 10, 'layers': 1},
+        {'scale': 10, 'layers': 10}
+    ]
+)
+def data_raster_init(request):
+    """Fixture that defines the raster initialization data to be tested."""
+    print(request)
+    return request.param
+
+@pytest.fixture(
+    params=[
+        {'scale': 1, 'layers': []},
+        {'scale': 1, 'layers': [Layer() for _ in range(1)]},
+        {'scale': 1, 'layers': [Layer() for _ in range(10)]},
+        {'scale': 10, 'layers': []},
+        {'scale': 10, 'layers': [Layer() for _ in range(1)]},
+        {'scale': 10, 'layers': [Layer() for _ in range(10)]}
+    ]
+)
+def data_raster_init(request):
+    """Fixture that defines the raster initialization data to be tested."""
     print(request)
     return request.param

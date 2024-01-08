@@ -1,9 +1,15 @@
-from typing import TypedDict, Dict
+from typing import Dict, TypedDict
 
 import rasterio
 
+from RasterForge.tools.rescale_dataset import rescale_dataset
+
 from .layer import Layer
-from RasterForge.tools.rescale_dataset import _rescale_dataset
+
+
+ERROR_MESSAGES = {
+    "scale": "ERROR: 'scale' argument is {scale_type}, but it must be an integer."
+}
 
 
 class RasterImportConfig(TypedDict):
@@ -16,13 +22,20 @@ class Raster:
     _scale: int = None
 
     def __init__(self, scale: int):
+        if not isinstance(scale, int):
+            raise TypeError(ERROR_MESSAGES["scale"].format(units_type=type(scale)))
         self._scale = scale
-
-    def __call__(self) -> Dict[str, Layer]:
-        return self._layers
 
     def __str__(self):
         return str({key: value.__str__() for key, value in self._layers.items()})
+
+    @property
+    def layers(self) -> Dict[str, Layer]:
+        return self._layers
+
+    @property
+    def count(self) -> int:
+        return len(self._layers)
 
     @property
     def scale(self) -> int:
@@ -30,7 +43,7 @@ class Raster:
 
     def import_layers(self, path: str, config: list[RasterImportConfig]):
         with rasterio.open(path) as dataset:
-            dataset = _rescale_dataset(dataset, self.scale)
+            dataset = rescale_dataset(dataset, self.scale)
 
             for item in config:
                 array = dataset.read(item["id"])

@@ -1,10 +1,10 @@
 import os
-from typing import Union, Dict, Optional, Tuple, List
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import rasterio
 
-from RasterForge.tools.rescale_dataset import _rescale_dataset
+from RasterForge.tools.rescale_dataset import rescale_dataset
 
 ERROR_MESSAGES = {
     "no_file": "Error: The file {file_path} does not exist.",
@@ -27,7 +27,6 @@ class Layer:
     _crs: Optional[str] = None
     _driver: Optional[str] = None
     _no_data: Optional[Union[int, float]] = None
-    _res: Optional[Dict[str, float]] = None
     _transform: Optional[Tuple[float, float, float, float, float, float]] = None
     _units: Optional[str] = None
 
@@ -89,7 +88,7 @@ class Layer:
         self._transform = transform
         self._units = units
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(
             {
                 "crs": self.crs,
@@ -115,7 +114,7 @@ class Layer:
 
         with rasterio.open(path) as dataset:
             if scale is not None:
-                dataset = _rescale_dataset(dataset, scale)
+                dataset = rescale_dataset(dataset, scale)
 
             array = dataset.read(id)
 
