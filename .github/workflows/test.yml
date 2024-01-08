@@ -1,0 +1,21 @@
+name: Tests
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone Repository
+      uses: actions/checkout@v4
+    - name: Setup Latest Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install Dependencies
+      run: |
+        pip install pip --upgrade
+        pip install -e .[devel]
+    - name: Test (PyTest + Coverage Report)
+      run: pytest --cov=txtstats --cov-report=xml
