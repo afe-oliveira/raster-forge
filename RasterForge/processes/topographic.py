@@ -6,7 +6,7 @@ from RasterForge.containers.layer import Layer
 from RasterForge.tools.exceptions import ErrorMessages
 
 
-def slope(dem: Union[Layer,np.ndarray], units: str = 'degrees') -> Layer | np.ndarray:
+def slope(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.ndarray:
     """Calculate the slope of a terrain based on a Digital Elevation Model (DEM).
 
     Args:
@@ -44,7 +44,7 @@ def slope(dem: Union[Layer,np.ndarray], units: str = 'degrees') -> Layer | np.nd
         return Layer(result)
 
 
-def aspect(dem: np.ndarray, units: str = 'degrees') -> Layer | np.ndarray:
+def aspect(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.ndarray:
     """Calculate the aspect of a terrain slope based on a Digital Elevation Model (DEM).
 
     Args:
