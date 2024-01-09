@@ -6,7 +6,6 @@ from RasterForge.tools.rescale_dataset import rescale_dataset
 
 from .layer import Layer
 
-
 ERROR_MESSAGES = {
     "scale": "ERROR: 'scale' argument is {scale_type}, but it must be an integer."
 }

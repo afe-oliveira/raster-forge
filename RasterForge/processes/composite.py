@@ -1,8 +1,8 @@
 from enum import Enum
-from typing import Union, Optional, Any
+from typing import Any, Optional, Union
 
 import numpy as np
-from numpy import ndarray, dtype, generic
+from numpy import dtype, generic, ndarray
 
 from RasterForge.containers.layer import Layer
 from RasterForge.tools.exceptions import ErrorMessages
@@ -46,8 +46,11 @@ def composite(
         arrays = [layer for layer in layers]
         is_array = True
     else:
-        raise TypeError(ErrorMessages.bad_input(name='layers',
-                                                expected_type='a list of numerical Layers or arrays'))
+        raise TypeError(
+            ErrorMessages.bad_input(
+                name="layers", expected_type="a list of numerical Layers or arrays"
+            )
+        )
 
     result = np.dstack(arrays)
 
@@ -60,8 +63,11 @@ def composite(
                 aux[:, :, i] = np.power(result[:, :, i], gamma[i])
             result = aux
         else:
-            raise TypeError(ErrorMessages.bad_input(name='gamma',
-                                                    expected_type='a tuple of numeric values'))
+            raise TypeError(
+                ErrorMessages.bad_input(
+                    name="gamma", expected_type="a tuple of numeric values"
+                )
+            )
 
     if alpha is not None:
         if isinstance(alpha, Layer) and alpha.array is not None:
@@ -73,8 +79,11 @@ def composite(
         ):
             result = np.dstack([result, alpha])
         else:
-            raise TypeError(ErrorMessages.bad_input(name='gamma',
-                                                    expected_type='a numerical Layer or array'))
+            raise TypeError(
+                ErrorMessages.bad_input(
+                    name="gamma", expected_type="a numerical Layer or array"
+                )
+            )
 
     if is_array:
         return result

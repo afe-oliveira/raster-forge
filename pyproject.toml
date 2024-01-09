@@ -14,6 +14,7 @@ authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt"
 dependencies = [
     "numpy",
     "rasterio",
+    "opencv-python",
     #"PySide6",
     "matplotlib"
 ]

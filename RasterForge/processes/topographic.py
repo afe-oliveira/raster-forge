@@ -6,7 +6,7 @@ from RasterForge.containers.layer import Layer
 from RasterForge.tools.exceptions import ErrorMessages
 
 
-def slope(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.ndarray:
+def slope(dem: Union[Layer, np.ndarray], units: str = "degrees") -> Layer | np.ndarray:
     """Calculate the slope of a terrain based on a Digital Elevation Model (DEM).
 
     Args:
@@ -21,22 +21,36 @@ def slope(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.n
     is_array = False
     if isinstance(dem, Layer) and dem.array is not None:
         array = dem.array
-    elif isinstance(dem, np.ndarray) and dem is not None and np.issubdtype(dem.dtype, np.number):
+    elif (
+        isinstance(dem, np.ndarray)
+        and dem is not None
+        and np.issubdtype(dem.dtype, np.number)
+    ):
         array = dem
         is_array = True
     else:
-        raise TypeError(ErrorMessages.bad_input(name='dem',
-                                                expected_type='a numerical Layer or array'))
+        raise TypeError(
+            ErrorMessages.bad_input(
+                name="dem", expected_type="a numerical Layer or array"
+            )
+        )
 
-    result = np.arctan(np.sqrt(np.power(np.gradient(array, axis=(0, 1))[0], 2) +
-                               np.power(np.gradient(array, axis=(0, 1))[1], 2)))
+    result = np.arctan(
+        np.sqrt(
+            np.power(np.gradient(array, axis=(0, 1))[0], 2)
+            + np.power(np.gradient(array, axis=(0, 1))[1], 2)
+        )
+    )
 
-    if units in ['degrees', 'radians']:
-        if units == 'degrees':
+    if units in ["degrees", "radians"]:
+        if units == "degrees":
             result = np.degrees(result)
     else:
-        raise TypeError(ErrorMessages.bad_input(name='units',
-                                                expected_type='\'degrees\' or \'radians\''))
+        raise TypeError(
+            ErrorMessages.bad_input(
+                name="units", expected_type="'degrees' or 'radians'"
+            )
+        )
 
     if is_array:
         return result
@@ -44,7 +58,7 @@ def slope(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.n
         return Layer(result)
 
 
-def aspect(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.ndarray:
+def aspect(dem: Union[Layer, np.ndarray], units: str = "degrees") -> Layer | np.ndarray:
     """Calculate the aspect of a terrain slope based on a Digital Elevation Model (DEM).
 
     Args:
@@ -59,21 +73,31 @@ def aspect(dem: Union[Layer, np.ndarray], units: str = 'degrees') -> Layer | np.
     is_array = False
     if isinstance(dem, Layer) and dem.array is not None:
         array = dem.array
-    elif isinstance(dem, np.ndarray) and dem is not None and np.issubdtype(dem.dtype, np.number):
+    elif (
+        isinstance(dem, np.ndarray)
+        and dem is not None
+        and np.issubdtype(dem.dtype, np.number)
+    ):
         array = dem
         is_array = True
     else:
-        raise TypeError(ErrorMessages.bad_input(name='dem',
-                                                expected_type='a numerical Layer or array'))
+        raise TypeError(
+            ErrorMessages.bad_input(
+                name="dem", expected_type="a numerical Layer or array"
+            )
+        )
 
     result = np.arctan2(-np.gradient(array, axis=0), np.gradient(array, axis=1))
 
-    if units in ['degrees', 'radians']:
-        if units == 'degrees':
+    if units in ["degrees", "radians"]:
+        if units == "degrees":
             result = np.degrees(result)
     else:
-        raise TypeError(ErrorMessages.bad_input(name='units',
-                                                expected_type='\'degrees\' or \'radians\''))
+        raise TypeError(
+            ErrorMessages.bad_input(
+                name="units", expected_type="'degrees' or 'radians'"
+            )
+        )
 
     if is_array:
         return result
