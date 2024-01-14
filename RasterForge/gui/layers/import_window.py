@@ -1,7 +1,20 @@
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
-    QDialog, QGridLayout, QPushButton, QLabel, QFrame,
-    QSpinBox, QFileDialog, QCheckBox, QVBoxLayout, QWidget, QLineEdit, QScrollArea, QHBoxLayout, QComboBox, QProgressBar
+    QDialog,
+    QGridLayout,
+    QPushButton,
+    QLabel,
+    QFrame,
+    QSpinBox,
+    QFileDialog,
+    QCheckBox,
+    QVBoxLayout,
+    QWidget,
+    QLineEdit,
+    QScrollArea,
+    QHBoxLayout,
+    QComboBox,
+    QProgressBar,
 )
 
 import rasterio
@@ -9,8 +22,8 @@ import rasterio
 from RasterForge.containers.raster import Raster
 from RasterForge.gui.data import data
 
-class LayersImportWindow(QDialog):
 
+class LayersImportWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -134,9 +147,10 @@ class LayersImportWindow(QDialog):
                 band_name = line_edit.text()
                 data_type = combo_box.currentText()
 
-                selected_layers.append({'id': index + 1, 'name': band_name, 'type': data_type.lower()})
+                selected_layers.append(
+                    {"id": index + 1, "name": band_name, "type": data_type.lower()}
+                )
 
         if selected_layers is not {}:
             data.raster.import_layers(self.selected_file_path, selected_layers)
             data.raster_changed.emit()
-

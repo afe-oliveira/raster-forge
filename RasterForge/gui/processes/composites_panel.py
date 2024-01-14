@@ -1,25 +1,41 @@
 import inspect
+from typing import Type
 
 import numpy as np
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QProgressBar, QComboBox, QLineEdit, \
-    QLabel, QGroupBox, QGridLayout
+from PySide6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QPushButton,
+    QScrollArea,
+    QProgressBar,
+    QComboBox,
+    QLineEdit,
+    QLabel,
+    QGroupBox,
+    QGridLayout,
+    QFrame,
+    QDoubleSpinBox,
+)
 
 from RasterForge.containers.layer import Layer
 
 from RasterForge.gui.data import data
+from RasterForge.gui.processes.adaptative_elements import adaptative_input
+
+from RasterForge.processes.composite import PRESET_COMPOSITES, composite
+
 
 class CompositesPanel(QWidget):
-    def __init__(self, plugins, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.plugins = plugins
 
-        # Create a Combo Box for Available Plugins
-        self.indices_combo = QComboBox(self)
+        # Create a Combo Box for Available Presets
+        self.composites_combo = QComboBox(self)
+        self.composites_combo.addItem("Custom")
+        for key in PRESET_COMPOSITES.keys():
+            self.composites_combo.addItem(key)
 
-        # Add Available Plugins
-        for name, function in self.plugins.items():
-            self.indices_combo.addItem(str(name).upper())
         # Create a Scroll Area
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
@@ -27,20 +43,20 @@ class CompositesPanel(QWidget):
         self.scroll_content = QWidget(self)
         self.scroll_area.setWidget(self.scroll_content)
 
-        # Create a layout for the scroll content
+        # Create a Vertical Layout for the Scroll Content (Aligned Top)
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.setAlignment(Qt.AlignTop)
 
-        # Add ComboBox and Scroll Area to the main layout
+        # Add the Combo Box and Scroll Area to the main layout
         layout = QVBoxLayout(self)
-        layout.addWidget(self.indices_combo)
+        layout.addWidget(self.composites_combo)
         layout.addWidget(self.scroll_area)
 
-        # Create a QGridLayout for the buttons
+        # Create a Grid Layout for the General UI
         buttons_layout = QGridLayout()
 
         # Add Back Button
-        back_button = QPushButton('Back', self)
+        back_button = QPushButton("Back", self)
         back_button.clicked.connect(self.back_clicked)
         buttons_layout.addWidget(back_button, 0, 0, 1, 1)
 
@@ -49,16 +65,23 @@ class CompositesPanel(QWidget):
         buttons_layout.addWidget(progress_bar, 0, 1, 1, 23)
 
         # Add Build Button
-        build_button = QPushButton('Build', self)
+        build_button = QPushButton("Build", self)
         build_button.clicked.connect(self.build_clicked)
         buttons_layout.addWidget(build_button, 0, 24, 1, 1)
 
-        # Add the buttons layout to the main layout
+        # Add the Buttons Layout to the Main Layout
         layout.addLayout(buttons_layout)
 
+        # Set Layout
         self.setLayout(layout)
-        self.indices_combo.currentIndexChanged.connect(self.update_scroll_content)
+
+        # When Combo Box Selection Changes, Update Inner Scroll Content
+        self.composites_combo.currentIndexChanged.connect(self.update_scroll_content)
+
+        # When Raster Data Changes, Update Inner Scroll Content
         data.raster_changed.connect(self.update_scroll_content)
+
+        # Start Scroll at First Position
         self.update_scroll_content(0)
 
     def update_scroll_content(self, index=0):
@@ -68,71 +91,67 @@ class CompositesPanel(QWidget):
             if widget:
                 widget.deleteLater()
 
-        selected_function = list(self.plugins.values())[index]
+        selection = self.composites_combo.currentText()
+        array_type: Type[np.ndarray] = np.ndarray
 
-        parameters = inspect.signature(selected_function).parameters
+        self.input_layers = {}
+        if selection == "Custom":
+            pass
+        else:
+            composite_components = PRESET_COMPOSITES[selection]
+            for component in composite_components:
+                label = QLabel(f"{component}", self)
+                widget = adaptative_input(component, array_type)
 
-        self.input_values = {}
-        for param_name, param in parameters.items():
-            label = QLabel(f"{param_name.upper()}", self)
+                self.scroll_layout.addWidget(label)
+                self.scroll_layout.addWidget(widget)
 
-            if param.annotation == np.ndarray:
-                widget = QComboBox(self)
-                if data.raster is not None:
-                    keys_from_raster = list(data.raster.layers.keys())
-                    widget.addItems(keys_from_raster)
-            elif getattr(param.annotation, '__origin__', None) == tuple:
-                tuple_types = getattr(param.annotation, '__args__', ())
-                widget_group = QGroupBox(self)
-                group_layout = QVBoxLayout()
-                for i, subtype in enumerate(tuple_types):
-                    sub_label = QLabel(f"{param_name.upper()}[{i}]", self)
-                    sub_widget = QLineEdit(self)
-                    sub_widget.setText("1")
-                    sub_widget.setObjectName(f"{param_name.upper()}_{i}")
-                    group_layout.addWidget(sub_label)
-                    group_layout.addWidget(sub_widget)
-                widget_group.setLayout(group_layout)
-                widget = widget_group
-            else:
-                widget = QLineEdit(self)
-                widget.setObjectName(f"{param_name.upper()}")
+                self.input_layers[component] = widget
 
-            self.scroll_layout.addWidget(label)
-            self.scroll_layout.addWidget(widget)
+        # Add Separator
+        separator_line = QFrame(self)
+        separator_line.setFrameShape(QFrame.HLine)
+        separator_line.setFrameShadow(QFrame.Sunken)
+        self.scroll_layout.addWidget(separator_line)
 
-            self.input_values[param_name] = widget
+        # Add Alpha Selection
+        label = QLabel(f"Alpha", self)
+        widget = adaptative_input("Alpha", array_type)
+        self.scroll_layout.addWidget(label)
+        self.scroll_layout.addWidget(widget)
+
+        # Add Separator
+        self.scroll_layout.addWidget(separator_line)
+
+        # Gamma Selection
+        self.input_gamma = {}
+        for key in self.input_layers.keys():
+            float_label = QLabel(f"{key} Gamma", self)
+            float_spinbox = QDoubleSpinBox(self)
+            float_spinbox.setDecimals(2)
+
+            self.scroll_layout.addWidget(float_label)
+            self.scroll_layout.addWidget(float_spinbox)
+
+            self.input_gamma[key] = float_spinbox
 
     def back_clicked(self):
         data.process_main.emit()
 
     def build_clicked(self):
-        # Get the Selected Plugin Function
-        function = list(self.plugins.values())[self.indices_combo.currentIndex()]
+        input_layers = []
+        for key, value in self.input_layers.items():
+            input_layers.append(data.raster.layers[value.currentText()].array)
 
-        parameters = inspect.signature(function).parameters
-        input_values = []
+        input_alpha = None
 
-        for param_name, param in parameters.items():
-            widget = self.input_values.get(param_name)
-
-            if param.annotation == np.ndarray:
-                if isinstance(widget, QComboBox) and data.raster is not None:
-                    selected_layer = widget.currentText()
-                    input_values.append(data.raster.layers[selected_layer].data)
-            elif getattr(param.annotation, '__origin__', None) == tuple:
-                tuple_values = []
-                if isinstance(widget, QGroupBox):
-                    for i in range(widget.layout().count()):
-                        sub_widget = widget.layout().itemAt(i).widget()
-                        if isinstance(sub_widget, QLineEdit):
-                            tuple_values.append(float(sub_widget.text()))
-                    input_values.append(tuple(tuple_values))
-            else:
-                if isinstance(widget, QLineEdit):
-                    input_values.append(float(widget.text()))
+        input_gamma = []
+        for key, value in self.input_gamma.items():
+            input_gamma.append(value.value())
 
         layer = Layer()
-        layer.data = function(*input_values)
+        layer.array = composite(
+            layers=input_layers, alpha=input_alpha, gamma=input_gamma
+        )
         data.viewer = layer
         data.viewer_changed.emit()

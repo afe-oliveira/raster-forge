@@ -4,6 +4,7 @@ from PySide6.QtCore import Signal, QObject
 from RasterForge.containers.layer import Layer
 from RasterForge.containers.raster import Raster
 
+
 class DataGUI(QObject):
 
     # General Data

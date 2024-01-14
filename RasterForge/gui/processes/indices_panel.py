@@ -3,13 +3,28 @@ from typing import Callable, get_args
 
 import numpy as np
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QScrollArea, QProgressBar, QComboBox, QLineEdit, \
-    QLabel, QGroupBox, QGridLayout, QFrame, QHBoxLayout, QSlider, QDoubleSpinBox
+from PySide6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QPushButton,
+    QScrollArea,
+    QProgressBar,
+    QComboBox,
+    QLineEdit,
+    QLabel,
+    QGroupBox,
+    QGridLayout,
+    QFrame,
+    QHBoxLayout,
+    QSlider,
+    QDoubleSpinBox,
+)
 
 from RasterForge.containers.layer import Layer
 
 from RasterForge.gui.data import data
 from RasterForge.indices.index import index
+
 
 class IndicesPanel(QWidget):
     def __init__(self, plugins, parent=None):
@@ -42,7 +57,7 @@ class IndicesPanel(QWidget):
         buttons_layout = QGridLayout()
 
         # Add Back Button
-        back_button = QPushButton('Back', self)
+        back_button = QPushButton("Back", self)
         back_button.clicked.connect(self.back_clicked)
         buttons_layout.addWidget(back_button, 0, 0, 1, 1)
 
@@ -51,7 +66,7 @@ class IndicesPanel(QWidget):
         buttons_layout.addWidget(progress_bar, 0, 1, 1, 23)
 
         # Add Build Button
-        build_button = QPushButton('Build', self)
+        build_button = QPushButton("Build", self)
         build_button.clicked.connect(self.build_clicked)
         buttons_layout.addWidget(build_button, 0, 24, 1, 1)
 
@@ -81,9 +96,16 @@ class IndicesPanel(QWidget):
         selected_function = list(self.plugins.values())[index]
 
         parameter_names = list(inspect.signature(selected_function()).parameters.keys())
-        parameter_types = [arg for return_type in get_args(inspect.signature(selected_function).return_annotation)[:-1]
-            for arg in (return_type if isinstance(return_type, tuple) else [return_type])
-            if arg is not inspect.Signature.empty][0]
+        parameter_types = [
+            arg
+            for return_type in get_args(
+                inspect.signature(selected_function).return_annotation
+            )[:-1]
+            for arg in (
+                return_type if isinstance(return_type, tuple) else [return_type]
+            )
+            if arg is not inspect.Signature.empty
+        ][0]
 
         self.input_values = {}
         for param_name, param_type in zip(parameter_names, parameter_types):
@@ -94,8 +116,8 @@ class IndicesPanel(QWidget):
                 if data.raster is not None:
                     keys_from_raster = list(data.raster.layers.keys())
                     widget.addItems(keys_from_raster)
-            elif getattr(param_type, '__origin__', None) == tuple:
-                tuple_types = getattr(param_type, '__args__', ())
+            elif getattr(param_type, "__origin__", None) == tuple:
+                tuple_types = getattr(param_type, "__args__", ())
                 widget_group = QGroupBox(self)
                 group_layout = QVBoxLayout()
                 for i, subtype in enumerate(tuple_types):
@@ -124,7 +146,7 @@ class IndicesPanel(QWidget):
         # Add ALPHA parameter
         alpha_label = QLabel("ALPHA", self)
         alpha_widget = QComboBox(self)
-        alpha_widget.addItem('None')
+        alpha_widget.addItem("None")
         if data.raster is not None:
             keys_from_raster = list(data.raster.layers.keys())
             alpha_widget.addItems(keys_from_raster)
@@ -171,19 +193,26 @@ class IndicesPanel(QWidget):
         input_values = []
 
         parameter_names = list(inspect.signature(function()).parameters.keys())
-        parameter_types = [arg for return_type in get_args(inspect.signature(function).return_annotation)[:-1]
-                           for arg in (return_type if isinstance(return_type, tuple) else [return_type])
-                           if arg is not inspect.Signature.empty][0]
+        parameter_types = [
+            arg
+            for return_type in get_args(inspect.signature(function).return_annotation)[
+                :-1
+            ]
+            for arg in (
+                return_type if isinstance(return_type, tuple) else [return_type]
+            )
+            if arg is not inspect.Signature.empty
+        ][0]
 
         for param_name, param_type in zip(parameter_names, parameter_types):
-            if param_name != 'ALPHA':
+            if param_name != "ALPHA":
                 widget = self.input_values.get(param_name)
 
                 if param_type == np.ndarray:
                     if isinstance(widget, QComboBox) and data.raster is not None:
                         selected_layer = widget.currentText()
                         input_values.append(data.raster.layers[selected_layer].data)
-                elif getattr(param_type, '__origin__', None) == tuple:
+                elif getattr(param_type, "__origin__", None) == tuple:
                     tuple_values = []
                     if isinstance(widget, QGroupBox):
                         for i in range(widget.layout().count()):
@@ -196,12 +225,19 @@ class IndicesPanel(QWidget):
                         input_values.append(float(widget.text()))
 
         alpha_value = self.input_values.get("ALPHA").currentText()
-        alpha_value = None if alpha_value == 'None' else data.raster.layers[alpha_value].data
+        alpha_value = (
+            None if alpha_value == "None" else data.raster.layers[alpha_value].data
+        )
 
         min_spinbox, max_spinbox = self.input_values["RANGE"]
 
         layer = Layer()
-        layer.data = index(function(), alpha_value, (min_spinbox.value(), max_spinbox.value()), *input_values)
+        layer.data = index(
+            function(),
+            alpha_value,
+            (min_spinbox.value(), max_spinbox.value()),
+            *input_values,
+        )
 
         data.viewer = layer
         data.viewer_changed.emit()

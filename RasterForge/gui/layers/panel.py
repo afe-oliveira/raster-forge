@@ -1,14 +1,24 @@
 from PySide6.QtCore import Signal
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QLayout, QFrame, QGridLayout, \
-    QScrollArea, QDialog, QLineEdit
+from PySide6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QLayout,
+    QFrame,
+    QGridLayout,
+    QScrollArea,
+    QDialog,
+    QLineEdit,
+)
 from RasterForge.gui.data import data
 from .import_window import LayersImportWindow
 from .info_window import LayerInfoWindow
 
 
 class LayersPanel(QWidget):
-
     def __init__(self):
         super().__init__()
 

@@ -10,7 +10,9 @@ from RasterForge.tools.rescale_dataset import rescale_dataset
 ERROR_MESSAGES = {
     "no_file": "Error: The file {file_path} does not exist.",
     "array": "ERROR: 'array' argument is {array_type}, but it must be a NumPy array of numeric type.",
-    "bounds_type": "ERROR: 'bounds' argument is {bounds_type}, but it must be a dictionary.",
+    "bounds_type": (
+        "ERROR: 'bounds' argument is {bounds_type}, but it must be a dictionary."
+    ),
     "bounds_values": "ERROR: All values in 'bounds' must be numeric.",
     "bounds_keys": "ERROR: 'bounds' argument has keys {bounds_keys}, but must contain the keys {{'left', 'bottom', 'right', 'top'}}.",
     "crs": "ERROR: 'crs' argument is {crs_type}, but it must be a string.",

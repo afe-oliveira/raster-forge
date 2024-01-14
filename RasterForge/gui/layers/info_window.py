@@ -1,7 +1,16 @@
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QTabWidget, QWidget, QGridLayout, QSizePolicy
+from PySide6.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QLabel,
+    QTabWidget,
+    QWidget,
+    QGridLayout,
+    QSizePolicy,
+)
 
 from RasterForge.gui.data import data
+
 
 class LayerInfoWindow(QDialog):
     def __init__(self, layer_name, parent=None):
@@ -35,8 +44,8 @@ class LayerInfoWindow(QDialog):
         metadata_layout.setAlignment(Qt.AlignTop)
 
         metadata_dict = data.raster.layers[self.name].metadata
-        del metadata_dict['crs']
-        del metadata_dict['transform']
+        del metadata_dict["crs"]
+        del metadata_dict["transform"]
 
         grid_layout = QGridLayout()
         row = 0
@@ -58,20 +67,26 @@ class LayerInfoWindow(QDialog):
     def transform_tab(self):
         transform_tab = QWidget()
         transform_layout = QVBoxLayout(transform_tab)
-        transform_label = QLabel("Transform: ...")  # Replace "..." with actual transform information
+        transform_label = QLabel(
+            "Transform: ..."
+        )  # Replace "..." with actual transform information
         transform_layout.addWidget(transform_label)
         return transform_tab
 
     def projection_tab(self):
         projection_tab = QWidget()
         projection_layout = QVBoxLayout(projection_tab)
-        projection_label = QLabel("Projection: ...")  # Replace "..." with actual projection information
+        projection_label = QLabel(
+            "Projection: ..."
+        )  # Replace "..." with actual projection information
         projection_layout.addWidget(projection_label)
         return projection_tab
 
     def statistics_tab(self):
         statistics_tab = QWidget()
         statistics_layout = QVBoxLayout(statistics_tab)
-        statistics_label = QLabel("Statistics: ...")  # Replace "..." with actual statistics information
+        statistics_label = QLabel(
+            "Statistics: ..."
+        )  # Replace "..." with actual statistics information
         statistics_layout.addWidget(statistics_label)
         return statistics_tab

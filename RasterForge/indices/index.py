@@ -10,9 +10,11 @@ def index(
     *variables: Union[np.ndarray, int, float],
 ) -> np.ndarray[np.float32]:
     variables = [
-        np.nan_to_num(var, nan=0.0, posinf=0.0, neginf=0.0)
-        if isinstance(var, np.ndarray)
-        else np.nan_to_num(var)
+        (
+            np.nan_to_num(var, nan=0.0, posinf=0.0, neginf=0.0)
+            if isinstance(var, np.ndarray)
+            else np.nan_to_num(var)
+        )
         for var in variables
     ]
 

@@ -4,8 +4,19 @@ import tempfile
 
 import numpy as np
 from PySide6.QtWidgets import (
-    QGraphicsView, QGraphicsScene, QLabel, QVBoxLayout, QHBoxLayout,
-    QGraphicsPixmapItem, QWidget, QPushButton, QGridLayout, QSlider, QFrame, QComboBox, QFileDialog
+    QGraphicsView,
+    QGraphicsScene,
+    QLabel,
+    QVBoxLayout,
+    QHBoxLayout,
+    QGraphicsPixmapItem,
+    QWidget,
+    QPushButton,
+    QGridLayout,
+    QSlider,
+    QFrame,
+    QComboBox,
+    QFileDialog,
 )
 from PySide6.QtGui import QPixmap, QTransform, QImage
 from PySide6.QtCore import Qt, QRectF, QPointF
@@ -15,28 +26,28 @@ from matplotlib.backends.backend_template import FigureCanvas
 from RasterForge.gui.data import data
 
 COLORMAPS = {
-    'Viridis': 'viridis',
-    'Viridis (Reversed)': 'viridis_r',
-    'Plasma': 'plasma',
-    'Plasma (Reversed)': 'plasma_r',
-    'Inferno': 'inferno',
-    'Inferno (Reversed)': 'inferno_r',
-    'Magma': 'magma',
-    'Magma (Reversed)': 'magma_r',
-    'Cividis': 'cividis',
-    'Cividis (Reversed)': 'cividis_r',
-    'Twilight': 'twilight',
-    'Twilight (Reversed)': 'twilight_r',
-    'Gray': 'gray',
-    'Gray (Reversed)': 'gray_r',
-    'Autumn': 'autumn',
-    'Autumn (Reversed)': 'autumn_r',
-    'Cool-Warm': 'coolwarm',
-    'Red-Blue': 'RdBu',
-    'Spectral': 'Spectral',
-    'Jet': 'jet',
-    'Ocean': 'ocean',
-    'Terrain': 'terrain'
+    "Viridis": "viridis",
+    "Viridis (Reversed)": "viridis_r",
+    "Plasma": "plasma",
+    "Plasma (Reversed)": "plasma_r",
+    "Inferno": "inferno",
+    "Inferno (Reversed)": "inferno_r",
+    "Magma": "magma",
+    "Magma (Reversed)": "magma_r",
+    "Cividis": "cividis",
+    "Cividis (Reversed)": "cividis_r",
+    "Twilight": "twilight",
+    "Twilight (Reversed)": "twilight_r",
+    "Gray": "gray",
+    "Gray (Reversed)": "gray_r",
+    "Autumn": "autumn",
+    "Autumn (Reversed)": "autumn_r",
+    "Cool-Warm": "coolwarm",
+    "Red-Blue": "RdBu",
+    "Spectral": "Spectral",
+    "Jet": "jet",
+    "Ocean": "ocean",
+    "Terrain": "terrain",
 }
 
 
@@ -123,7 +134,9 @@ class ViewerPanel(QWidget):
         # Initialize a QLabel for displaying band values
         self.band_values_label = QLabel("", self)
         self.band_values_label.setGeometry(0, 0, 100, 50)
-        self.band_values_label.setStyleSheet("background-color: rgba(255, 255, 255, 200); border: 1px solid black;")
+        self.band_values_label.setStyleSheet(
+            "background-color: rgba(255, 255, 255, 200); border: 1px solid black;"
+        )
         self.band_values_label.hide()
 
         self.graphics_view.mouseMoveEvent = self.update_coordinates
@@ -165,7 +178,9 @@ class ViewerPanel(QWidget):
     def update_zoom(self):
         zoom_value = self.zoom_slider.value()
         self.current_zoom = 1.0 + zoom_value / 100.0
-        self.graphics_view.setTransform(QTransform().scale(self.current_zoom, self.current_zoom))
+        self.graphics_view.setTransform(
+            QTransform().scale(self.current_zoom, self.current_zoom)
+        )
         self.zoom_value_label.setText(f"{(self.current_zoom - 0.5):.2f}")
 
     def restore_zoom(self):
@@ -176,26 +191,41 @@ class ViewerPanel(QWidget):
         self.colormap_combobox.setEnabled(False)
 
         if data.viewer is not None and data.viewer.data is not None:
-            num_channels = data.viewer.data.shape[-1] if len(data.viewer.data.shape) == 3 else 1
+            num_channels = (
+                data.viewer.data.shape[-1] if len(data.viewer.data.shape) == 3 else 1
+            )
             self.colormap_combobox.setEnabled(num_channels == 1 or num_channels == 2)
 
-            temp_file_path = tempfile.mktemp(suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir())
+            temp_file_path = tempfile.mktemp(
+                suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
+            )
 
             fig, ax = plt.subplots()
             fig.patch.set_alpha(0)
 
             if num_channels == 2:
                 normal_data = data.viewer.data[..., 0]
-                alpha_channel = np.interp(data.viewer.data[..., 1], (data.viewer.data[..., 1].min(), data.viewer.data[..., 1].max()), (0, 1))
+                alpha_channel = np.interp(
+                    data.viewer.data[..., 1],
+                    (data.viewer.data[..., 1].min(), data.viewer.data[..., 1].max()),
+                    (0, 1),
+                )
 
-                ax.imshow(normal_data, cmap=COLORMAPS[self.colormap_combobox.currentText()], alpha=alpha_channel)
+                ax.imshow(
+                    normal_data,
+                    cmap=COLORMAPS[self.colormap_combobox.currentText()],
+                    alpha=alpha_channel,
+                )
             else:
-                ax.imshow(data.viewer.data, cmap=COLORMAPS[self.colormap_combobox.currentText()])
+                ax.imshow(
+                    data.viewer.data,
+                    cmap=COLORMAPS[self.colormap_combobox.currentText()],
+                )
 
-            ax.axis('off')
+            ax.axis("off")
             ax.set_frame_on(False)
 
-            plt.savefig(temp_file_path, format='png', transparent=True)
+            plt.savefig(temp_file_path, format="png", transparent=True)
             plt.close()
 
             image = QImage(temp_file_path)
@@ -219,25 +249,34 @@ class ViewerPanel(QWidget):
     def save_as_geotiff(self):
         if data.viewer is not None and data.raster is not None:
             file_dialog = QFileDialog()
-            file_path, _ = file_dialog.getSaveFileName(self, "Save as TIFF", "", "TIFF Files (*.tif *.tiff)")
+            file_path, _ = file_dialog.getSaveFileName(
+                self, "Save as TIFF", "", "TIFF Files (*.tif *.tiff)"
+            )
 
             if file_path:
                 tiff_data = data.viewer.data.astype(np.uint8)
                 import tifffile
+
                 tifffile.imwrite(file_path, tiff_data)
 
     def save_as_image(self):
         if data.viewer is not None and data.raster is not None:
             file_dialog = QFileDialog()
-            file_path, _ = file_dialog.getSaveFileName(self, "Save as Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp)")
+            file_path, _ = file_dialog.getSaveFileName(
+                self, "Save as Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp)"
+            )
 
             if file_path:
-                temp_file_path = tempfile.mktemp(suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir())
+                temp_file_path = tempfile.mktemp(
+                    suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
+                )
 
                 image_data = data.viewer.data.astype(np.uint8)
-                plt.imshow(image_data, cmap=COLORMAPS[self.colormap_combobox.currentText()])
-                plt.axis('off')
-                plt.savefig(temp_file_path, format='png', transparent=True)
+                plt.imshow(
+                    image_data, cmap=COLORMAPS[self.colormap_combobox.currentText()]
+                )
+                plt.axis("off")
+                plt.savefig(temp_file_path, format="png", transparent=True)
                 plt.close()
 
                 shutil.move(temp_file_path, file_path)

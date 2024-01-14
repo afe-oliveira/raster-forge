@@ -8,11 +8,10 @@ from RasterForge.containers.layer import Layer
 from RasterForge.tools.exceptions import ErrorMessages
 
 
-class CompositeType(Enum):
-    """Enumerates types of composite bands and their dispositions."""
-
-    TRUE_COLOR = ["Red", "Green", "Blue"]
-    CIR = ["NIR", "Red", "Green"]
+PRESET_COMPOSITES = {
+    "True Color": ["Red", "Green", "Blue"],
+    "CIR": ["NIR", "Red", "Green"],
+}
 
 
 def composite(

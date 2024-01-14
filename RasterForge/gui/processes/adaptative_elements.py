@@ -1,21 +1,23 @@
+from typing import Any, Type
+
 import numpy as np
 from PySide6.QtWidgets import QComboBox, QVBoxLayout, QGroupBox, QLabel, QLineEdit
 
 from RasterForge.gui.data import data
 
-def adaptative_input(name, type):
 
+def adaptative_input(name: str, type: Type):
     widget = None
 
-    # Data Type is an Numpy Array (Raster )
+    # Data Type is an Numpy Array
     if type == np.ndarray:
         widget = QComboBox()
         if data.raster is not None:
             keys_from_raster = list(data.raster.layers.keys())
             widget.addItems(keys_from_raster)
     # Data Type is a Tuple
-    elif getattr(type, '__origin__', None) == tuple:
-        tuple_types = getattr(type, '__args__', ())
+    elif getattr(type, "__origin__", None) == tuple:
+        tuple_types = getattr(type, "__args__", ())
         widget_group = QGroupBox()
         group_layout = QVBoxLayout()
         for i, subtype in enumerate(tuple_types):
@@ -29,7 +31,7 @@ def adaptative_input(name, type):
         widget = widget_group
     # Data Type is a Scalar
     else:
-        widget = QLineEdit(self)
-        widget.setObjectName(f"{param_name.upper()}")
+        widget = QLineEdit()
+        widget.setObjectName(f"{name.upper()}")
 
     return widget

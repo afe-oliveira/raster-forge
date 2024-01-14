@@ -1,4 +1,11 @@
-from PySide6.QtWidgets import QGridLayout, QWidget, QMainWindow, QVBoxLayout, QFrame, QPushButton
+from PySide6.QtWidgets import (
+    QGridLayout,
+    QWidget,
+    QMainWindow,
+    QVBoxLayout,
+    QFrame,
+    QPushButton,
+)
 
 from .layers.panel import LayersPanel
 from RasterForge.gui.viewer.panel import ViewerPanel
@@ -12,27 +19,27 @@ class OuterFrame(QFrame):
         layout = QVBoxLayout(self)
         layout.addWidget(widget)
 
-class MainWindow(QMainWindow):
 
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("PySide 6 Application")
+        self.setWindowTitle("Raster Forge")
         self.setGeometry(100, 100, 1200, 800)
 
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
         panels = {
-            'layers': OuterFrame(LayersPanel()),
-            'processes': OuterFrame(ProcessPanel()),
-            'viewer': OuterFrame(ViewerPanel())
+            "layers": OuterFrame(LayersPanel()),
+            "processes": OuterFrame(ProcessPanel()),
+            "viewer": OuterFrame(ViewerPanel()),
         }
 
         grid_layout = QGridLayout(central_widget)
-        grid_layout.addWidget(panels['layers'], 0, 0, 50, 40)
-        grid_layout.addWidget(panels['processes'], 50, 0, 50, 40)
-        grid_layout.addWidget(panels['viewer'], 0, 40, 100, 60)
+        grid_layout.addWidget(panels["layers"], 0, 0, 50, 40)
+        grid_layout.addWidget(panels["processes"], 50, 0, 50, 40)
+        grid_layout.addWidget(panels["viewer"], 0, 40, 100, 60)
 
         # Lock Proportions
         for i in range(100):
