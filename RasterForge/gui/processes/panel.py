@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
 
 from RasterForge.gui.processes.composites_panel import CompositesPanel
 from RasterForge.gui.processes.indices_panel import IndicesPanel
+from RasterForge.gui.processes.topographical_panel import TopographicalPanel
 from RasterForge.indices.index_finder import _find_indices
 
 from RasterForge.gui.data import data
@@ -38,6 +39,14 @@ class ProcessPanel(QWidget):
         topo_button.clicked.connect(self.topographical_clicked)
         main_process_layout.addWidget(topo_button)
 
+        distance_button = QPushButton(f"Distance Chart", self)
+        distance_button.clicked.connect(self.distance_clicked())
+        main_process_layout.addWidget(distance_button)
+
+        fuel_button = QPushButton(f"Fuel Map", self)
+        fuel_button.clicked.connect(self.fuel_clicked())
+        main_process_layout.addWidget(fuel_button)
+
         self.stacked_widget.addWidget(main_process_panel)
         data.process_main.connect(self.show_main_panel)
 
@@ -50,8 +59,16 @@ class ProcessPanel(QWidget):
         self.stacked_widget.addWidget(self.indices_panel)
 
         # Panel 4: Topographical Features Panel
-        self.topo_panel = CompositesPanel(_find_indices())
+        self.topo_panel = TopographicalPanel()
         self.stacked_widget.addWidget(self.topo_panel)
+
+        # Panel 5: Distance Feature Panel
+        self.distance_panel = TopographicalPanel()
+        self.stacked_widget.addWidget(self.distance_panel)
+
+        # Panel 6: Fuel Feature Panel
+        self.fuel_panel = TopographicalPanel()
+        self.stacked_widget.addWidget(self.fuel_panel)
 
         layout = QVBoxLayout(self)
         layout.addWidget(self.stacked_widget)
@@ -66,4 +83,10 @@ class ProcessPanel(QWidget):
         self.stacked_widget.setCurrentIndex(2)
 
     def topographical_clicked(self):
-        self.stacked_widget.setCurrentIndex(2)
+        self.stacked_widget.setCurrentIndex(3)
+
+    def distance_clicked(self):
+        self.stacked_widget.setCurrentIndex(3)
+
+    def fuel_clicked(self):
+        self.stacked_widget.setCurrentIndex(3)

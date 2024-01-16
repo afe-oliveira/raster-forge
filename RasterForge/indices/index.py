@@ -21,7 +21,6 @@ def index(
     result = formula(*variables)
     result = (2 * (result - np.min(result)) / (np.max(result) - np.min(result))) - 1
     result = np.clip(result, clip[0], clip[1])
-    print(result.mean())
 
     if alpha is not None:
         result = np.dstack([result, alpha])
