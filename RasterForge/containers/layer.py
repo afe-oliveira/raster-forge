@@ -137,7 +137,7 @@ class Layer:
                 "right": dataset.bounds[2],
                 "top": dataset.bounds[3],
             }
-            crs = str(dataset.crs.wkt)
+            crs = str(dataset.crs.to_epsg()) if dataset.crs.to_epsg() is not None else '4326'
             driver = dataset.meta["driver"].upper()
             no_data = dataset.nodata
             transform = (
