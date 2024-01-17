@@ -1,4 +1,4 @@
-from typing import Dict, TypedDict
+from typing import Dict, TypedDict, Optional
 
 import rasterio
 
@@ -40,9 +40,17 @@ class Raster:
     def scale(self) -> int:
         return self._scale
 
-    def import_layers(self, path: str, config: list[RasterImportConfig]):
+    def import_layers(self, path: str, config: Optional[list[RasterImportConfig]] = None):
         with rasterio.open(path) as dataset:
             dataset = rescale_dataset(dataset, self.scale)
+
+            if config is None:
+                config = []
+                for id in range(1, dataset.count + 1):
+                    aux_config = {}
+                    aux_config['name'] = f"Layer {id}"
+                    aux_config['id'] = id
+                    config.append(aux_config)
 
             for item in config:
                 array = dataset.read(item["id"])
