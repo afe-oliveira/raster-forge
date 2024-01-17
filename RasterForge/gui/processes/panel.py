@@ -9,6 +9,8 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.gui.processes.composites_panel import CompositesPanel
+from RasterForge.gui.processes.distance_panel import DistancePanel
+from RasterForge.gui.processes.fuel_panel import FuelPanel
 from RasterForge.gui.processes.indices_panel import IndicesPanel
 from RasterForge.gui.processes.topographical_panel import TopographicalPanel
 from RasterForge.indices.index_finder import _find_indices
@@ -40,11 +42,11 @@ class ProcessPanel(QWidget):
         main_process_layout.addWidget(topo_button)
 
         distance_button = QPushButton(f"Distance Chart", self)
-        distance_button.clicked.connect(self.distance_clicked())
+        distance_button.clicked.connect(self.distance_clicked)
         main_process_layout.addWidget(distance_button)
 
         fuel_button = QPushButton(f"Fuel Map", self)
-        fuel_button.clicked.connect(self.fuel_clicked())
+        fuel_button.clicked.connect(self.fuel_clicked)
         main_process_layout.addWidget(fuel_button)
 
         self.stacked_widget.addWidget(main_process_panel)
@@ -63,11 +65,11 @@ class ProcessPanel(QWidget):
         self.stacked_widget.addWidget(self.topo_panel)
 
         # Panel 5: Distance Feature Panel
-        self.distance_panel = TopographicalPanel()
+        self.distance_panel = DistancePanel()
         self.stacked_widget.addWidget(self.distance_panel)
 
         # Panel 6: Fuel Feature Panel
-        self.fuel_panel = TopographicalPanel()
+        self.fuel_panel = FuelPanel()
         self.stacked_widget.addWidget(self.fuel_panel)
 
         layout = QVBoxLayout(self)
@@ -86,7 +88,7 @@ class ProcessPanel(QWidget):
         self.stacked_widget.setCurrentIndex(3)
 
     def distance_clicked(self):
-        self.stacked_widget.setCurrentIndex(3)
+        self.stacked_widget.setCurrentIndex(4)
 
     def fuel_clicked(self):
-        self.stacked_widget.setCurrentIndex(3)
+        self.stacked_widget.setCurrentIndex(5)
