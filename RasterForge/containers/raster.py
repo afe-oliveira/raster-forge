@@ -64,7 +64,7 @@ class Raster:
                     dataset.transform.d,
                     dataset.transform.e,
                 )
-                units = dataset.units[item["id"]]
+                units = dataset.units[item["id"] - 1]
 
                 layer = Layer(
                     array=array,

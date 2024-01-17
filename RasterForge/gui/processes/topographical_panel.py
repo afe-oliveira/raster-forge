@@ -133,7 +133,7 @@ class TopographicalPanel(QWidget):
                 dem=data.raster.layers[self.inputs["DEM"].currentText()].array,
                 units=self.inputs["Units"].currentText().lower(),
             )
-        elif self.topographic_combo.currentText() == "Degrees":
+        elif self.topographic_combo.currentText() == "Aspect":
             layer.array = aspect(
                 dem=data.raster.layers[self.inputs["DEM"].currentText()].array,
                 units=self.inputs["Units"].currentText().lower(),

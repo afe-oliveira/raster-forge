@@ -190,11 +190,8 @@ class ViewerPanel(QWidget):
     def update_viewer(self):
         self.colormap_combobox.setEnabled(False)
 
-        if data.viewer is not None and data.viewer.data is not None:
-            num_channels = (
-                data.viewer.data.shape[-1] if len(data.viewer.data.shape) == 3 else 1
-            )
-            self.colormap_combobox.setEnabled(num_channels == 1 or num_channels == 2)
+        if data.viewer is not None and data.viewer.array is not None:
+            self.colormap_combobox.setEnabled(data.viewer.count == 1 or data.viewer.count == 2)
 
             temp_file_path = tempfile.mktemp(
                 suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
@@ -203,11 +200,11 @@ class ViewerPanel(QWidget):
             fig, ax = plt.subplots()
             fig.patch.set_alpha(0)
 
-            if num_channels == 2:
-                normal_data = data.viewer.data[..., 0]
+            if data.viewer.count == 2:
+                normal_data = data.viewer.array[..., 0]
                 alpha_channel = np.interp(
-                    data.viewer.data[..., 1],
-                    (data.viewer.data[..., 1].min(), data.viewer.data[..., 1].max()),
+                    data.viewer.array[..., 1],
+                    (data.viewer.array[..., 1].min(), data.viewer.array[..., 1].max()),
                     (0, 1),
                 )
 
@@ -218,7 +215,7 @@ class ViewerPanel(QWidget):
                 )
             else:
                 ax.imshow(
-                    data.viewer.data,
+                    data.viewer.array,
                     cmap=COLORMAPS[self.colormap_combobox.currentText()],
                 )
 
@@ -254,7 +251,7 @@ class ViewerPanel(QWidget):
             )
 
             if file_path:
-                tiff_data = data.viewer.data.astype(np.uint8)
+                tiff_data = data.viewer.array.astype(np.uint8)
                 import tifffile
 
                 tifffile.imwrite(file_path, tiff_data)
@@ -271,7 +268,7 @@ class ViewerPanel(QWidget):
                     suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
                 )
 
-                image_data = data.viewer.data.astype(np.uint8)
+                image_data = data.viewer.array.astype(np.uint8)
                 plt.imshow(
                     image_data, cmap=COLORMAPS[self.colormap_combobox.currentText()]
                 )
