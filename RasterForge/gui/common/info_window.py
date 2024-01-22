@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QScrollArea, QWidget, QVBoxLayout, QFrame, QLabel
+from PySide6.QtWidgets import QDialog, QScrollArea, QWidget, QVBoxLayout, QFrame, QLabel, QTabWidget
 from PySide6.QtCore import Qt
 
 class LayerInfoWindow(QDialog):
@@ -7,18 +7,31 @@ class LayerInfoWindow(QDialog):
         self.name = name
         self.setWindowTitle(f"Layer Information - {self.name}")
 
-        # Create a Scroll Area
-        self.scroll_area = QScrollArea(self)
-        self.scroll_area.setWidgetResizable(True)
+        # Create a Tab Widget
+        self.tab_widget = QTabWidget(self)
 
-        self.scroll_content = QWidget(self)
-        self.scroll_area.setWidget(self.scroll_content)
+        # Create Tabs
+        self.create_general_tab(layer)
+        self.create_statistics_tab(layer)
+        self.create_histogram_tab(layer)
 
-        # Create a Layout for the Scroll Content
-        self.scroll_layout = QVBoxLayout(self.scroll_content)
-        self.scroll_layout.setAlignment(Qt.AlignTop)
+        # Set the Layout for the Dialog
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.tab_widget)
+        self.setLayout(layout)
 
-        # Create Labels for Properties
+    def create_general_tab(self, layer):
+        # Create a Scroll Area for General Information
+        scroll_area = QScrollArea(self)
+        scroll_area.setWidgetResizable(True)
+
+        scroll_content = QWidget(self)
+        scroll_area.setWidget(scroll_content)
+
+        scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setAlignment(Qt.AlignTop)
+
+        # Add Labels for General Information
         properties = [
             ("Driver", layer.driver),
             ("No Data", layer.no_data),
@@ -31,15 +44,8 @@ class LayerInfoWindow(QDialog):
             ("Width", layer.width),
             ("Height", layer.height),
             ("Count", layer.count),
-            ("Separator", None),
-            ("Mean", layer.mean),
-            ("Median", layer.median),
-            ("Minimum", layer.min),
-            ("Maximum", layer.max),
-            ("Standard Deviation", layer.std_dev),
         ]
 
-        # Add Labels to the Layout
         for property_name, value in properties:
             if value is not None:
                 if property_name == "Separator":
@@ -47,7 +53,7 @@ class LayerInfoWindow(QDialog):
                     separator = QFrame(self)
                     separator.setFrameShape(QFrame.HLine)
                     separator.setFrameShadow(QFrame.Sunken)
-                    self.scroll_layout.addWidget(separator)
+                    scroll_layout.addWidget(separator)
                 elif property_name == "Transform":
                     transform_elements = [
                         ("Upper Left Corner X Coordinate", value[0]),
@@ -58,22 +64,54 @@ class LayerInfoWindow(QDialog):
                         ("Pixel Height", value[5])
                     ]
                     label = QLabel(f"{property_name}:")
-                    self.scroll_layout.addWidget(label)
+                    scroll_layout.addWidget(label)
                     for element_name, element_value in transform_elements:
                         label = QLabel(f"   {element_name}: {element_value}")
-                        self.scroll_layout.addWidget(label)
+                        scroll_layout.addWidget(label)
                 elif property_name == "Bounds":
                     label = QLabel(f"{property_name}:")
                     for element_name, element_value in value.items():
                         label = QLabel(f"   {element_name}: {element_value}")
-                        self.scroll_layout.addWidget(label)
-                    self.scroll_layout.addWidget(label)
+                        scroll_layout.addWidget(label)
+                    scroll_layout.addWidget(label)
                 else:
                     label = QLabel(f"{property_name}: {value}")
-                    self.scroll_layout.addWidget(label)
+                    scroll_layout.addWidget(label)
             else:
                 label = QLabel(f"{property_name}: N/A")
-                self.scroll_layout.addWidget(label)
-        # Set the Layout for the Dialog
-        self.setLayout(self.scroll_layout)
+                scroll_layout.addWidget(label)
+
+        scroll_content.setLayout(scroll_layout)
+        self.tab_widget.addTab(scroll_area, "General")
+
+    def create_statistics_tab(self, layer):
+        # Create a Scroll Area for General Information
+        scroll_area = QScrollArea(self)
+        scroll_area.setWidgetResizable(True)
+
+        scroll_content = QWidget(self)
+        scroll_area.setWidget(scroll_content)
+
+        scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setAlignment(Qt.AlignTop)
+
+        # Add Labels for General Information
+        properties = [
+            ("Mean", layer.mean),
+            ("Median", layer.median),
+            ("Minimum", layer.min),
+            ("Maximum", layer.max),
+            ("Standard Deviation", layer.std_dev)
+        ]
+
+        for property_name, value in properties:
+            label_text = f"{property_name}: {value}" if value is not None else f"{property_name}: N/A"
+            label = QLabel(label_text)
+            scroll_layout.addWidget(label)
+
+        scroll_content.setLayout(scroll_layout)
+        self.tab_widget.addTab(scroll_area, "Statistics")
+
+    def create_histogram_tab(self, layer):
+        pass
 
