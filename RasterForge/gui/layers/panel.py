@@ -123,7 +123,7 @@ class LayerElement(QWidget):
         self.edit_line.setParent(None)
 
     def handle_info_button_click(self):
-        info_window = LayerInfoWindow(self.name, self)
+        info_window = LayerInfoWindow(self.name, data.raster.layers[self.name], self)
         info_window.exec_()
 
     def handle_delete_button_click(self):

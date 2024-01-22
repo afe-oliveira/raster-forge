@@ -1,92 +1,76 @@
-from PySide6.QtGui import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QVBoxLayout,
-    QLabel,
-    QTabWidget,
-    QWidget,
-    QGridLayout,
-    QSizePolicy,
-)
-
-from RasterForge.gui.data import data
-
+from PySide6.QtWidgets import QDialog, QScrollArea, QWidget, QVBoxLayout, QFrame, QLabel
+from PySide6.QtCore import Qt
 
 class LayerInfoWindow(QDialog):
-    def __init__(self, layer_name, parent=None):
+    def __init__(self, name, layer, parent=None):
         super().__init__(parent)
-        self.name = layer_name
+        self.name = name
         self.setWindowTitle(f"Layer Information - {self.name}")
 
-        # Create a layout for the information window
-        main_layout = QVBoxLayout(self)
+        # Create a Scroll Area
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setWidgetResizable(True)
 
-        # Create a tab widget
-        self.tab_widget = QTabWidget(self)
+        self.scroll_content = QWidget(self)
+        self.scroll_area.setWidget(self.scroll_content)
 
-        # Add tabs for metadata, transform, projection, and statistics
-        self.tab_widget.addTab(self.metadata_tab(), "Metadata")
-        self.tab_widget.addTab(self.transform_tab(), "Transform")
-        self.tab_widget.addTab(self.projection_tab(), "Projection")
-        self.tab_widget.addTab(self.statistics_tab(), "Statistics")
+        # Create a Layout for the Scroll Content
+        self.scroll_layout = QVBoxLayout(self.scroll_content)
+        self.scroll_layout.setAlignment(Qt.AlignTop)
 
-        # Add the tab widget to the main layout
-        main_layout.addWidget(self.tab_widget)
+        # Create Labels for Properties
+        properties = [
+            ("Driver", layer.driver),
+            ("No Data", layer.no_data),
+            ("Units", layer.units),
+            ("Separator", None),
+            ("Transform", layer.transform),
+            ("CRS", layer.crs),
+            ("Bounds", layer.bounds),
+            ("Separator", None),
+            ("Width", layer.width),
+            ("Height", layer.height),
+            ("Count", layer.count),
+            ("Separator", None),
+            ("Mean", layer.mean),
+            ("Median", layer.median),
+            ("Minimum", layer.min),
+            ("Maximum", layer.max),
+            ("Standard Deviation", layer.std_dev),
+        ]
 
-        # Set a predefined window size
-        self.setFixedSize(500, 400)  # Adjust the values as needed
+        # Add Labels to the Layout
+        for property_name, value in properties:
+            if property_name == "Separator":
+                # Create Separator
+                separator = QFrame(self)
+                separator.setFrameShape(QFrame.HLine)
+                separator.setFrameShadow(QFrame.Sunken)
+                self.scroll_layout.addWidget(separator)
+            elif property_name == "Transform":
+                transform_elements = [
+                    ("Upper Left Corner X Coordinate", value[0]),
+                    ("Pixel Width", value[1]),
+                    ("Row Rotation", value[2]),
+                    ("Upper Left Corner Y Coordinate", value[3]),
+                    ("Column Rotation", value[4]),
+                    ("Pixel Height", value[5])
+                ]
+                label = QLabel(f"{property_name}:")
+                self.scroll_layout.addWidget(label)
+                for element_name, element_value in transform_elements:
+                    label = QLabel(f"   {element_name}: {element_value}")
+                    self.scroll_layout.addWidget(label)
+            elif property_name == "Bounds":
+                label = QLabel(f"{property_name}:")
+                for element_name, element_value in value.items():
+                    label = QLabel(f"   {element_name}: {element_value}")
+                    self.scroll_layout.addWidget(label)
+                self.scroll_layout.addWidget(label)
+            else:
+                label = QLabel(f"{property_name}: {value}")
+                self.scroll_layout.addWidget(label)
 
-    def metadata_tab(self):
-        metadata_tab = QWidget()
-        metadata_tab.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # Set the Layout for the Dialog
+        self.setLayout(self.scroll_layout)
 
-        metadata_layout = QVBoxLayout(metadata_tab)
-        metadata_layout.setAlignment(Qt.AlignTop)
-
-        metadata_dict = data.raster.layers[self.name].metadata
-        del metadata_dict["crs"]
-        del metadata_dict["transform"]
-
-        grid_layout = QGridLayout()
-        row = 0
-        for key, value in metadata_dict.items():
-            key_label = QLabel(str(key).upper())
-            value_label = QLabel(str(value).upper())
-
-            key_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            value_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-            grid_layout.addWidget(key_label, row, 0)
-            grid_layout.addWidget(value_label, row, 1)
-
-            row += 1
-
-        metadata_layout.addLayout(grid_layout)
-        return metadata_tab
-
-    def transform_tab(self):
-        transform_tab = QWidget()
-        transform_layout = QVBoxLayout(transform_tab)
-        transform_label = QLabel(
-            "Transform: ..."
-        )  # Replace "..." with actual transform information
-        transform_layout.addWidget(transform_label)
-        return transform_tab
-
-    def projection_tab(self):
-        projection_tab = QWidget()
-        projection_layout = QVBoxLayout(projection_tab)
-        projection_label = QLabel(
-            "Projection: ..."
-        )  # Replace "..." with actual projection information
-        projection_layout.addWidget(projection_label)
-        return projection_tab
-
-    def statistics_tab(self):
-        statistics_tab = QWidget()
-        statistics_layout = QVBoxLayout(statistics_tab)
-        statistics_label = QLabel(
-            "Statistics: ..."
-        )  # Replace "..." with actual statistics information
-        statistics_layout.addWidget(statistics_label)
-        return statistics_tab

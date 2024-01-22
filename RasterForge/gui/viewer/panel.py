@@ -2,6 +2,9 @@ import os
 import shutil
 import tempfile
 
+import rasterio
+from rasterio.transform import from_origin
+
 import numpy as np
 from PySide6.QtWidgets import (
     QGraphicsView,
@@ -145,23 +148,25 @@ class ViewerPanel(QWidget):
         data.viewer_changed.emit()
 
     def update_coordinates(self, event):
-        pos_in_scene = self.graphics_view.mapToScene(event.pos())
-        pixel_coordinates = f"({int(pos_in_scene.x())}, {int(pos_in_scene.y())})"
-        self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
+        if data.viewer is not None and data.viewer.array is not None:
+            pos_in_scene = self.graphics_view.mapToScene(event.pos())
+            pixel_coordinates = f"({int(pos_in_scene.x())}, {int(pos_in_scene.y())})"
+            self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
 
-        transform = None  # layer_data.transform
-        if transform is not None:
-            inverted_transform = transform.inverted()[0]
-            pos_in_original = inverted_transform.map(pos_in_scene)
 
-            lat_lng_coordinates = f"({pos_in_original.x()}, {pos_in_original.y()})"
-            self.lat_lng_coordinates_label.setText(f"{lat_lng_coordinates}")
-        else:
-            self.lat_lng_coordinates_label.setText(f"N/A")
+            if data.viewer.transform is not None:
+                transform = from_origin(data.viewer.transform[0], data.viewer.transform[3], data.viewer.transform[1],
+                                        data.viewer.transform[5])
+                pos_in_original = transform * (pos_in_scene.x(), pos_in_scene.y())
 
-        # Show the band values popup near the mouse cursor
-        band_values = self.get_band_values(pos_in_scene)
-        self.show_band_values_popup(event, band_values)
+                lat_lng_coordinates = f"({pos_in_original[0]}, {pos_in_original[1]})"
+                self.lat_lng_coordinates_label.setText(f"{lat_lng_coordinates}")
+            else:
+                self.lat_lng_coordinates_label.setText(f"N/A")
+
+            # Show the band values popup near the mouse cursor
+            band_values = self.get_band_values(pos_in_scene)
+            self.show_band_values_popup(event, band_values)
 
     def show_band_values_popup(self, event, band_values):
         # Show the band values popup near the mouse cursor

@@ -37,6 +37,7 @@ class IndicesPanel(QWidget):
         # Add Available Plugins
         for name, function in self.plugins.items():
             self.indices_combo.addItem(str(name).upper())
+
         # Create a Scroll Area
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
