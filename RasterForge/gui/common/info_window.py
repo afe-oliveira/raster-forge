@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QDialog, QScrollArea, QWidget, QVBoxLayout, QFrame, QLabel, QTabWidget
 from PySide6.QtCore import Qt
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 class LayerInfoWindow(QDialog):
     def __init__(self, name, layer, parent=None):
@@ -85,7 +87,7 @@ class LayerInfoWindow(QDialog):
         self.tab_widget.addTab(scroll_area, "General")
 
     def create_statistics_tab(self, layer):
-        # Create a Scroll Area for General Information
+        # Create a Scroll Area for Statistical Information
         scroll_area = QScrollArea(self)
         scroll_area.setWidgetResizable(True)
 
@@ -95,7 +97,7 @@ class LayerInfoWindow(QDialog):
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setAlignment(Qt.AlignTop)
 
-        # Add Labels for General Information
+        # Add Labels for Statistical Information
         properties = [
             ("Mean", layer.mean),
             ("Median", layer.median),
@@ -113,5 +115,30 @@ class LayerInfoWindow(QDialog):
         self.tab_widget.addTab(scroll_area, "Statistics")
 
     def create_histogram_tab(self, layer):
-        pass
+        # Create a Scroll Area for Histogram
+        scroll_area = QScrollArea(self)
+        scroll_area.setWidgetResizable(True)
+
+        scroll_content = QWidget(self)
+        scroll_area.setWidget(scroll_content)
+
+        scroll_layout = QVBoxLayout(scroll_content)
+        scroll_layout.setAlignment(Qt.AlignTop)
+
+        # Create a Matplotlib figure and canvas
+        figure, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+        canvas = FigureCanvas(figure)
+        scroll_layout.addWidget(canvas)
+
+        # Plot the histogram using layer.array data
+        ax.hist(layer.array.flatten(), bins=50, color='blue', alpha=0.7)
+        ax.set_title('Histogram')
+        ax.set_xlabel('Pixel Values')
+        ax.set_ylabel('Frequency')
+
+        # Add the Matplotlib canvas to the scroll layout
+        scroll_layout.addWidget(canvas)
+
+        scroll_content.setLayout(scroll_layout)
+        self.tab_widget.addTab(scroll_area, "Histogram")
 
