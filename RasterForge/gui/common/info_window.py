@@ -41,36 +41,39 @@ class LayerInfoWindow(QDialog):
 
         # Add Labels to the Layout
         for property_name, value in properties:
-            if property_name == "Separator":
-                # Create Separator
-                separator = QFrame(self)
-                separator.setFrameShape(QFrame.HLine)
-                separator.setFrameShadow(QFrame.Sunken)
-                self.scroll_layout.addWidget(separator)
-            elif property_name == "Transform":
-                transform_elements = [
-                    ("Upper Left Corner X Coordinate", value[0]),
-                    ("Pixel Width", value[1]),
-                    ("Row Rotation", value[2]),
-                    ("Upper Left Corner Y Coordinate", value[3]),
-                    ("Column Rotation", value[4]),
-                    ("Pixel Height", value[5])
-                ]
-                label = QLabel(f"{property_name}:")
-                self.scroll_layout.addWidget(label)
-                for element_name, element_value in transform_elements:
-                    label = QLabel(f"   {element_name}: {element_value}")
+            if value is not None:
+                if property_name == "Separator":
+                    # Create Separator
+                    separator = QFrame(self)
+                    separator.setFrameShape(QFrame.HLine)
+                    separator.setFrameShadow(QFrame.Sunken)
+                    self.scroll_layout.addWidget(separator)
+                elif property_name == "Transform":
+                    transform_elements = [
+                        ("Upper Left Corner X Coordinate", value[0]),
+                        ("Pixel Width", value[1]),
+                        ("Row Rotation", value[2]),
+                        ("Upper Left Corner Y Coordinate", value[3]),
+                        ("Column Rotation", value[4]),
+                        ("Pixel Height", value[5])
+                    ]
+                    label = QLabel(f"{property_name}:")
                     self.scroll_layout.addWidget(label)
-            elif property_name == "Bounds":
-                label = QLabel(f"{property_name}:")
-                for element_name, element_value in value.items():
-                    label = QLabel(f"   {element_name}: {element_value}")
+                    for element_name, element_value in transform_elements:
+                        label = QLabel(f"   {element_name}: {element_value}")
+                        self.scroll_layout.addWidget(label)
+                elif property_name == "Bounds":
+                    label = QLabel(f"{property_name}:")
+                    for element_name, element_value in value.items():
+                        label = QLabel(f"   {element_name}: {element_value}")
+                        self.scroll_layout.addWidget(label)
                     self.scroll_layout.addWidget(label)
-                self.scroll_layout.addWidget(label)
+                else:
+                    label = QLabel(f"{property_name}: {value}")
+                    self.scroll_layout.addWidget(label)
             else:
-                label = QLabel(f"{property_name}: {value}")
+                label = QLabel(f"{property_name}: N/A")
                 self.scroll_layout.addWidget(label)
-
         # Set the Layout for the Dialog
         self.setLayout(self.scroll_layout)
 

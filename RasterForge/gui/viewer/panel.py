@@ -26,6 +26,7 @@ from PySide6.QtCore import Qt, QRectF, QPointF
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_template import FigureCanvas
 
+from RasterForge.gui.common.info_window import LayerInfoWindow
 from RasterForge.gui.data import data
 
 COLORMAPS = {
@@ -242,7 +243,8 @@ class ViewerPanel(QWidget):
             self.update_zoom()
 
     def show_info(self):
-        pass
+        info_window = LayerInfoWindow("Viewer Data", data.viewer, self)
+        info_window.exec_()
 
     def save_as_layer(self):
         if data.viewer is not None and data.raster is not None:
