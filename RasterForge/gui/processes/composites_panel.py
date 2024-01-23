@@ -4,25 +4,23 @@ from typing import Type
 import numpy as np
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QComboBox,
+    QDoubleSpinBox,
+    QFrame,
+    QGridLayout,
+    QGroupBox,
+    QLabel,
+    QLineEdit,
+    QProgressBar,
     QPushButton,
     QScrollArea,
-    QProgressBar,
-    QComboBox,
-    QLineEdit,
-    QLabel,
-    QGroupBox,
-    QGridLayout,
-    QFrame,
-    QDoubleSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
 
 from RasterForge.containers.layer import Layer
-
 from RasterForge.gui.data import data
 from RasterForge.gui.processes.adaptative_elements import adaptative_input
-
 from RasterForge.processes.composite import PRESET_COMPOSITES, composite
 
 

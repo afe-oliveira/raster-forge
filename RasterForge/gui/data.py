@@ -1,5 +1,5 @@
 import numpy as np
-from PySide6.QtCore import Signal, QObject
+from PySide6.QtCore import QObject, Signal
 
 from RasterForge.containers.layer import Layer
 from RasterForge.containers.raster import Raster

@@ -10,8 +10,6 @@ from PySide6.QtWidgets import (
     QGraphicsView,
     QGraphicsScene,
     QLabel,
-    QVBoxLayout,
-    QHBoxLayout,
     QGraphicsPixmapItem,
     QWidget,
     QPushButton,
@@ -57,7 +55,7 @@ COLORMAPS = {
 
 class ViewerPanel(QWidget):
 
-    current_zoom = 0.5
+    current_zoom = 0
     layer = None
 
     def __init__(self):
@@ -111,9 +109,9 @@ class ViewerPanel(QWidget):
         # Add Zoom Slider
         self.zoom_slider = QSlider()
         self.zoom_slider.setOrientation(Qt.Horizontal)
-        self.zoom_slider.setMinimum(-50)
-        self.zoom_slider.setMaximum(1950)
-        self.zoom_slider.setValue(-50)
+        self.zoom_slider.setMinimum(0)
+        self.zoom_slider.setMaximum(2000)
+        self.zoom_slider.setValue(0)
 
         self.zoom_label = QLabel("Zoom:")
         self.zoom_value_label = QLabel("1.0")
@@ -157,25 +155,30 @@ class ViewerPanel(QWidget):
     def update_coordinates(self, event):
         if data.viewer is not None and data.viewer.array is not None:
             pos_in_scene = self.graphics_view.mapToScene(event.pos())
-            if int(pos_in_scene.x()) in range(0, data.viewer.width) and int(pos_in_scene.y()) in range(0, data.viewer.height):
-                pixel_coordinates = f"({int(pos_in_scene.x())}, {int(pos_in_scene.y())})"
-                self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
 
-                if data.viewer.transform is not None:
-                    transform = from_origin(data.viewer.transform[0], data.viewer.transform[3], data.viewer.transform[1],
-                                            data.viewer.transform[5])
-                    pos_in_original = transform * (pos_in_scene.x(), pos_in_scene.y())
+            if self.graphics_view.transform():
+                pos_in_original = self.graphics_view.transform().inverted()[0].map(pos_in_scene)
 
-                    lat_lng_coordinates = f"({pos_in_original[0]}, {pos_in_original[1]})"
-                    self.lat_lng_coordinates_label.setText(f"{lat_lng_coordinates}")
-                else:
-                    self.lat_lng_coordinates_label.setText(f"N/A")
+                if 0 <= pos_in_original.x() < data.viewer.width and 0 <= pos_in_original.y() < data.viewer.height:
+                    pixel_coordinates = f"({int(pos_in_original.x())}, {int(pos_in_original.y())})"
+                    self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
 
-                band_values = self.get_band_values(int(pos_in_scene.x()), int(pos_in_scene.y()))
-                self.show_band_values_popup(event, band_values)
-            else:
-                self.pixel_coordinates_label.setText(f"N/A")
-                self.lat_lng_coordinates_label.setText(f"N/A")
+                    if data.viewer.transform is not None:
+                        transform = from_origin(data.viewer.transform[0], data.viewer.transform[3],
+                                                data.viewer.transform[1], data.viewer.transform[5])
+                        pos_transformed = transform * (pos_in_scene.x(), pos_in_scene.y())
+
+                        lat_lng_coordinates = f"({pos_transformed[0]}, {pos_transformed[1]})"
+                        self.lat_lng_coordinates_label.setText(f"{lat_lng_coordinates}")
+                    else:
+                        self.lat_lng_coordinates_label.setText(f"N/A")
+
+                    band_values = self.get_band_values(int(pos_in_original.x()), int(pos_in_original.y()))
+                    self.show_band_values_popup(event, band_values)
+                    return
+
+        self.pixel_coordinates_label.setText(f"N/A")
+        self.lat_lng_coordinates_label.setText(f"N/A")
 
     def show_band_values_popup(self, event, band_values):
         if self.pixel_value_show:
@@ -188,10 +191,10 @@ class ViewerPanel(QWidget):
         band_values = ""
         if data.viewer.array is not None:
             if data.viewer.count > 1:
-                for i in data.viewer.count:
-                    band_values += f"Band {i+1}: {data.viewer.array[y,x,i]} \n"
+                for i in range(data.viewer.count):
+                    band_values += f"Band {i + 1}: {data.viewer.array[y, x, i]} \n"
             else:
-                band_values = f"{data.viewer.array[y,x]}"
+                band_values = f"{data.viewer.array[y, x]}"
         return band_values
 
     def update_zoom(self):
@@ -200,10 +203,10 @@ class ViewerPanel(QWidget):
         self.graphics_view.setTransform(
             QTransform().scale(self.current_zoom, self.current_zoom)
         )
-        self.zoom_value_label.setText(f"{(self.current_zoom - 0.5):.2f}")
+        self.zoom_value_label.setText(f"{self.current_zoom:.2f}")
 
     def restore_zoom(self):
-        self.zoom_slider.setValue(-50)
+        self.zoom_slider.setValue(0)
         self.update_zoom()
 
     def toggle_pixel_value(self):
@@ -254,9 +257,11 @@ class ViewerPanel(QWidget):
             self.scene.clear()
 
             image_item = QGraphicsPixmapItem(pixmap)
+
             self.scene.addItem(image_item)
 
             self.update_zoom()
+
 
     def show_info(self):
         info_window = LayerInfoWindow("Viewer Data", data.viewer, self)

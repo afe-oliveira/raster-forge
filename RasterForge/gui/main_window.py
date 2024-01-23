@@ -1,14 +1,15 @@
 from PySide6.QtWidgets import (
-    QGridLayout,
-    QWidget,
-    QMainWindow,
-    QVBoxLayout,
     QFrame,
+    QGridLayout,
+    QMainWindow,
     QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 
-from .layers.panel import LayersPanel
 from RasterForge.gui.viewer.panel import ViewerPanel
+
+from .layers.panel import LayersPanel
 from .processes.panel import ProcessPanel
 
 

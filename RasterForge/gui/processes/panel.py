@@ -1,21 +1,20 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QApplication,
-    QWidget,
-    QVBoxLayout,
     QPushButton,
     QScrollArea,
     QStackedWidget,
+    QVBoxLayout,
+    QWidget,
 )
 
+from RasterForge.gui.data import data
 from RasterForge.gui.processes.composites_panel import CompositesPanel
 from RasterForge.gui.processes.distance_panel import DistancePanel
 from RasterForge.gui.processes.fuel_panel import FuelPanel
 from RasterForge.gui.processes.indices_panel import IndicesPanel
 from RasterForge.gui.processes.topographical_panel import TopographicalPanel
 from RasterForge.indices.index_finder import _find_indices
-
-from RasterForge.gui.data import data
 
 
 class ProcessPanel(QWidget):

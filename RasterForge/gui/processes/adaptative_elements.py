@@ -1,7 +1,7 @@
 from typing import Any, Type
 
 import numpy as np
-from PySide6.QtWidgets import QComboBox, QVBoxLayout, QGroupBox, QLabel, QLineEdit
+from PySide6.QtWidgets import QComboBox, QGroupBox, QLabel, QLineEdit, QVBoxLayout
 
 from RasterForge.gui.data import data
 

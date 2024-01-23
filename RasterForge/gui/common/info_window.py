@@ -1,7 +1,16 @@
-from PySide6.QtWidgets import QDialog, QScrollArea, QWidget, QVBoxLayout, QFrame, QLabel, QTabWidget
-from PySide6.QtCore import Qt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QDialog,
+    QFrame,
+    QLabel,
+    QScrollArea,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
+
 
 class LayerInfoWindow(QDialog):
     def __init__(self, name, layer, parent=None):

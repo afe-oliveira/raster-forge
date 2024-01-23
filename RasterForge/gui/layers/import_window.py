@@ -1,23 +1,22 @@
+import rasterio
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
-    QDialog,
-    QGridLayout,
-    QPushButton,
-    QLabel,
-    QFrame,
-    QSpinBox,
-    QFileDialog,
     QCheckBox,
+    QComboBox,
+    QDialog,
+    QFileDialog,
+    QFrame,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QProgressBar,
+    QPushButton,
+    QScrollArea,
+    QSpinBox,
     QVBoxLayout,
     QWidget,
-    QLineEdit,
-    QScrollArea,
-    QHBoxLayout,
-    QComboBox,
-    QProgressBar,
 )
-
-import rasterio
 
 from RasterForge.containers.raster import Raster
 from RasterForge.gui.data import data

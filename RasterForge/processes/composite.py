@@ -7,7 +7,6 @@ from numpy import dtype, generic, ndarray
 from RasterForge.containers.layer import Layer
 from RasterForge.tools.exceptions import ErrorMessages
 
-
 PRESET_COMPOSITES = {
     "True Color": ["Red", "Green", "Blue"],
     "CIR": ["NIR", "Red", "Green"],

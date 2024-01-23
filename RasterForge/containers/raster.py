@@ -1,4 +1,4 @@
-from typing import Dict, TypedDict, Optional
+from typing import Dict, Optional, TypedDict
 
 import rasterio
 

@@ -4,24 +4,23 @@ from typing import Callable, get_args
 import numpy as np
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QComboBox,
+    QDoubleSpinBox,
+    QFrame,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QProgressBar,
     QPushButton,
     QScrollArea,
-    QProgressBar,
-    QComboBox,
-    QLineEdit,
-    QLabel,
-    QGroupBox,
-    QGridLayout,
-    QFrame,
-    QHBoxLayout,
     QSlider,
-    QDoubleSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
 
 from RasterForge.containers.layer import Layer
-
 from RasterForge.gui.data import data
 from RasterForge.indices.index import index
 
