@@ -85,9 +85,15 @@ class ViewerPanel(QWidget):
         self.colormap_combobox = QComboBox()
         self.colormap_combobox.addItems(list(COLORMAPS.keys()))
         self.colormap_combobox.setCurrentText("gray")
-        layout.addWidget(self.colormap_label, 0, 22, 1, 1)
-        layout.addWidget(self.colormap_combobox, 0, 23, 1, 1)
+        layout.addWidget(self.colormap_label, 0, 21, 1, 1)
+        layout.addWidget(self.colormap_combobox, 0, 22, 1, 1)
         self.colormap_combobox.currentIndexChanged.connect(self.update_viewer)
+
+        # Add Pixel Value Button
+        self.pixel_value_button = QPushButton("T")
+        layout.addWidget(self.pixel_value_button, 0, 23, 1, 1)
+        self.pixel_value_button.clicked.connect(self.toggle_pixel_value)
+        self.pixel_value_show = False
 
         # Add Info Button
         self.info_button = QPushButton("Info")
@@ -151,34 +157,41 @@ class ViewerPanel(QWidget):
     def update_coordinates(self, event):
         if data.viewer is not None and data.viewer.array is not None:
             pos_in_scene = self.graphics_view.mapToScene(event.pos())
-            pixel_coordinates = f"({int(pos_in_scene.x())}, {int(pos_in_scene.y())})"
-            self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
+            if int(pos_in_scene.x()) in range(0, data.viewer.width) and int(pos_in_scene.y()) in range(0, data.viewer.height):
+                pixel_coordinates = f"({int(pos_in_scene.x())}, {int(pos_in_scene.y())})"
+                self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
 
+                if data.viewer.transform is not None:
+                    transform = from_origin(data.viewer.transform[0], data.viewer.transform[3], data.viewer.transform[1],
+                                            data.viewer.transform[5])
+                    pos_in_original = transform * (pos_in_scene.x(), pos_in_scene.y())
 
-            if data.viewer.transform is not None:
-                transform = from_origin(data.viewer.transform[0], data.viewer.transform[3], data.viewer.transform[1],
-                                        data.viewer.transform[5])
-                pos_in_original = transform * (pos_in_scene.x(), pos_in_scene.y())
+                    lat_lng_coordinates = f"({pos_in_original[0]}, {pos_in_original[1]})"
+                    self.lat_lng_coordinates_label.setText(f"{lat_lng_coordinates}")
+                else:
+                    self.lat_lng_coordinates_label.setText(f"N/A")
 
-                lat_lng_coordinates = f"({pos_in_original[0]}, {pos_in_original[1]})"
-                self.lat_lng_coordinates_label.setText(f"{lat_lng_coordinates}")
+                band_values = self.get_band_values(int(pos_in_scene.x()), int(pos_in_scene.y()))
+                self.show_band_values_popup(event, band_values)
             else:
+                self.pixel_coordinates_label.setText(f"N/A")
                 self.lat_lng_coordinates_label.setText(f"N/A")
 
-            # Show the band values popup near the mouse cursor
-            band_values = self.get_band_values(pos_in_scene)
-            self.show_band_values_popup(event, band_values)
-
     def show_band_values_popup(self, event, band_values):
-        # Show the band values popup near the mouse cursor
-        cursor_pos = self.graphics_view.mapToScene(event.pos())
-        self.band_values_label.setText(f"Band Values: {band_values}")
-        self.band_values_label.move(cursor_pos.x() + 10, cursor_pos.y() + 10)
-        self.band_values_label.show()
+        if self.pixel_value_show:
+            cursor_pos = self.graphics_view.mapToScene(event.pos())
+            self.band_values_label.setText(f"Band Values: {band_values}")
+            self.band_values_label.move(cursor_pos.x() + 10, cursor_pos.y() + 10)
+            self.band_values_label.show()
 
-    def get_band_values(self, pos_in_scene):
-        # Replace this with your logic to get band values at the given position
-        band_values = "Band 1: 100, Band 2: 150, Band 3: 200"
+    def get_band_values(self, x, y):
+        band_values = ""
+        if data.viewer.array is not None:
+            if data.viewer.count > 1:
+                for i in data.viewer.count:
+                    band_values += f"Band {i+1}: {data.viewer.array[y,x,i]} \n"
+            else:
+                band_values = f"{data.viewer.array[y,x]}"
         return band_values
 
     def update_zoom(self):
@@ -192,6 +205,9 @@ class ViewerPanel(QWidget):
     def restore_zoom(self):
         self.zoom_slider.setValue(-50)
         self.update_zoom()
+
+    def toggle_pixel_value(self):
+        self.pixel_value_show = not self.pixel_value_show
 
     def update_viewer(self):
         self.colormap_combobox.setEnabled(False)
