@@ -1,0 +1,119 @@
+/*
+
+COLOR LIST
+
+Platinum: #E0E3E3
+White: #FEFCFD
+Blue: #3E5874
+Orange: #F46036
+Green: #9EA93F
+
+*/
+
+/* Main Windows and Panels */
+
+#main-window {
+    background-color: #F0F0F0;
+    padding: 10px;
+}
+
+#outer-panel {
+    background-color: #FEFCFD;
+    border-radius: 10px;
+    border: 2px solid #D5D5D5;
+    border-style: inset;
+}
+
+/* Scroll List */
+
+#scroll-list {
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+#scroll-list::handle {
+    background-color: #3E5874;
+    border-radius: 5px;
+}
+
+#scroll-list::sub-page {
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+/* Scroll Item */
+
+#layer-item {
+    background-color: #A9A9A9;
+    border-radius: 10px;
+}
+
+/* Labels */
+
+#title-label {
+    color: #333;
+    background: none;
+    border: none;
+    font-family: "Helvetica", sans-serif;
+    font-size: 16px;
+    padding: 0;
+}
+
+#simple-label {
+    color: #333;
+    background: none;
+    border: none;
+    font-family: "Helvetica", sans-serif;
+    font-size: 12px;
+    padding: 0;
+}
+
+/* Simple Button */
+
+#simple-button {
+    background-color: #3E5874;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    color: #FFFFFF;
+    min-width: 10px;
+    max-width: 10px;
+    min-height: 10px;
+    max-height: 10px;
+}
+
+#simple-button:hover {
+    background-color: #506A8D;
+    cursor: pointer;
+}
+
+#simple-button:pressed {
+    background-color: #2D4258;
+    border: 1px solid #1D2A3A;
+}
+
+/* Simple Button (Small) */
+
+#simple-button-small {
+    background-color: #3E5874;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    color: #FFFFFF;
+    min-width: 5px;
+    max-width: 5px;
+    min-height: 5px;
+    max-height: 5px;
+}
+
+#simple-button-small:hover {
+    background-color: #506A8D;
+    cursor: pointer;
+}
+
+#simple-button-small:pressed {
+    background-color: #2D4258;
+    border: 1px solid #1D2A3A;
+}

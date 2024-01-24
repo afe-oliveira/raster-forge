@@ -3,7 +3,7 @@ from typing import Any, Type
 import numpy as np
 from PySide6.QtWidgets import QComboBox, QGroupBox, QLabel, QLineEdit, QVBoxLayout
 
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 
 
 def adaptative_input(name: str, type: Type):
@@ -12,8 +12,8 @@ def adaptative_input(name: str, type: Type):
     # Data Type is an Numpy Array
     if type == np.ndarray:
         widget = QComboBox()
-        if data.raster is not None:
-            keys_from_raster = list(data.raster.layers.keys())
+        if _data.raster is not None:
+            keys_from_raster = list(_data.raster.layers.keys())
             widget.addItems(keys_from_raster)
     # Data Type is a Tuple
     elif getattr(type, "__origin__", None) == tuple:

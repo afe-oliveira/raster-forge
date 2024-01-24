@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "RasterForge"
-version = "0.0.1"
+version = "0.1.0"
 description = "RasterForge is an package for the manipulation of raster data. It includes a library and a graphical user interface (GUI) application."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -38,7 +38,7 @@ devel = [
 ]
 
 [project.gui-scripts]
-rforge = "RasterForge.gui.app:run"
+rforge = "RasterForge.gui.app:_run"
 
 [project.entry-points."rforge.indices"]
 sr = "RasterForge.indices.index_base:sr"

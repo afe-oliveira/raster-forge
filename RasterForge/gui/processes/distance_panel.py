@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.containers.layer import Layer
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 from RasterForge.gui.processes.adaptative_elements import adaptative_input
 from RasterForge.processes.composite import PRESET_COMPOSITES, composite
 from RasterForge.processes.distance import distance
@@ -69,7 +69,7 @@ class DistancePanel(QWidget):
         self.setLayout(layout)
 
         # When Raster Data Changes, Update Inner Scroll Content
-        data.raster_changed.connect(self.update_scroll_content)
+        _data.raster_changed.connect(self.update_scroll_content)
 
         # Start Scroll at First Position
         self.update_scroll_content()
@@ -105,11 +105,11 @@ class DistancePanel(QWidget):
         self.inputs["Alpha"] = widget
 
     def back_clicked(self):
-        data.process_main.emit()
+        _data.process_main.emit()
 
     def build_clicked(self):
         layer = Layer()
-        layer.array = distance(layer=data.raster.layers[self.inputs["Layer"].currentText()].array,
-                               alpha=data.raster.layers[self.inputs["Alpha"].currentText()].array)
-        data.viewer = layer
-        data.viewer_changed.emit()
+        layer.array = distance(layer=_data.raster.layers[self.inputs["Layer"].currentText()].array,
+                               alpha=_data.raster.layers[self.inputs["Alpha"].currentText()].array)
+        _data.viewer = layer
+        _data.viewer_changed.emit()

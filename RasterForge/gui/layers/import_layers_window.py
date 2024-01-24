@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.containers.raster import Raster
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 
 
 class LayersImportWindow(QDialog):
@@ -54,8 +54,8 @@ class LayersImportWindow(QDialog):
         self.scale_spinbox = QSpinBox()
         self.scale_spinbox.setMinimum(1)
         self.scale_spinbox.setMaximum(100000)
-        if data.raster is not None:
-            self.scale_spinbox.setValue(data.raster.scale)
+        if _data.raster is not None:
+            self.scale_spinbox.setValue(_data.raster.scale)
             self.scale_spinbox.setEnabled(False)
         else:
             self.scale_spinbox.setValue(1)
@@ -138,8 +138,8 @@ class LayersImportWindow(QDialog):
     def submit_import_request(self):
         selected_layers = []
 
-        if data.raster is None:
-            data.raster = Raster(scale=self.scale_spinbox.value())
+        if _data.raster is None:
+            _data.raster = Raster(scale=self.scale_spinbox.value())
 
         for index, (checkbox, line_edit, combo_box) in enumerate(self.band_checkboxes):
             if checkbox.isChecked():
@@ -151,5 +151,5 @@ class LayersImportWindow(QDialog):
                 )
 
         if selected_layers is not {}:
-            data.raster.import_layers(self.selected_file_path, selected_layers)
-            data.raster_changed.emit()
+            _data.raster.import_layers(self.selected_file_path, selected_layers)
+            _data.raster_changed.emit()

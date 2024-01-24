@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.containers.layer import Layer
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 from RasterForge.gui.processes.adaptative_elements import adaptative_input
 from RasterForge.processes.composite import PRESET_COMPOSITES, composite
 from RasterForge.processes.topographic import aspect, slope
@@ -69,7 +69,7 @@ class FuelPanel(QWidget):
         self.setLayout(layout)
 
         # When Raster Data Changes, Update Inner Scroll Content
-        data.raster_changed.connect(self.update_scroll_content)
+        _data.raster_changed.connect(self.update_scroll_content)
 
         # Start Scroll at First Position
         self.update_scroll_content()
@@ -132,9 +132,9 @@ class FuelPanel(QWidget):
         self.inputs["Vegetation"] = vegetation_spinbox
 
     def back_clicked(self):
-        data.process_main.emit()
+        _data.process_main.emit()
 
     def build_clicked(self):
         layer = Layer()
-        data.viewer = layer
-        data.viewer_changed.emit()
+        _data.viewer = layer
+        _data.viewer_changed.emit()

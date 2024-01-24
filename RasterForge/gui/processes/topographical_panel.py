@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.containers.layer import Layer
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 from RasterForge.gui.processes.adaptative_elements import adaptative_input
 from RasterForge.processes.composite import PRESET_COMPOSITES, composite
 from RasterForge.processes.topographic import aspect, slope
@@ -77,7 +77,7 @@ class TopographicalPanel(QWidget):
         self.topographic_combo.currentIndexChanged.connect(self.update_scroll_content)
 
         # When Raster Data Changes, Update Inner Scroll Content
-        data.raster_changed.connect(self.update_scroll_content)
+        _data.raster_changed.connect(self.update_scroll_content)
 
         # Start Scroll at First Position
         self.update_scroll_content(0)
@@ -122,19 +122,19 @@ class TopographicalPanel(QWidget):
         self.inputs["Alpha"] = widget
 
     def back_clicked(self):
-        data.process_main.emit()
+        _data.process_main.emit()
 
     def build_clicked(self):
         layer = Layer()
         if self.topographic_combo.currentText() == "Slope":
             layer.array = slope(
-                dem=data.raster.layers[self.inputs["DEM"].currentText()].array,
+                dem=_data.raster.layers[self.inputs["DEM"].currentText()].array,
                 units=self.inputs["Units"].currentText().lower(),
             )
         elif self.topographic_combo.currentText() == "Aspect":
             layer.array = aspect(
-                dem=data.raster.layers[self.inputs["DEM"].currentText()].array,
+                dem=_data.raster.layers[self.inputs["DEM"].currentText()].array,
                 units=self.inputs["Units"].currentText().lower(),
             )
-        data.viewer = layer
-        data.viewer_changed.emit()
+        _data.viewer = layer
+        _data.viewer_changed.emit()

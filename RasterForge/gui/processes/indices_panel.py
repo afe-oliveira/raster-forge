@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.containers.layer import Layer
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 from RasterForge.indices.index import index
 
 
@@ -75,7 +75,7 @@ class IndicesPanel(QWidget):
 
         self.setLayout(layout)
         self.indices_combo.currentIndexChanged.connect(self.update_scroll_content)
-        data.raster_changed.connect(self.update_scroll_content)
+        _data.raster_changed.connect(self.update_scroll_content)
         self.update_scroll_content(0)
 
     def update_scroll_content(self, index=0):
@@ -113,8 +113,8 @@ class IndicesPanel(QWidget):
 
             if param_type == np.ndarray:
                 widget = QComboBox(self)
-                if data.raster is not None:
-                    keys_from_raster = list(data.raster.layers.keys())
+                if _data.raster is not None:
+                    keys_from_raster = list(_data.raster.layers.keys())
                     widget.addItems(keys_from_raster)
             elif getattr(param_type, "__origin__", None) == tuple:
                 tuple_types = getattr(param_type, "__args__", ())
@@ -147,8 +147,8 @@ class IndicesPanel(QWidget):
         alpha_label = QLabel("ALPHA", self)
         alpha_widget = QComboBox(self)
         alpha_widget.addItem("None")
-        if data.raster is not None:
-            keys_from_raster = list(data.raster.layers.keys())
+        if _data.raster is not None:
+            keys_from_raster = list(_data.raster.layers.keys())
             alpha_widget.addItems(keys_from_raster)
         alpha_widget.setObjectName("ALPHA")
 
@@ -184,7 +184,7 @@ class IndicesPanel(QWidget):
         self.input_values["RANGE"] = (alpha_min_spinbox, alpha_max_spinbox)
 
     def back_clicked(self):
-        data.process_main.emit()
+        _data.process_main.emit()
 
     def build_clicked(self):
         # Get the Selected Plugin Function
@@ -209,9 +209,9 @@ class IndicesPanel(QWidget):
                 widget = self.input_values.get(param_name)
 
                 if param_type == np.ndarray:
-                    if isinstance(widget, QComboBox) and data.raster is not None:
+                    if isinstance(widget, QComboBox) and _data.raster is not None:
                         selected_layer = widget.currentText()
-                        input_values.append(data.raster.layers[selected_layer].data)
+                        input_values.append(_data.raster.layers[selected_layer]._data)
                 elif getattr(param_type, "__origin__", None) == tuple:
                     tuple_values = []
                     if isinstance(widget, QGroupBox):
@@ -226,7 +226,7 @@ class IndicesPanel(QWidget):
 
         alpha_value = self.input_values.get("ALPHA").currentText()
         alpha_value = (
-            None if alpha_value == "None" else data.raster.layers[alpha_value].data
+            None if alpha_value == "None" else _data.raster.layers[alpha_value]._data
         )
 
         min_spinbox, max_spinbox = self.input_values["RANGE"]
@@ -239,5 +239,5 @@ class IndicesPanel(QWidget):
             *input_values,
         )
 
-        data.viewer = layer
-        data.viewer_changed.emit()
+        _data.viewer = layer
+        _data.viewer_changed.emit()

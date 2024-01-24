@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 from RasterForge.gui.processes.composites_panel import CompositesPanel
 from RasterForge.gui.processes.distance_panel import DistancePanel
 from RasterForge.gui.processes.fuel_panel import FuelPanel
@@ -49,7 +49,7 @@ class ProcessPanel(QWidget):
         main_process_layout.addWidget(fuel_button)
 
         self.stacked_widget.addWidget(main_process_panel)
-        data.process_main.connect(self.show_main_panel)
+        _data.process_main.connect(self.show_main_panel)
 
         # Panel 2: Composites Panel
         self.composites_panel = CompositesPanel()

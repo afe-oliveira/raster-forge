@@ -24,8 +24,8 @@ from PySide6.QtCore import Qt, QRectF, QPointF
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_template import FigureCanvas
 
-from RasterForge.gui.common.info_window import LayerInfoWindow
-from RasterForge.gui.data import data
+from RasterForge.gui.common.layer_information import LayerInfoWindow
+from RasterForge.gui.data import _data
 
 COLORMAPS = {
     "Viridis": "viridis",
@@ -63,7 +63,7 @@ class ViewerPanel(QWidget):
 
         layout = QGridLayout(self)
 
-        data.viewer_changed.connect(self.update_viewer)
+        _data.viewer_changed.connect(self.update_viewer)
 
         # Add Save Buttons
         self.save_layer_button = QPushButton("Layer")
@@ -150,22 +150,22 @@ class ViewerPanel(QWidget):
         self.graphics_view.mouseMoveEvent = self.update_coordinates
         self.update_zoom()
 
-        data.viewer_changed.emit()
+        _data.viewer_changed.emit()
 
     def update_coordinates(self, event):
-        if data.viewer is not None and data.viewer.array is not None:
+        if _data.viewer is not None and _data.viewer.array is not None:
             pos_in_scene = self.graphics_view.mapToScene(event.pos())
 
             if self.graphics_view.transform():
                 pos_in_original = self.graphics_view.transform().inverted()[0].map(pos_in_scene)
 
-                if 0 <= pos_in_original.x() < data.viewer.width and 0 <= pos_in_original.y() < data.viewer.height:
+                if 0 <= pos_in_original.x() < _data.viewer.width and 0 <= pos_in_original.y() < _data.viewer.height:
                     pixel_coordinates = f"({int(pos_in_original.x())}, {int(pos_in_original.y())})"
                     self.pixel_coordinates_label.setText(f"{pixel_coordinates}")
 
-                    if data.viewer.transform is not None:
-                        transform = from_origin(data.viewer.transform[0], data.viewer.transform[3],
-                                                data.viewer.transform[1], data.viewer.transform[5])
+                    if _data.viewer.transform is not None:
+                        transform = from_origin(_data.viewer.transform[0], _data.viewer.transform[3],
+                                                _data.viewer.transform[1], _data.viewer.transform[5])
                         pos_transformed = transform * (pos_in_scene.x(), pos_in_scene.y())
 
                         lat_lng_coordinates = f"({pos_transformed[0]}, {pos_transformed[1]})"
@@ -189,12 +189,12 @@ class ViewerPanel(QWidget):
 
     def get_band_values(self, x, y):
         band_values = ""
-        if data.viewer.array is not None:
-            if data.viewer.count > 1:
-                for i in range(data.viewer.count):
-                    band_values += f"Band {i + 1}: {data.viewer.array[y, x, i]} \n"
+        if _data.viewer.array is not None:
+            if _data.viewer.count > 1:
+                for i in range(_data.viewer.count):
+                    band_values += f"Band {i + 1}: {_data.viewer.array[y, x, i]} \n"
             else:
-                band_values = f"{data.viewer.array[y, x]}"
+                band_values = f"{_data.viewer.array[y, x]}"
         return band_values
 
     def update_zoom(self):
@@ -215,8 +215,8 @@ class ViewerPanel(QWidget):
     def update_viewer(self):
         self.colormap_combobox.setEnabled(False)
 
-        if data.viewer is not None and data.viewer.array is not None:
-            self.colormap_combobox.setEnabled(data.viewer.count == 1 or data.viewer.count == 2)
+        if _data.viewer is not None and _data.viewer.array is not None:
+            self.colormap_combobox.setEnabled(_data.viewer.count == 1 or _data.viewer.count == 2)
 
             temp_file_path = tempfile.mktemp(
                 suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
@@ -225,11 +225,11 @@ class ViewerPanel(QWidget):
             fig, ax = plt.subplots()
             fig.patch.set_alpha(0)
 
-            if data.viewer.count == 2:
-                normal_data = data.viewer.array[..., 0]
+            if _data.viewer.count == 2:
+                normal_data = _data.viewer.array[..., 0]
                 alpha_channel = np.interp(
-                    data.viewer.array[..., 1],
-                    (data.viewer.array[..., 1].min(), data.viewer.array[..., 1].max()),
+                    _data.viewer.array[..., 1],
+                    (_data.viewer.array[..., 1].min(), _data.viewer.array[..., 1].max()),
                     (0, 1),
                 )
 
@@ -240,7 +240,7 @@ class ViewerPanel(QWidget):
                 )
             else:
                 ax.imshow(
-                    data.viewer.array,
+                    _data.viewer.array,
                     cmap=COLORMAPS[self.colormap_combobox.currentText()],
                 )
 
@@ -264,28 +264,28 @@ class ViewerPanel(QWidget):
 
 
     def show_info(self):
-        info_window = LayerInfoWindow("Viewer Data", data.viewer, self)
+        info_window = LayerInfoWindow("Viewer Data", _data.viewer, self)
         info_window.exec_()
 
     def save_as_layer(self):
-        if data.viewer is not None and data.raster is not None:
-            data.raster.add_layer(data.viewer, "Layer")
+        if _data.viewer is not None and _data.raster is not None:
+            _data.raster.add_layer(_data.viewer, "Layer")
 
     def save_as_geotiff(self):
-        if data.viewer is not None and data.raster is not None:
+        if _data.viewer is not None and _data.raster is not None:
             file_dialog = QFileDialog()
             file_path, _ = file_dialog.getSaveFileName(
                 self, "Save as TIFF", "", "TIFF Files (*.tif *.tiff)"
             )
 
             if file_path:
-                tiff_data = data.viewer.array.astype(np.uint8)
+                tiff_data = _data.viewer.array.astype(np.uint8)
                 import tifffile
 
                 tifffile.imwrite(file_path, tiff_data)
 
     def save_as_image(self):
-        if data.viewer is not None and data.raster is not None:
+        if _data.viewer is not None and _data.raster is not None:
             file_dialog = QFileDialog()
             file_path, _ = file_dialog.getSaveFileName(
                 self, "Save as Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp)"
@@ -296,7 +296,7 @@ class ViewerPanel(QWidget):
                     suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
                 )
 
-                image_data = data.viewer.array.astype(np.uint8)
+                image_data = _data.viewer.array.astype(np.uint8)
                 plt.imshow(
                     image_data, cmap=COLORMAPS[self.colormap_combobox.currentText()]
                 )

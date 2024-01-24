@@ -12,12 +12,15 @@ def rescale_dataset(dataset, pixel_size):
         resampling_factor_x, resampling_factor_y
     )
 
+    new_width = max(int(dataset.width * resampling_factor_x), 1)
+    new_height = max(int(dataset.height * resampling_factor_y), 1)
+
     new_meta = dataset.meta.copy()
     new_meta.update(
         {
             "transform": new_transform,
-            "width": int(dataset.width * resampling_factor_x),
-            "height": int(dataset.height * resampling_factor_y),
+            "width": new_width,
+            "height": new_height,
         }
     )
 

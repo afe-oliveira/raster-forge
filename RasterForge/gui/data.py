@@ -1,11 +1,10 @@
-import numpy as np
 from PySide6.QtCore import QObject, Signal
 
 from RasterForge.containers.layer import Layer
 from RasterForge.containers.raster import Raster
 
 
-class DataGUI(QObject):
+class _DataGUI(QObject):
 
     # General Data
     raster: Raster = None
@@ -21,4 +20,4 @@ class DataGUI(QObject):
         super().__init__()
 
 
-data = DataGUI()
+_data = _DataGUI()

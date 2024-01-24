@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from RasterForge.containers.layer import Layer
-from RasterForge.gui.data import data
+from RasterForge.gui.data import _data
 from RasterForge.gui.processes.adaptative_elements import adaptative_input
 from RasterForge.processes.composite import PRESET_COMPOSITES, composite
 
@@ -77,7 +77,7 @@ class CompositesPanel(QWidget):
         self.composites_combo.currentIndexChanged.connect(self.update_scroll_content)
 
         # When Raster Data Changes, Update Inner Scroll Content
-        data.raster_changed.connect(self.update_scroll_content)
+        _data.raster_changed.connect(self.update_scroll_content)
 
         # Start Scroll at First Position
         self.update_scroll_content(0)
@@ -134,12 +134,12 @@ class CompositesPanel(QWidget):
             self.input_gamma[key] = float_spinbox
 
     def back_clicked(self):
-        data.process_main.emit()
+        _data.process_main.emit()
 
     def build_clicked(self):
         input_layers = []
         for key, value in self.input_layers.items():
-            input_layers.append(data.raster.layers[value.currentText()].array)
+            input_layers.append(_data.raster.layers[value.currentText()].array)
 
         input_alpha = None
 
@@ -151,5 +151,5 @@ class CompositesPanel(QWidget):
         layer.array = composite(
             layers=input_layers, alpha=input_alpha, gamma=input_gamma
         )
-        data.viewer = layer
-        data.viewer_changed.emit()
+        _data.viewer = layer
+        _data.viewer_changed.emit()

@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
 
 from RasterForge.gui.viewer.panel import ViewerPanel
 
-from .layers.panel import LayersPanel
+from .layers.layers_panel import LayersPanel
 from .processes.panel import ProcessPanel
 
 
@@ -17,6 +17,7 @@ class OuterFrame(QFrame):
     def __init__(self, widget):
         super().__init__()
         self.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
+        self.setObjectName("outer-panel")
         layout = QVBoxLayout(self)
         layout.addWidget(widget)
 
@@ -29,6 +30,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, 1200, 800)
 
         central_widget = QWidget(self)
+        self.setObjectName("main-window")
         self.setCentralWidget(central_widget)
 
         panels = {
