@@ -134,12 +134,12 @@ class LayerInfoWindow(QDialog):
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setAlignment(Qt.AlignTop)
 
-        # Create a Matplotlib figure and canvas
+        # Create a Matplotlib Figure and Canvas
         figure, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
         canvas = FigureCanvas(figure)
         scroll_layout.addWidget(canvas)
 
-        # Plot the histogram using layer.array data
+        # Plot the Histogram Using Data
         ax.hist(layer.array.flatten(), bins=50, color='blue', alpha=0.7)
         ax.set_title('Histogram')
         ax.set_xlabel('Pixel Values')

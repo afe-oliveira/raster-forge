@@ -211,7 +211,7 @@ class IndicesPanel(QWidget):
                 if param_type == np.ndarray:
                     if isinstance(widget, QComboBox) and _data.raster is not None:
                         selected_layer = widget.currentText()
-                        input_values.append(_data.raster.layers[selected_layer]._data)
+                        input_values.append(_data.raster.layers[selected_layer].array)
                 elif getattr(param_type, "__origin__", None) == tuple:
                     tuple_values = []
                     if isinstance(widget, QGroupBox):
@@ -226,7 +226,7 @@ class IndicesPanel(QWidget):
 
         alpha_value = self.input_values.get("ALPHA").currentText()
         alpha_value = (
-            None if alpha_value == "None" else _data.raster.layers[alpha_value]._data
+            None if alpha_value == "None" else _data.raster.layers[alpha_value].array
         )
 
         min_spinbox, max_spinbox = self.input_values["RANGE"]

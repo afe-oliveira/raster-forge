@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource>
+        <file>style.qss</file>
+        <file>icons/logo.svg</file>
+        <file>icons/logo-flat.svg</file>
+    </qresource>
+</RCC>

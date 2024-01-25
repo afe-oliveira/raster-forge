@@ -1,3 +1,4 @@
+from PySide6.QtGui import QIcon, QPixmap, Qt
 from PySide6.QtWidgets import (
     QFrame,
     QGridLayout,
@@ -12,6 +13,7 @@ from RasterForge.gui.viewer.panel import ViewerPanel
 from .layers.layers_panel import LayersPanel
 from .processes.panel import ProcessPanel
 
+from .resources import resources
 
 class OuterFrame(QFrame):
     def __init__(self, widget):
@@ -27,6 +29,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Raster Forge")
+        self.setWindowIcon(QIcon(QPixmap(":/icons/logo-flat.svg").scaledToHeight(64, Qt.SmoothTransformation)))
         self.setGeometry(100, 100, 1200, 800)
 
         central_widget = QWidget(self)

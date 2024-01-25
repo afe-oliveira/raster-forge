@@ -38,7 +38,7 @@ devel = [
 ]
 
 [project.gui-scripts]
-rforge = "RasterForge.gui.app:_run"
+rforge = "RasterForge.gui.gui:gui"
 
 [project.entry-points."rforge.indices"]
 sr = "RasterForge.indices.index_base:sr"
