@@ -3,5 +3,10 @@
         <file>style.qss</file>
         <file>icons/logo.svg</file>
         <file>icons/logo-flat.svg</file>
+        <file>icons/map-plus.svg</file>
+        <file>icons/eye.svg</file>
+        <file>icons/edit.svg</file>
+        <file>icons/info-square-rounded.svg</file>
+        <file>icons/trash-x.svg</file>
     </qresource>
 </RCC>

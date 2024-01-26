@@ -1,3 +1,4 @@
+from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QGridLayout,
     QLabel,
@@ -5,18 +6,16 @@ from PySide6.QtWidgets import (
     QPushButton,
     QScrollArea,
     QVBoxLayout,
-    QWidget,
+    QWidget, QHBoxLayout,
 )
 
 from RasterForge.gui.common.layer_information import LayerInfoWindow
 from RasterForge.gui.data import _data
 
-from .import_layers_window import LayersImportWindow
-
-from RasterForge.icons.icons import *
+from .import_layers import LayersImportWindow
 
 
-class LayersPanel(QWidget):
+class _LayersPanel(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -31,13 +30,13 @@ class LayersPanel(QWidget):
 
         # Add the Import Layers Button
         self.import_layers_button = QPushButton()
-        self.import_layers_button.setToolTip("Import layers from external file.")
-        self.import_layers_button.setIcon(ADD_LAYER_ICON)
-        self.import_layers_button.setObjectName("simple-button")
+        self.import_layers_button.setToolTip("Import Layers from File")
+        self.import_layers_button.setIcon(QIcon(":/icons/map-plus.svg"))
+        self.import_layers_button.setObjectName("push-button")
         self.import_layers_button.clicked.connect(self.import_layers_clicked)
         self.layout.addWidget(self.import_layers_button, 0, 8, 1, 2, alignment=Qt.AlignRight)
 
-        # Add Layers List
+        # Create and Layers List
         self.scroll_list = QScrollArea(self)
         self.scroll_list.setWidgetResizable(True)
         self.scroll_list.setObjectName("scroll-list")
@@ -58,7 +57,7 @@ class LayersPanel(QWidget):
         # Add Updated Layers
         if _data.raster is not None:
             for key, value in _data.raster.layers.items():
-                layer = LayerElement(key)
+                layer = _LayerElement(key)
                 self.list_layout.addWidget(layer)
 
         # Set the Alignment
@@ -69,7 +68,7 @@ class LayersPanel(QWidget):
         import_dialog.exec_()
 
 
-class LayerElement(QWidget):
+class _LayerElement(QWidget):
 
     name = None
 
@@ -80,41 +79,50 @@ class LayerElement(QWidget):
         self.layout = QGridLayout(self)
         self.setObjectName("layer-item")
 
+        # Add Layer Name Label
         self.label = QLabel(self.name)
         self.label.setObjectName("simple-label")
-        self.layout.addWidget(self.label, 0, 0, 1, 16)
+        self.layout.addWidget(self.label, 0, 0, 1, 1)
+
+        # Create a Horizontal Layout for Buttons
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(1)
+        button_layout.setAlignment(Qt.AlignRight)
 
         # View Button
         v_button = QPushButton()
-        v_button.setToolTip("Show layer.")
-        v_button.setIcon(VIEW_LAYER_ICON)
-        v_button.setObjectName("simple-button-small")
+        v_button.setToolTip("Show Layer")
+        v_button.setIcon(QIcon(":/icons/eye.svg"))
+        v_button.setObjectName("mini-push-button")
         v_button.clicked.connect(self.handle_view_button_click)
-        self.layout.addWidget(v_button, 0, 17, 1, 1)
+        button_layout.addWidget(v_button)
 
         # Edit Button
-        edit_button = QPushButton("E")
-        edit_button.setToolTip("Change layer name.")
-        edit_button.setIcon(EDIT_LAYER_ICON)
-        edit_button.setObjectName("simple-button-small")
+        edit_button = QPushButton()
+        edit_button.setToolTip("Change Name")
+        edit_button.setIcon(QIcon(":/icons/edit.svg"))
+        edit_button.setObjectName("mini-push-button")
         edit_button.clicked.connect(self.handle_edit_button_click)
-        self.layout.addWidget(edit_button, 0, 18, 1, 1)
+        button_layout.addWidget(edit_button)
 
         # Info Button
-        info_button = QPushButton("I")
-        info_button.setToolTip("Show additional layer information.")
-        info_button.setIcon(INFO_LAYER_ICON)
-        info_button.setObjectName("simple-button-small")
+        info_button = QPushButton()
+        info_button.setToolTip("Show Information")
+        info_button.setIcon(QIcon(":/icons/info-square-rounded.svg"))
+        info_button.setObjectName("mini-push-button")
         info_button.clicked.connect(self.handle_info_button_click)
-        self.layout.addWidget(info_button, 0, 19, 1, 1)
+        button_layout.addWidget(info_button)
 
         # Delete Button
-        d_button = QPushButton("D")
-        d_button.setToolTip("Delete layer.")
-        d_button.setIcon(DELETE_LAYER_ICON)
-        d_button.setObjectName("simple-button-small")
+        d_button = QPushButton()
+        d_button.setToolTip("Delete Layer")
+        d_button.setIcon(QIcon(":/icons/trash-x.svg"))
+        d_button.setObjectName("mini-push-button")
         d_button.clicked.connect(self.handle_delete_button_click)
-        self.layout.addWidget(d_button, 0, 20, 1, 1)
+        button_layout.addWidget(d_button)
+
+        # Add the Button Layout to the Main Grid Layout
+        self.layout.addLayout(button_layout, 0, 1, 1, 1)
 
         self.edit_line = None  # Placeholder for Edit Functionality
 

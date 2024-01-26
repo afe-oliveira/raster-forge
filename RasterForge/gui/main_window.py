@@ -3,45 +3,51 @@ from PySide6.QtWidgets import (
     QFrame,
     QGridLayout,
     QMainWindow,
-    QPushButton,
     QVBoxLayout,
-    QWidget,
+    QWidget, QPushButton,
 )
 
 from RasterForge.gui.viewer.panel import ViewerPanel
 
-from .layers.layers_panel import LayersPanel
+from .layers.layers import _LayersPanel
 from .processes.panel import ProcessPanel
 
-from .resources import resources
 
-class OuterFrame(QFrame):
+class _OuterFrame(QFrame):
     def __init__(self, widget):
         super().__init__()
+
+        # Set Panel Style Name
         self.setFrameStyle(QFrame.StyledPanel | QFrame.Plain)
         self.setObjectName("outer-panel")
+
+        # Create Vertical Layout and Add Child Widget
         layout = QVBoxLayout(self)
         layout.addWidget(widget)
 
 
-class MainWindow(QMainWindow):
+class _MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # Set Window Title and Icon
         self.setWindowTitle("Raster Forge")
         self.setWindowIcon(QIcon(QPixmap(":/icons/logo-flat.svg").scaledToHeight(64, Qt.SmoothTransformation)))
         self.setGeometry(100, 100, 1200, 800)
 
+        # Create Main Widget and Set Style Name
         central_widget = QWidget(self)
         self.setObjectName("main-window")
         self.setCentralWidget(central_widget)
 
+        # Set Component Panels
         panels = {
-            "layers": OuterFrame(LayersPanel()),
-            "processes": OuterFrame(ProcessPanel()),
-            "viewer": OuterFrame(ViewerPanel()),
+            "layers": _OuterFrame(_LayersPanel()),
+            "processes": _OuterFrame(QPushButton()),
+            "viewer": _OuterFrame(QPushButton()),
         }
 
+        # Lay Panels in a Grid Layout
         grid_layout = QGridLayout(central_widget)
         grid_layout.addWidget(panels["layers"], 0, 0, 50, 40)
         grid_layout.addWidget(panels["processes"], 50, 0, 50, 40)

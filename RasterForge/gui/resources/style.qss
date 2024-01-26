@@ -3,10 +3,15 @@
 COLOR LIST
 
 Platinum: #E0E3E3
-White: #FEFCFD
-Blue: #3E5874
-Orange: #F46036
-Green: #9EA93F
+White: #FFFFFF
+
+Teal: #3F5752
+Green: #506354
+Olive: #6C704D
+
+Yellow: #DAAC3D
+
+Black: #000000
 
 */
 
@@ -27,31 +32,22 @@ Green: #9EA93F
 /* Scroll List */
 
 #scroll-list {
-    background: transparent;
-    border: 1px solid transparent;
-}
-
-#scroll-list::handle {
-    background-color: #3E5874;
-    border-radius: 5px;
-}
-
-#scroll-list::sub-page {
-    background-color: transparent;
-    border-radius: 5px;
+    background-color: #E0E3E3;
+    border: 2px solid #E0E3E3;
+    border-radius: 10px;
 }
 
 /* Scroll Item */
 
 #layer-item {
-    background-color: #A9A9A9;
+    background-color: #000000;
     border-radius: 10px;
 }
 
 /* Labels */
 
 #title-label {
-    color: #333;
+    color: #0C0C0C;
     background: none;
     border: none;
     font-family: "Helvetica", sans-serif;
@@ -67,11 +63,10 @@ Green: #9EA93F
     font-size: 12px;
     padding: 0;
 }
+/* Buttons */
 
-/* Simple Button */
-
-#simple-button {
-    background-color: #3E5874;
+#push-button {
+    background-color: #3F5752;
     border: none;
     border-radius: 5px;
     padding: 10px;
@@ -82,21 +77,16 @@ Green: #9EA93F
     min-height: 10px;
     max-height: 10px;
 }
-
-#simple-button:hover {
-    background-color: #506A8D;
+#push-button:hover {
+    background-color: #4A6660;
     cursor: pointer;
 }
-
-#simple-button:pressed {
-    background-color: #2D4258;
-    border: 1px solid #1D2A3A;
+#push-button:pressed {
+    background-color: #344844;
 }
 
-/* Simple Button (Small) */
-
-#simple-button-small {
-    background-color: #3E5874;
+#mini-push-button {
+    background-color: #3F5752;
     border: none;
     border-radius: 5px;
     padding: 10px;
@@ -107,13 +97,27 @@ Green: #9EA93F
     min-height: 5px;
     max-height: 5px;
 }
-
-#simple-button-small:hover {
-    background-color: #506A8D;
+#mini-push-button:hover {
+    background-color: #4A6660;
     cursor: pointer;
 }
+#mini-push-button:pressed {
+    background-color: #344844;
+}
 
-#simple-button-small:pressed {
-    background-color: #2D4258;
-    border: 1px solid #1D2A3A;
+/* Tool Tip */
+
+QToolTip {
+    border: none;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    color: #0C0C0C;
+    font-family: "Helvetica", sans-serif;
+    font-size: 12px;
+    padding: 5px;
+}
+QToolTip#qt_tip_label {
+    color: #0C0C0C;
+    font-family: "Helvetica", sans-serif;
+    font-size: 12px;
 }
