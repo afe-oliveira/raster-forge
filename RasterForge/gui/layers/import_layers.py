@@ -1,5 +1,6 @@
 import rasterio
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -22,36 +23,48 @@ from RasterForge.containers.raster import Raster
 from RasterForge.gui.data import _data
 
 
-class LayersImportWindow(QDialog):
+class _LayersImportWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         self.setWindowTitle("Import Layers")
-        self.layout = QGridLayout(self)
-        self.setGeometry(100, 100, 500, 600)
+        self.layout = QVBoxLayout(self)
 
-        # Add Open File Button
-        self.open_file_button = QPushButton("Open File")
-        self.open_file_button.clicked.connect(self.open_file_dialog)
-        self.layout.addWidget(self.open_file_button, 0, 0, 1, 1)
+        # File Interaction Layout
+        file_layout = QHBoxLayout()
 
         # Add File Explorer
-        self.selected_file_label = QLabel("None")
-        self.layout.addWidget(self.selected_file_label, 0, 1, 1, 23)
+        selected_file_label = QLabel("No File Selected")
+        selected_file_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        selected_file_label.setObjectName("simple-label")
+        file_layout.addWidget(selected_file_label)
+
+        # Add Open File Button
+        open_file_button = QPushButton()
+        open_file_button.setToolTip("Select File")
+        open_file_button.setIcon(QIcon(":/icons/folder.svg"))
+        open_file_button.setObjectName("push-button")
+        open_file_button.clicked.connect(self._open_file_callback)
+        file_layout.addWidget(open_file_button)
+
+        self.layout.addLayout(file_layout)
 
         # Add Separator
         separator = QFrame()
         separator.setFrameShape(QFrame.HLine)
         separator.setFrameShadow(QFrame.Sunken)
-        self.layout.addWidget(separator, 1, 0, 1, 25)
+        self.layout.addWidget(separator)
 
-        # Add Scale / Metadata / Geographic Transform Input
+        # Add Scale Input
         scale_layout = QHBoxLayout()
 
-        self.scale_label = QLabel("Scale")
-        scale_layout.addWidget(self.scale_label, alignment=Qt.AlignRight)
+        scale_label = QLabel("Scale")
+        scale_label.setObjectName("simple-label-no-bg")
+        scale_label.setToolTip("Scale is the Side Length of Each Cell (in Meters)")
+        scale_layout.addWidget(scale_label, alignment=Qt.AlignRight)
 
         self.scale_spinbox = QSpinBox()
+        self.scale_spinbox.setObjectName("spin-box")
         self.scale_spinbox.setMinimum(1)
         self.scale_spinbox.setMaximum(100000)
         if _data.raster is not None:
@@ -62,34 +75,43 @@ class LayersImportWindow(QDialog):
             self.scale_spinbox.setEnabled(True)
         scale_layout.addWidget(self.scale_spinbox, stretch=1)
 
-        self.layout.addLayout(scale_layout, 2, 0, 1, 2)
+        self.layout.addLayout(scale_layout)
 
         # Add Bands Checklist
-        self.bands_label = QLabel("Bands")
-        self.layout.addWidget(self.bands_label, 3, 0, 1, 1)
+        bands_label = QLabel("Bands")
+        bands_label.setObjectName("title-label")
+        self.layout.addWidget(bands_label)
 
         # Create Checklist Scroll Area
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setObjectName("scroll-list")
+        self.scroll_area.setMinimumSize(500, 450)
         self.scroll_widget = QWidget()
         self.scroll_layout = QVBoxLayout(self.scroll_widget)
         self.scroll_area.setWidget(self.scroll_widget)
-        self.layout.addWidget(self.scroll_area, 4, 0, 45, 25)
+        self.layout.addWidget(self.scroll_area)
 
         self.band_checkboxes = []
+
+        # Bottom Layout
+        bottom_layout = QHBoxLayout()
 
         # Add Progress Bar
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
         self.progress_bar.setVisible(True)
-        self.layout.addWidget(self.progress_bar, 49, 0, 1, 24)
+        bottom_layout.addWidget(self.progress_bar)
 
         # Add Import Button
-        self.import_button = QPushButton("Import")
-        self.import_button.clicked.connect(self.submit_import_request)
-        self.layout.addWidget(self.import_button, 49, 24, 1, 1)
+        import_button = QPushButton("Import")
+        import_button.setObjectName("push-button-text")
+        import_button.clicked.connect(self._import_callback)
+        bottom_layout.addWidget(import_button)
 
-    def open_file_dialog(self):
+        self.layout.addLayout(bottom_layout)
+
+    def _open_file_callback(self):
         file_dialog = QFileDialog(self)
         file_dialog.setNameFilter("TIFF Files (*.tif)")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
@@ -102,14 +124,13 @@ class LayersImportWindow(QDialog):
 
                 with rasterio.open(self.selected_file_path) as dataset:
                     num_bands = dataset.count
-                    self.populate_bands_checklist(num_bands)
+                    self._populate_bands_checklist(num_bands)
 
-    def populate_bands_checklist(self, num_bands):
-        # Clear Existing Checkboxes, Line Edits, and Combo Boxes
-        for checkbox, line_edit, combo_box in self.band_checkboxes:
+    def _populate_bands_checklist(self, num_bands):
+        # Clear Existing items
+        for checkbox, line_edit in self.band_checkboxes:
             checkbox.setParent(None)
             line_edit.setParent(None)
-            combo_box.setParent(None)
 
         self.band_checkboxes = []
 
@@ -120,22 +141,20 @@ class LayersImportWindow(QDialog):
 
             checkbox = QCheckBox()
             line_edit = QLineEdit(f"Band {i + 1}")
-            combo_box = QComboBox()
-            combo_box.addItems(["Relative", "Absolute"])
+            line_edit.setObjectName("edit-line")
 
             # Add Widgets to the Horizontal Layout
             band_layout.addWidget(checkbox)
             band_layout.addWidget(line_edit)
-            band_layout.addWidget(combo_box)
 
             # Add the Horizontal Layout to the Scroll Layout
             self.scroll_layout.addLayout(band_layout)
 
-            self.band_checkboxes.append((checkbox, line_edit, combo_box))
+            self.band_checkboxes.append((checkbox, line_edit))
 
         self.scroll_layout.setAlignment(Qt.AlignTop)
 
-    def submit_import_request(self):
+    def _import_callback(self):
         selected_layers = []
 
         if _data.raster is None:

@@ -8,5 +8,8 @@
         <file>icons/edit.svg</file>
         <file>icons/info-square-rounded.svg</file>
         <file>icons/trash-x.svg</file>
+        <file>icons/folder.svg</file>
+        <file>icons/triangle-inverted-filled.svg</file>
+        <file>icons/triangle-filled.svg</file>
     </qresource>
 </RCC>

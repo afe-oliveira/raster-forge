@@ -56,13 +56,59 @@ Black: #000000
 }
 
 #simple-label {
-    color: #333;
-    background: none;
+    color: #0C0C0C;
+    background: 1px solid #E0E3E3;
     border: none;
+    border-radius: 10px;
     font-family: "Helvetica", sans-serif;
     font-size: 12px;
-    padding: 0;
+    padding: 0 5px;
 }
+
+#simple-label-no-bg {
+    color: #0C0C0C;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    font-family: "Helvetica", sans-serif;
+    font-size: 12px;
+    padding: 0 5px;
+}
+
+/* Check Box */
+
+QCheckBox::indicator {
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border-width: 0px;
+    border: 1px solid #E9E9E9;
+}
+QCheckBox::indicator:checked {
+    background-color: #DAAC3D;
+    border: 1px solid #E9E9E9;
+}
+
+/* Edit Line */
+
+#edit-line:focus {
+  border: none;
+  border-bottom: none;
+  border-radius: 10px;
+  background: #FFFFFF;
+  font-family: "Helvetica", sans-serif;
+  color: #000000;
+  padding: 0 5px;
+}
+#edit-line:focus {
+  border: none;
+  border-bottom: 1px solid #DAAC3D;
+  border-radius: 10px;
+  background: #FFFFFF;
+  font-family: "Helvetica", sans-serif;
+  color: #000000;
+  padding: 0 5px;
+}
+
 /* Buttons */
 
 #push-button {
@@ -76,6 +122,23 @@ Black: #000000
     max-width: 10px;
     min-height: 10px;
     max-height: 10px;
+}
+#push-button:hover {
+    background-color: #4A6660;
+    cursor: pointer;
+}
+#push-button:pressed {
+    background-color: #344844;
+}
+
+#push-button-text {
+    background-color: #3F5752;
+    border: none;
+    border-radius: 5px;
+    font-family: "Helvetica", sans-serif;
+    padding: 10px;
+    margin: 5px;
+    color: #FFFFFF;
 }
 #push-button:hover {
     background-color: #4A6660;
@@ -103,6 +166,73 @@ Black: #000000
 }
 #mini-push-button:pressed {
     background-color: #344844;
+}
+
+/* Spin Box */
+
+#spin-box,
+#spin-box:editable,
+#spin-box:hover,
+#spin-box:pressed {
+  border: none;
+  border-bottom: 1px solid #FFFFFF;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #000000;
+  padding: 5px 4px 4px 4px;
+}
+#spin-box:focus {
+  border: none;
+  border-bottom: 1px solid #DAAC3D;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #000000;
+  padding: 5px 4px 4px 4px;
+}
+#spin-box:disabled {
+  border: none;
+  border-bottom: 1px solid #999999;
+  border-radius: 10px;
+  background: #999999;
+  color: #000000;
+  padding: 5px 15px 4px 4px;
+}
+#spin-box::up-button {
+  subcontrol-origin: border;
+  subcontrol-position: top right;
+  border: none;
+  border-radius: 10px;
+  background: #FFFFFF;
+  margin-top: 1px;
+}
+#spin-box::down-button {
+  subcontrol-origin: border;
+  subcontrol-position: bottom right;
+  border: none;
+  border-radius: 10px;
+  background: #FFFFFF;
+}
+#spin-box::up-arrow {
+  image: url(:/icons/triangle-filled.svg);
+  min-width: 2px;
+  max-width: 2px;
+  min-height: 2px;
+  max-height: 2px;
+}
+#spin-box::up-arrow:disabled,
+#spin-box::up-arrow:off {
+  image: none;
+}
+#spin-box::down-arrow {
+  image: url(:/icons/triangle-inverted-filled.svg);
+  min-width: 2px;
+  max-width: 2px;
+  min-height: 2px;
+  max-height: 2px;
+}
+#spin-box::down-arrow:disabled,
+#spin-box::down-arrow:off {
+  image: none;
 }
 
 /* Tool Tip */

@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 from RasterForge.gui.common.layer_information import LayerInfoWindow
 from RasterForge.gui.data import _data
 
-from .import_layers import LayersImportWindow
+from .import_layers import _LayersImportWindow
 
 
 class _LayersPanel(QWidget):
@@ -64,7 +64,7 @@ class _LayersPanel(QWidget):
         self.list_layout.setAlignment(Qt.AlignTop)
 
     def import_layers_clicked(self):
-        import_dialog = LayersImportWindow(self)
+        import_dialog = _LayersImportWindow(self)
         import_dialog.exec_()
 
 
@@ -81,6 +81,7 @@ class _LayerElement(QWidget):
 
         # Add Layer Name Label
         self.label = QLabel(self.name)
+        self.label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label.setObjectName("simple-label")
         self.layout.addWidget(self.label, 0, 0, 1, 1)
 
@@ -94,7 +95,7 @@ class _LayerElement(QWidget):
         v_button.setToolTip("Show Layer")
         v_button.setIcon(QIcon(":/icons/eye.svg"))
         v_button.setObjectName("mini-push-button")
-        v_button.clicked.connect(self.handle_view_button_click)
+        v_button.clicked.connect(self._view_callback)
         button_layout.addWidget(v_button)
 
         # Edit Button
@@ -102,7 +103,7 @@ class _LayerElement(QWidget):
         edit_button.setToolTip("Change Name")
         edit_button.setIcon(QIcon(":/icons/edit.svg"))
         edit_button.setObjectName("mini-push-button")
-        edit_button.clicked.connect(self.handle_edit_button_click)
+        edit_button.clicked.connect(self._edit_callback)
         button_layout.addWidget(edit_button)
 
         # Info Button
@@ -110,7 +111,7 @@ class _LayerElement(QWidget):
         info_button.setToolTip("Show Information")
         info_button.setIcon(QIcon(":/icons/info-square-rounded.svg"))
         info_button.setObjectName("mini-push-button")
-        info_button.clicked.connect(self.handle_info_button_click)
+        info_button.clicked.connect(self._info_callback)
         button_layout.addWidget(info_button)
 
         # Delete Button
@@ -118,7 +119,7 @@ class _LayerElement(QWidget):
         d_button.setToolTip("Delete Layer")
         d_button.setIcon(QIcon(":/icons/trash-x.svg"))
         d_button.setObjectName("mini-push-button")
-        d_button.clicked.connect(self.handle_delete_button_click)
+        d_button.clicked.connect(self._delete_callback)
         button_layout.addWidget(d_button)
 
         # Add the Button Layout to the Main Grid Layout
@@ -126,21 +127,22 @@ class _LayerElement(QWidget):
 
         self.edit_line = None  # Placeholder for Edit Functionality
 
-    def handle_view_button_click(self):
+    def _view_callback(self):
         _data.viewer = _data.raster.layers[self.name]
         _data.viewer_changed.emit()
 
-    def handle_edit_button_click(self):
+    def _edit_callback(self):
         self.edit_line = QLineEdit(self.name)
+        self.edit_line.setObjectName("edit-line")
         self.layout.replaceWidget(self.label, self.edit_line)
         self.label.setParent(None)
 
-        self.edit_line.editingFinished.connect(self.handle_edit_finished)
+        self.edit_line.editingFinished.connect(self._edit_finished)
 
         self.edit_line.setFocus()
 
-    def handle_edit_finished(self):
-        new_name = self.edit_line.text()
+    def _edit_finished(self):
+        new_name = self.edit_line.text().replace('\n', '')
         if new_name != self.name:
             _data.raster.edit_layer(self.name, new_name)
             _data.raster_changed.emit()
@@ -148,10 +150,10 @@ class _LayerElement(QWidget):
         self.layout.replaceWidget(self.edit_line, self.label)
         self.edit_line.setParent(None)
 
-    def handle_info_button_click(self):
+    def _info_callback(self):
         info_window = LayerInfoWindow(self.name, _data.raster.layers[self.name], self)
         info_window.exec_()
 
-    def handle_delete_button_click(self):
+    def _delete_callback(self):
         _data.raster.remove_layer(self.name)
         _data.raster_changed.emit()
