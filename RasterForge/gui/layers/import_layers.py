@@ -1,13 +1,11 @@
 import rasterio
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QMutex, QThreadPool, QObject, QMutexLocker, QRunnable
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QCheckBox,
-    QComboBox,
     QDialog,
     QFileDialog,
     QFrame,
-    QGridLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -21,6 +19,48 @@ from PySide6.QtWidgets import (
 
 from RasterForge.containers.raster import Raster
 from RasterForge.gui.data import _data
+from PySide6.QtCore import QThread
+
+
+class _ImportWorkerSignals(QObject):
+    finished = Signal()
+
+class _ImportWorker(QRunnable):
+    def __init__(self, raster, file_path, selected_layers, mutex):
+        super().__init__()
+        self.raster = raster
+        self.file_path = file_path
+        self.selected_layers = selected_layers
+        self.mutex = mutex
+        self.signals = _ImportWorkerSignals()
+
+    def run(self):
+        with QMutexLocker(self.mutex):
+            try:
+                self.raster.import_layers(self.file_path, self.selected_layers)
+            except Exception as e:
+                print(f"Error During Import: {e}")
+            finally:
+                self.signals.finished.emit()
+
+
+class _ImportThread(QObject):
+    progress_updated = Signal(int)
+    finished = Signal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.pool = QThreadPool.globalInstance()
+
+    def start_import(self, raster, file_path, selected_layers, mutex):
+        worker = _ImportWorker(raster, file_path, selected_layers, mutex)
+        worker.setAutoDelete(True)
+        worker.signals.finished.connect(self._import_finished_callback)
+        self.pool.start(worker)
+
+    def _import_finished_callback(self):
+        _data.raster_changed.emit()
+        self.finished.emit()
 
 
 class _LayersImportWindow(QDialog):
@@ -34,10 +74,10 @@ class _LayersImportWindow(QDialog):
         file_layout = QHBoxLayout()
 
         # Add File Explorer
-        selected_file_label = QLabel("No File Selected")
-        selected_file_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        selected_file_label.setObjectName("simple-label")
-        file_layout.addWidget(selected_file_label)
+        self.selected_file_label = QLabel("No File Selected")
+        self.selected_file_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.selected_file_label.setObjectName("simple-label")
+        file_layout.addWidget(self.selected_file_label)
 
         # Add Open File Button
         open_file_button = QPushButton()
@@ -104,10 +144,18 @@ class _LayersImportWindow(QDialog):
         bottom_layout.addWidget(self.progress_bar)
 
         # Add Import Button
-        import_button = QPushButton("Import")
-        import_button.setObjectName("push-button-text")
-        import_button.clicked.connect(self._import_callback)
-        bottom_layout.addWidget(import_button)
+        self.import_button = QPushButton("Import")
+        self.import_button.setObjectName("push-button-text")
+        self.import_button.clicked.connect(self._import_callback)
+        bottom_layout.addWidget(self.import_button)
+
+        # Add a Mutex for Thread Synchronization
+        self.mutex = QMutex()
+
+        # Connect the Import Thread's Finished Signal to a Slot
+        self.import_thread = _ImportThread(self)
+        self.import_thread.progress_updated.connect(self.progress_bar.setValue)
+        self.import_thread.finished.connect(self._import_finished_callback)
 
         self.layout.addLayout(bottom_layout)
 
@@ -154,21 +202,29 @@ class _LayersImportWindow(QDialog):
 
         self.scroll_layout.setAlignment(Qt.AlignTop)
 
+    def _import_finished_callback(self):
+        print("Hall")
+        self.import_button.setEnabled(True)
+
     def _import_callback(self):
         selected_layers = []
 
         if _data.raster is None:
             _data.raster = Raster(scale=self.scale_spinbox.value())
 
-        for index, (checkbox, line_edit, combo_box) in enumerate(self.band_checkboxes):
+        for index, (checkbox, line_edit) in enumerate(self.band_checkboxes):
             if checkbox.isChecked():
                 band_name = line_edit.text()
-                data_type = combo_box.currentText()
+                selected_layers.append({"id": index + 1, "name": band_name})
 
-                selected_layers.append(
-                    {"id": index + 1, "name": band_name, "type": data_type.lower()}
-                )
+        if selected_layers:
+            # Disable the Import Button During the Import Process
+            self.import_button.setEnabled(False)
 
-        if selected_layers is not {}:
-            _data.raster.import_layers(self.selected_file_path, selected_layers)
-            _data.raster_changed.emit()
+            # Start the Import Thread
+            self.import_thread.start_import(
+                _data.raster,
+                self.selected_file_path,
+                selected_layers,
+                self.mutex
+            )
