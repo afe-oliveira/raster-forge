@@ -271,10 +271,10 @@ class Layer:
     def mean(self) -> Optional[List[float]]:
         if self._array is not None:
             return (
-                np.mean(self._array)
+                float(np.mean(self._array))
                 if len(self._array.shape) <= 2
                 else [
-                    np.mean(self._array[:, :, i]) for i in range(self._array.shape[2])
+                    np.mean(float(self._array[:, :, i])) for i in range(self._array.shape[2])
                 ]
             )
         else:
@@ -284,10 +284,10 @@ class Layer:
     def median(self) -> Optional[List[float]]:
         if self._array is not None:
             return (
-                np.median(self._array)
+                float(np.median(self._array))
                 if len(self._array.shape) <= 2
                 else [
-                    np.median(self._array[:, :, i]) for i in range(self._array.shape[2])
+                    np.median(float(self._array[:, :, i])) for i in range(self._array.shape[2])
                 ]
             )
         else:
@@ -297,9 +297,9 @@ class Layer:
     def min(self) -> Optional[List[Union[int, float]]]:
         if self._array is not None:
             return (
-                np.min(self._array)
+                float(np.min(self._array))
                 if len(self._array.shape) <= 2
-                else [np.min(self._array[:, :, i]) for i in range(self._array.shape[2])]
+                else [float(np.min(self._array[:, :, i])) for i in range(self._array.shape[2])]
             )
         else:
             return None
@@ -308,9 +308,9 @@ class Layer:
     def max(self) -> Optional[List[Union[int, float]]]:
         if self._array is not None:
             return (
-                np.max(self._array)
+                float(np.max(self._array))
                 if len(self._array.shape) <= 2
-                else [np.max(self._array[:, :, i]) for i in range(self._array.shape[2])]
+                else [float(np.max(self._array[:, :, i])) for i in range(self._array.shape[2])]
             )
         else:
             return None
@@ -319,9 +319,9 @@ class Layer:
     def std_dev(self) -> Optional[List[float]]:
         if self._array is not None:
             return (
-                np.std(self._array)
+                float(np.std(self._array))
                 if len(self._array.shape) <= 2
-                else [np.std(self._array[:, :, i]) for i in range(self._array.shape[2])]
+                else [float(np.std(self._array[:, :, i])) for i in range(self._array.shape[2])]
             )
         else:
             return None

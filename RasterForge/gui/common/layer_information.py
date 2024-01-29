@@ -1,18 +1,19 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
     QFrame,
-    QLabel,
     QScrollArea,
     QTabWidget,
     QVBoxLayout,
     QWidget,
 )
+from RasterForge.gui.common.adaptative_elements import adaptative_label
 
 
-class LayerInfoWindow(QDialog):
+class _LayerInfoWindow(QDialog):
     def __init__(self, name, layer, parent=None):
         super().__init__(parent)
         self.name = name
@@ -21,17 +22,41 @@ class LayerInfoWindow(QDialog):
         # Create a Tab Widget
         self.tab_widget = QTabWidget(self)
 
-        # Create Tabs
-        self.create_general_tab(layer)
-        self.create_statistics_tab(layer)
-        self.create_histogram_tab(layer)
+        # Create General Information
+        general = [
+            (layer.width, "Width"),
+            (layer.height, "Height"),
+            (layer.count, "Count"), None,
+            (layer.driver, "Driver"),
+            (layer.no_data, "No Data"),
+            (layer.units, "Units"), None,
+            (layer.transform, "Transform",
+             ["Top-Left X", "Pixel Width", "Row Rotation", "Top-Left Y", "Column Rotation", "Pixel Height"]), None,
+            (layer.crs, "CRS"), None,
+            (layer.bounds, "Bounds", {"left": "Left", "right": "Right", "top": "Top", "bottom": "Bottom"}),
+        ]
 
-        # Set the Layout for the Dialog
+        # Create Statistical Information
+        statistics = [
+            (layer.min, "Minimum"),
+            (layer.max, "Maximum"),
+            None,
+            (layer.mean, "Mean"),
+            (layer.median, "Median"),
+            (layer.std_dev, "Standard Deviation"),
+        ]
+
+        # Create Information Tabs
+        self._numerical_tab(general, "General")
+        self._numerical_tab(statistics, "Statistics")
+        self._histogram_tab(layer)
+
+        # Set Layout
         layout = QVBoxLayout(self)
         layout.addWidget(self.tab_widget)
         self.setLayout(layout)
 
-    def create_general_tab(self, layer):
+    def _numerical_tab(self, properties, name):
         # Create a Scroll Area for General Information
         scroll_area = QScrollArea(self)
         scroll_area.setWidgetResizable(True)
@@ -42,89 +67,27 @@ class LayerInfoWindow(QDialog):
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setAlignment(Qt.AlignTop)
 
-        # Add Labels for General Information
-        properties = [
-            ("Driver", layer.driver),
-            ("No Data", layer.no_data),
-            ("Units", layer.units),
-            ("Separator", None),
-            ("Transform", layer.transform),
-            ("CRS", layer.crs),
-            ("Bounds", layer.bounds),
-            ("Separator", None),
-            ("Width", layer.width),
-            ("Height", layer.height),
-            ("Count", layer.count),
-        ]
-
-        for property_name, value in properties:
-            if value is not None:
-                if property_name == "Separator":
-                    # Create Separator
-                    separator = QFrame(self)
-                    separator.setFrameShape(QFrame.HLine)
-                    separator.setFrameShadow(QFrame.Sunken)
-                    scroll_layout.addWidget(separator)
-                elif property_name == "Transform":
-                    transform_elements = [
-                        ("Upper Left Corner X Coordinate", value[0]),
-                        ("Pixel Width", value[1]),
-                        ("Row Rotation", value[2]),
-                        ("Upper Left Corner Y Coordinate", value[3]),
-                        ("Column Rotation", value[4]),
-                        ("Pixel Height", value[5])
-                    ]
-                    label = QLabel(f"{property_name}:")
-                    scroll_layout.addWidget(label)
-                    for element_name, element_value in transform_elements:
-                        label = QLabel(f"   {element_name}: {element_value}")
-                        scroll_layout.addWidget(label)
-                elif property_name == "Bounds":
-                    label = QLabel(f"{property_name}:")
-                    for element_name, element_value in value.items():
-                        label = QLabel(f"   {element_name}: {element_value}")
-                        scroll_layout.addWidget(label)
-                    scroll_layout.addWidget(label)
-                else:
-                    label = QLabel(f"{property_name}: {value}")
-                    scroll_layout.addWidget(label)
+        for items in properties:
+            if items is None:
+                # Add Separator
+                separator = QFrame()
+                separator.setFrameShape(QFrame.HLine)
+                separator.setFrameShadow(QFrame.Sunken)
+                scroll_layout.addWidget(separator)
             else:
-                label = QLabel(f"{property_name}: N/A")
-                scroll_layout.addWidget(label)
+                widgets = adaptative_label(*items)
+                for widget in widgets:
+                    scroll_layout.addWidget(widget)
 
         scroll_content.setLayout(scroll_layout)
-        self.tab_widget.addTab(scroll_area, "General")
+        self.tab_widget.addTab(scroll_area, name)
 
-    def create_statistics_tab(self, layer):
-        # Create a Scroll Area for Statistical Information
-        scroll_area = QScrollArea(self)
-        scroll_area.setWidgetResizable(True)
+    def _histogram_tab(self, layer):
+        # Clean Min and Max
+        cleaned_data = layer.array.astype(float)
+        cleaned_data[(cleaned_data == layer.min) | (cleaned_data == layer.max)] = np.nan
 
-        scroll_content = QWidget(self)
-        scroll_area.setWidget(scroll_content)
-
-        scroll_layout = QVBoxLayout(scroll_content)
-        scroll_layout.setAlignment(Qt.AlignTop)
-
-        # Add Labels for Statistical Information
-        properties = [
-            ("Mean", layer.mean),
-            ("Median", layer.median),
-            ("Minimum", layer.min),
-            ("Maximum", layer.max),
-            ("Standard Deviation", layer.std_dev)
-        ]
-
-        for property_name, value in properties:
-            label_text = f"{property_name}: {value}" if value is not None else f"{property_name}: N/A"
-            label = QLabel(label_text)
-            scroll_layout.addWidget(label)
-
-        scroll_content.setLayout(scroll_layout)
-        self.tab_widget.addTab(scroll_area, "Statistics")
-
-    def create_histogram_tab(self, layer):
-        # Create a Scroll Area for Histogram
+        # Create a Scroll Area for Graph
         scroll_area = QScrollArea(self)
         scroll_area.setWidgetResizable(True)
 
@@ -139,15 +102,36 @@ class LayerInfoWindow(QDialog):
         canvas = FigureCanvas(figure)
         scroll_layout.addWidget(canvas)
 
-        # Plot the Histogram Using Data
-        ax.hist(layer.array.flatten(), bins=50, color='blue', alpha=0.7)
-        ax.set_title('Histogram')
-        ax.set_xlabel('Pixel Values')
-        ax.set_ylabel('Frequency')
+        # Calculate Histogram
+        colors = [
+            '#DAAC3D',
+            '#D3A334',
+            '#CC9A2B',
+            '#C69322',
+            '#BF8B19',
+            '#B88410',
+            '#B17C07',
+            '#AA7500',
+            '#A36E00',
+            '#9C6700'
+        ]
+        if layer.count > 1:
+            for band in range(layer.count):
+                band_data = cleaned_data[..., band]
+                valid_data = band_data[~np.isnan(band_data)].flatten()
 
-        # Add the Matplotlib canvas to the scroll layout
+                ax.hist(valid_data, bins=100, color=colors[band], histtype='bar', label=f'Band {band + 1}',
+                        density=True)
+                ax.legend()
+        else:
+            ax.hist(cleaned_data[~np.isnan(cleaned_data)].flatten(), bins=100, color=colors[0], histtype='bar',
+                    density=True)
+
+        ax.set_xlabel('Pixel Value')
+        ax.set_ylabel('Percentage')
+
+        # Add the Matplotlib Canvas to the Scroll Layout
         scroll_layout.addWidget(canvas)
 
         scroll_content.setLayout(scroll_layout)
-        self.tab_widget.addTab(scroll_area, "Histogram")
-
+        self.tab_widget.addTab(scroll_area, "Line Graph")

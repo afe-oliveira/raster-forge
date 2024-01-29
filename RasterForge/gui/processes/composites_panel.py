@@ -1,4 +1,3 @@
-import inspect
 from typing import Type
 
 import numpy as np
@@ -8,9 +7,7 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QFrame,
     QGridLayout,
-    QGroupBox,
     QLabel,
-    QLineEdit,
     QProgressBar,
     QPushButton,
     QScrollArea,
@@ -20,7 +17,7 @@ from PySide6.QtWidgets import (
 
 from RasterForge.containers.layer import Layer
 from RasterForge.gui.data import _data
-from RasterForge.gui.processes.adaptative_elements import adaptative_input
+from RasterForge.gui.common.adaptative_elements import adaptative_input
 from RasterForge.processes.composite import PRESET_COMPOSITES, composite
 
 

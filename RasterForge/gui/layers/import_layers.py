@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (
 
 from RasterForge.containers.raster import Raster
 from RasterForge.gui.data import _data
-from PySide6.QtCore import QThread
 
 
 class _ImportWorkerSignals(QObject):
@@ -186,6 +185,7 @@ class _LayersImportWindow(QDialog):
         for i in range(num_bands):
             # Create a Horizontal Layout for Each Band
             band_layout = QHBoxLayout()
+            band_layout.setContentsMargins(5, 5, 5, 5)
 
             checkbox = QCheckBox()
             line_edit = QLineEdit(f"Band {i + 1}")
@@ -203,7 +203,6 @@ class _LayersImportWindow(QDialog):
         self.scroll_layout.setAlignment(Qt.AlignTop)
 
     def _import_finished_callback(self):
-        print("Hall")
         self.import_button.setEnabled(True)
 
     def _import_callback(self):

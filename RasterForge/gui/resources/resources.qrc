@@ -11,5 +11,6 @@
         <file>icons/folder.svg</file>
         <file>icons/triangle-inverted-filled.svg</file>
         <file>icons/triangle-filled.svg</file>
+        <file>icons/check.svg</file>
     </qresource>
 </RCC>

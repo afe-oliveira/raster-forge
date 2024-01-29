@@ -79,25 +79,32 @@ Black: #000000
 
 QCheckBox::indicator {
     background-color: #FFFFFF;
-    border-radius: 5px;
+    border-radius: 10px;
     border-width: 0px;
-    border: 1px solid #E9E9E9;
+    border: 1px solid #DAAC3D;
+    width: 15px;
+    height: 15px;
+    padding: 2px;
 }
 QCheckBox::indicator:checked {
     background-color: #DAAC3D;
-    border: 1px solid #E9E9E9;
+    border: 1px solid #DAAC3D;
+    border-radius: 10px;
+    width: 15px;
+    height: 15px;
+    image: url(:/icons/check.svg);
 }
 
 /* Edit Line */
 
-#edit-line:focus {
+#edit-line {
   border: none;
   border-bottom: none;
   border-radius: 10px;
   background: #FFFFFF;
   font-family: "Helvetica", sans-serif;
   color: #000000;
-  padding: 0 5px;
+  padding: 5px 5px;
 }
 #edit-line:focus {
   border: none;
@@ -106,7 +113,7 @@ QCheckBox::indicator:checked {
   background: #FFFFFF;
   font-family: "Helvetica", sans-serif;
   color: #000000;
-  padding: 0 5px;
+  padding: 5px 5px;
 }
 
 /* Buttons */
@@ -250,4 +257,32 @@ QToolTip#qt_tip_label {
     color: #0C0C0C;
     font-family: "Helvetica", sans-serif;
     font-size: 12px;
+}
+
+/* Tabs */
+
+QTabWidget::pane {
+    border: 1px solid #3F5752;
+    margin: 0px;
+    padding: 0px;
+}
+
+QTabBar::tab {
+    background-color: #3F5752;
+    color: white;
+    border: 1px solid #3F5752;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-family: "Helvetica", sans-serif;
+    font-size: 12px;
+    min-width: 80px;
+    padding: 4px;
+}
+QTabBar::tab:selected {
+    background-color: #344844;
+    border: 1px solid #344844;
+}
+QTabBar::tab:hover {
+    background-color: #4A6660;
+    border: 1px solid #4A6660;
 }

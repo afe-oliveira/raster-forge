@@ -6,6 +6,8 @@ from RasterForge.tools.rescale_dataset import rescale_dataset
 
 from .layer import Layer
 
+from tqdm import tqdm
+
 ERROR_MESSAGES = {
     "scale": "ERROR: 'scale' argument is {scale_type}, but it must be an integer."
 }
@@ -52,7 +54,7 @@ class Raster:
                     aux_config['id'] = id
                     config.append(aux_config)
 
-            for item in config:
+            for i, item in enumerate(tqdm(config)):
                 array = dataset.read(item["id"])
 
                 bounds = {

@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QWidget, QHBoxLayout,
 )
 
-from RasterForge.gui.common.layer_information import LayerInfoWindow
+from RasterForge.gui.common.layer_information import _LayerInfoWindow
 from RasterForge.gui.data import _data
 
 from .import_layers import _LayersImportWindow
@@ -151,7 +151,7 @@ class _LayerElement(QWidget):
         self.edit_line.setParent(None)
 
     def _info_callback(self):
-        info_window = LayerInfoWindow(self.name, _data.raster.layers[self.name], self)
+        info_window = _LayerInfoWindow(self.name, _data.raster.layers[self.name], self)
         info_window.exec_()
 
     def _delete_callback(self):
