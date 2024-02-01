@@ -1,0 +1,23 @@
+name: Publish
+
+on:
+  push:
+    tags: 'v*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Package
+        uses: actions/checkout@v4
+      - name: Install Build and Publish Dependencies
+        run: |
+          pip3 install --upgrade build
+      - name: Build Package
+        run: |
+          python3 -m build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          repository-url: https://pypi.org/legacy/
