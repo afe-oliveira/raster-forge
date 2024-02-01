@@ -8,16 +8,16 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout package
+      - name: Checkout Package
         uses: actions/checkout@v4
-      - name: Install build and publish dependencies
+      - name: Install Build and Publish Dependencies
         run: |
           pip3 install --upgrade build
-      - name: Build package
+      - name: Build Package
         run: |
           python3 -m build
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository-url: https://test.pypi.org/legacy/
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          repository-url: https://pypi.org/legacy/
