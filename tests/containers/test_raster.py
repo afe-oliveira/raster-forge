@@ -1,12 +1,12 @@
 import pytest
 
-from RasterForge.containers.raster import Raster
-from RasterForge.containers.layer import Layer
+from rforge.containers.raster import Raster
+from rforge.containers.layer import Layer
 
 
 def test_init(data_raster_init):
-    scale = data_raster_init.get('scale')
-    layers = data_raster_init.get('layers')
+    scale = data_raster_init.get("scale")
+    layers = data_raster_init.get("layers")
 
     r = Raster(scale)
     for i in range(len(layers)):

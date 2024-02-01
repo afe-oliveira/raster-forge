@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "raster-forge"
+name = "rforge"
 version = "0.3.0"
 description = "Raster Forge is an package for the manipulation of raster data. It includes a library and a graphical user interface (GUI) application."
 readme = "README.md"
@@ -42,7 +42,7 @@ devel = [
 ]
 
 [project.gui-scripts]
-rforge = "RasterForge.gui.gui:gui"
+rforge = "rforge.gui.gui:gui"
 
 [tool.black]
 line-length = 88
@@ -50,7 +50,7 @@ target-version = ['py38']
 
 [tool.isort]
 profile = "black"
-src_paths = ["RasterForge", "tests"]
+src_paths = ["raster-forge", "tests"]
 line_length = 88
 skip_gitignore = "True"
 
