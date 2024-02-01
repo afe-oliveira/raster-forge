@@ -1,0 +1,24 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource>
+        <file>style.qss</file>
+        <file>icons/logo.svg</file>
+        <file>icons/logo-flat.svg</file>
+        <file>icons/map-plus.svg</file>
+        <file>icons/eye.svg</file>
+        <file>icons/edit.svg</file>
+        <file>icons/info-square-rounded.svg</file>
+        <file>icons/trash-x.svg</file>
+        <file>icons/folder.svg</file>
+        <file>icons/triangle-inverted-filled.svg</file>
+        <file>icons/triangle-filled.svg</file>
+        <file>icons/check.svg</file>
+        <file>icons/device-floppy.svg</file>
+        <file>icons/zoom-reset.svg</file>
+        <file>icons/zoom-scan.svg</file>
+        <file>icons/stack-2.svg</file>
+        <file>icons/3d-cube-sphere.svg</file>
+        <file>icons/mountain.svg</file>
+        <file>icons/arrows-diagonal.svg</file>
+        <file>icons/flame.svg</file>
+    </qresource>
+</RCC>
