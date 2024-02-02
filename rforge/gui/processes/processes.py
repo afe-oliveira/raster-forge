@@ -14,6 +14,7 @@ from rforge.gui.data import _data
 from rforge.gui.processes.panels.composites import _CompositesPanel
 from rforge.gui.processes.panels.distance import _DistanceFieldPanel
 from rforge.gui.processes.panels.fuel import _FuelMapPanel
+from rforge.gui.processes.panels.height import _HeightPanel
 from rforge.gui.processes.panels.indices import _IndicesPanel
 from rforge.gui.processes.panels.topography import _TopographyPanel
 
@@ -57,6 +58,7 @@ class _ProcessPanel(QWidget):
                 self._indices_callback,
             ),
             ("Topography", ":/icons/mountain.svg", self._topographical_callback),
+            ("Height Map", ":/icons/line-height.svg", self._height_callback),
             ("Distance Field", ":/icons/arrows-diagonal.svg", self._distance_callback),
             ("Fuel Map", ":/icons/flame.svg", self._fuel_callback),
         ]
@@ -77,6 +79,10 @@ class _ProcessPanel(QWidget):
         # Topographical Features Panel
         self.topo_panel = _TopographyPanel(name="Topography", selector=True)
         self.stacked_widget.addWidget(self.topo_panel)
+
+        # Height Panel
+        self.height_panel = _HeightPanel(name="Height Map")
+        self.stacked_widget.addWidget(self.height_panel)
 
         # Distance Chart Panel
         self.distance_panel = _DistanceFieldPanel(name="Distance Field")
@@ -151,8 +157,11 @@ class _ProcessPanel(QWidget):
     def _topographical_callback(self):
         self.stacked_widget.setCurrentIndex(3)
 
-    def _distance_callback(self):
+    def _height_callback(self):
         self.stacked_widget.setCurrentIndex(4)
 
-    def _fuel_callback(self):
+    def _distance_callback(self):
         self.stacked_widget.setCurrentIndex(5)
+
+    def _fuel_callback(self):
+        self.stacked_widget.setCurrentIndex(6)

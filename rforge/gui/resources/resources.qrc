@@ -18,6 +18,7 @@
         <file>icons/stack-2.svg</file>
         <file>icons/3d-cube-sphere.svg</file>
         <file>icons/mountain.svg</file>
+        <file>icons/line-height.svg</file>
         <file>icons/arrows-diagonal.svg</file>
         <file>icons/flame.svg</file>
     </qresource>
