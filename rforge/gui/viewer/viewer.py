@@ -319,27 +319,28 @@ class _ViewerPanel(QWidget):
             fig, ax = plt.subplots()
             fig.patch.set_alpha(0)
 
-            if _data.viewer.count == 2:
-                normal_data = _data.viewer.array[..., 0]
-                alpha_channel = np.interp(
-                    _data.viewer.array[..., 1],
-                    (
-                        _data.viewer.array[..., 1].min(),
-                        _data.viewer.array[..., 1].max(),
-                    ),
-                    (0, 1),
-                )
+            count = _data.viewer.count
+            viewer_array = _data.viewer.array
+            colormap = COLORMAPS[self.colormap_combobox.currentText()]
 
-                ax.imshow(
-                    normal_data,
-                    cmap=COLORMAPS[self.colormap_combobox.currentText()],
-                    alpha=alpha_channel,
-                )
+            min_vals = viewer_array.min(axis=(0, 1), keepdims=True)
+            max_vals = viewer_array.max(axis=(0, 1), keepdims=True)
+            normalized_array = (viewer_array - min_vals) / (max_vals - min_vals + 1e-10)
+
+            if count in [1, 2]:
+                if count == 2:
+                    normal_data = normalized_array[..., 0]
+                    alpha_channel = np.interp(
+                        normalized_array[..., 1],
+                        (normalized_array[..., 1].min(), normalized_array[..., 1].max()),
+                        (0, 1),
+                    )
+
+                    ax.imshow(normal_data, cmap=colormap, alpha=alpha_channel)
+                else:
+                    ax.imshow(normalized_array, cmap=colormap)
             else:
-                ax.imshow(
-                    _data.viewer.array,
-                    cmap=COLORMAPS[self.colormap_combobox.currentText()],
-                )
+                ax.imshow(normalized_array)
 
             ax.axis("off")
             ax.set_frame_on(False)

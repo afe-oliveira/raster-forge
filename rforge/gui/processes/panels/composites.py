@@ -62,7 +62,7 @@ class _CompositesPanel(_ProcessPanel):
         layer.array = Normalize()(
             composite(layers=input_layers, alpha=input_alpha, gamma=input_gamma)
         )
-        print(layer.array.mean())
+
         _data.viewer = layer
         _data.viewer_changed.emit()
 
