@@ -8,6 +8,8 @@ jobs:
     environment:
       name: pypi
       url: https://pypi.org/p/raster-forge
+    permissions:
+      id-token: write
     steps:
       - name: Checkout Package
         uses: actions/checkout@v4
@@ -19,5 +21,3 @@ jobs:
           python3 -m build
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
