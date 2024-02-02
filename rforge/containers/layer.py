@@ -278,7 +278,7 @@ class Layer:
                 float(np.mean(self._array))
                 if len(self._array.shape) <= 2
                 else [
-                    np.mean(float(self._array[:, :, i]))
+                    float(np.mean(self._array[:, :, i]))
                     for i in range(self._array.shape[2])
                 ]
             )
@@ -292,7 +292,7 @@ class Layer:
                 float(np.median(self._array))
                 if len(self._array.shape) <= 2
                 else [
-                    np.median(float(self._array[:, :, i]))
+                    float(np.median(self._array[:, :, i]))
                     for i in range(self._array.shape[2])
                 ]
             )
