@@ -27,43 +27,43 @@ class _FuelMapPanel(_ProcessPanel):
         # Add Vegetation Coverage
         (
             self._widgets["Vegetation Coverage"],
-            self._references["Vegetation Coverage"],
+            self._references["Vegetation Coverage"], _
         ) = _adaptative_input("Vegetation Coverage", ARRAY_TYPE)
 
         # Add Canopy Height
-        self._widgets["Canopy Height"], self._references["Canopy Height"] = (
+        self._widgets["Canopy Height"], self._references["Canopy Height"], _ = (
             _adaptative_input("Canopy Height", ARRAY_TYPE)
         )
 
         # Add Distance Field
-        self._widgets["Distance Field"], self._references["Distance Field"] = (
+        self._widgets["Distance Field"], self._references["Distance Field"], _ = (
             _adaptative_input("Distance Field", ARRAY_TYPE)
         )
 
         # Add Water Features
-        self._widgets["Water Features"], self._references["Water Features"] = (
+        self._widgets["Water Features"], self._references["Water Features"], _ = (
             _adaptative_input("Water Features", ARRAY_TYPE)
         )
 
         # Add Artificial Structures
         (
             self._widgets["Artificial Structures"],
-            self._references["Artificial Structures"],
+            self._references["Artificial Structures"], _
         ) = _adaptative_input("Artificial Structures", ARRAY_TYPE)
 
         # Add Fuel Models
-        self._widgets["Fuel F"], self._references["Fuel F"] = _adaptative_input(
+        self._widgets["Fuel F"], self._references["Fuel F"], _ = _adaptative_input(
             "Fuel Model (Trees)", int, 200
         )
-        self._widgets["Fuel V"], self._references["FuelV"] = _adaptative_input(
+        self._widgets["Fuel V"], self._references["FuelV"], _ = _adaptative_input(
             "Fuel Model (Vegetation)", int, 200
         )
-        self._widgets["Fuel M"], self._references["Fuel M"] = _adaptative_input(
+        self._widgets["Fuel M"], self._references["Fuel M"], _ = _adaptative_input(
             "Fuel Model (Mixed)", int, 200
         )
 
         # Add Alpha
-        self._widgets["Alpha"], self._references["Alpha"] = _adaptative_input(
+        self._widgets["Alpha"], self._references["Alpha"], _ = _adaptative_input(
             "Alpha", ARRAY_TYPE, "None"
         )
 

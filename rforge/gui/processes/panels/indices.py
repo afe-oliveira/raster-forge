@@ -2,13 +2,11 @@ from typing import Type
 
 import numpy as np
 import spyndex
-from PySide6.QtWidgets import QLabel
 
 from rforge.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
 from rforge.gui.data import _data
 from rforge.gui.processes.process_panel import _ProcessPanel
-from rforge.processes.composite import PRESET_COMPOSITES
 from rforge.processes.index import index
 
 ARRAY_TYPE: Type[np.ndarray] = np.ndarray
@@ -34,13 +32,13 @@ class _IndicesPanel(_ProcessPanel):
         for input in inputs:
             if input in spyndex.bands:
                 band = spyndex.bands[input]
-                widget, reference = _adaptative_input(band.long_name, ARRAY_TYPE)
+                widget, reference, _ = _adaptative_input(band.long_name, ARRAY_TYPE)
 
                 self._widgets[band] = widget
                 self._references["Bands"][band] = reference
             elif input in spyndex.constants:
                 constant = spyndex.bands[input]
-                widget, reference = _adaptative_input(
+                widget, reference, _ = _adaptative_input(
                     constant.long_name, float, constant.default
                 )
 
@@ -48,17 +46,17 @@ class _IndicesPanel(_ProcessPanel):
                 self._references["Constants"][constant] = reference
 
         # Add Alpha
-        self._widgets["Alpha"], self._references["Alpha"] = _adaptative_input(
+        self._widgets["Alpha"], self._references["Alpha"], _ = _adaptative_input(
             "Alpha", ARRAY_TYPE, "None"
         )
 
         # Add Threshold
-        self._widgets["Thresholds"], self._references["Thresholds"] = _adaptative_input(
-            "Thresholds", range
+        self._widgets["Thresholds"], self._references["Thresholds"], self._references["Thresholds Toggle"] = _adaptative_input(
+            "Thresholds", range, None, True
         )
 
         # Add Binarization
-        self._widgets["Binarize"], self._references["Binarize"] = _adaptative_input(
+        self._widgets["Binarize"], self._references["Binarize"], _ = _adaptative_input(
             "Binarize", bool
         )
 
@@ -81,8 +79,8 @@ class _IndicesPanel(_ProcessPanel):
             if self._references["Alpha"].currentText() != "None"
             else None
         )
-        thresholds = self._references["Thresholds"].value()
-        binarize = False
+        thresholds = self._references["Thresholds"].value() if self._references["Thresholds Toggle"].isChecked() else None
+        binarize = self._references["Binarize"].isChecked()
 
         layer = Layer()
         layer.array = index(selected_index, parameters, alpha, thresholds, binarize)

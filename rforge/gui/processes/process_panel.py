@@ -34,6 +34,7 @@ class _ProcessPanel(QWidget):
 
         if selector:
             self.selector_combo = QComboBox(self)
+            self.selector_combo.currentIndexChanged.connect(self._scroll_content_callback)
             self.selector_combo.setEditable(True)
             self.selector_combo.setInsertPolicy(QComboBox.NoInsert)
 

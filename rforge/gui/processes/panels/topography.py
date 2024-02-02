@@ -27,17 +27,17 @@ class _TopographyPanel(_ProcessPanel):
         self._references = {}
 
         # Add DEM
-        self._widgets["DEM"], self._references["DEM"] = _adaptative_input(
+        self._widgets["DEM"], self._references["DEM"], _ = _adaptative_input(
             "DEM", ARRAY_TYPE
         )
 
         # Add Units
-        self._widgets["Units"], self._references["Units"] = _adaptative_input(
+        self._widgets["Units"], self._references["Units"], _ = _adaptative_input(
             "Units", list, ["Degrees", "Radians"]
         )
 
         # Add Alpha
-        self._widgets["Alpha"], self._references["Alpha"] = _adaptative_input(
+        self._widgets["Alpha"], self._references["Alpha"], _ = _adaptative_input(
             "Alpha", ARRAY_TYPE, "None"
         )
 

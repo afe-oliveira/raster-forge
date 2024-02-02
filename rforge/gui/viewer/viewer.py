@@ -263,18 +263,34 @@ class _ViewerPanel(QWidget):
             self.band_values_label.show()
 
     def _set_pixel_values(self, event, x, y):
-        if not self.band_values_label.isHidden():
-            band_values = ""
-            if _data.viewer.array is not None:
-                if _data.viewer.count > 1:
-                    for i in range(_data.viewer.count):
-                        band_values += f"{_data.viewer.array[y, x, i]} \n"
-                else:
-                    band_values = f"{_data.viewer.array[y, x]}"
+        if self.band_values_label.isHidden():
+            return
 
-            cursor_pos = self.graphics_view.mapToScene(event.pos())
-            self.band_values_label.setText(f"{band_values}")
-            self.band_values_label.move(cursor_pos.x() - 5, cursor_pos.y() - 5)
+        band_values = ""
+        viewer = _data.viewer
+
+        if viewer.array is not None:
+            if viewer.count > 1:
+                values = [viewer.array[y, x, i] for i in range(viewer.count)]
+            else:
+                values = [viewer.array[y, x]]
+
+            for i, value in enumerate(values):
+                if -99999 <= value <= 99999:
+                    value = str(round(value, 5))
+                else:
+                    value = "{:e}".format(value)
+
+                if i > 0:
+                    band_values += "\n"
+                band_values += value
+
+        cursor_pos = self.graphics_view.mapToScene(event.pos())
+        label_width = 10 * len(band_values)
+        label_height = 20 * viewer.count
+        self.band_values_label.setFixedSize(label_width, label_height)
+        self.band_values_label.setText("{}".format(band_values))
+        self.band_values_label.move(cursor_pos.x() - label_width / 2, cursor_pos.y())
 
     def update_zoom(self):
         zoom_value = self.zoom_slider.value()

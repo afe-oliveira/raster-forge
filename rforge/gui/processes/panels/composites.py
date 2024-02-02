@@ -25,22 +25,19 @@ class _CompositesPanel(_ProcessPanel):
         self._widgets = {}
         self._references = {}
         for component in PRESET_COMPOSITES[self.selector_combo.currentText()]:
-            widget, reference = _adaptative_input(component, ARRAY_TYPE)
+            widget, reference, _ = _adaptative_input(component, ARRAY_TYPE)
 
             self._widgets[component] = widget
             self._references[component] = reference
 
         # Add Alpha
-        self._widgets["Alpha"], self._references["Alpha"] = _adaptative_input(
+        self._widgets["Alpha"], self._references["Alpha"], _ = _adaptative_input(
             "Alpha", ARRAY_TYPE, "None"
         )
 
         # Add Gammas
         for component in PRESET_COMPOSITES[self.selector_combo.currentText()]:
-            (
-                self._widgets[f"Gamma {component}"],
-                self._references[f"Gamma {component}"],
-            ) = _adaptative_input(f"Gamma {component}", float, 1)
+            self._widgets[f"Gamma {component}"], self._references[f"Gamma {component}"], _ = _adaptative_input(f"Gamma {component}", float, 1)
 
         super()._scroll_content_callback()
 

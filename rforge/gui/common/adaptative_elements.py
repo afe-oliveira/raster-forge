@@ -99,110 +99,67 @@ def adaptative_label(data, label, sub_labels=None):
 def _adaptative_input(
     name: str, type: Type, preset: Any = None, optional: bool = False
 ):
-    widget = None
-    reference = None
+    widget = QWidget()
+    value_ref = None
+    optional_ref = None
 
-    # Data Type is an Numpy Array
-    if type == np.ndarray:
-        widget = QWidget()
+    layout = QVBoxLayout()
+    label_layout = QHBoxLayout()
 
-        layout = QVBoxLayout()
+    label = QLabel(f"{name}")
 
-        label = QLabel(f"{name}")
+    label_layout.addWidget(label)
+    label_layout.addStretch(100)
 
+    if optional or type == bool:
+        optional_ref = QCheckBox()
+        label_layout.addWidget(optional_ref)
+
+    layout.addLayout(label_layout)
+
+    if type == bool:
+        widget.setLayout(layout)
+        return widget, optional_ref, None
+    elif type == np.ndarray:
         combo_box = QComboBox()
-        reference = combo_box
         if preset is not None:
             combo_box.addItem(preset)
         if _data.raster is not None:
             keys_from_raster = list(_data.raster.layers.keys())
             combo_box.addItems(keys_from_raster)
 
-        layout.addWidget(label)
+        value_ref = combo_box
+
         layout.addWidget(combo_box)
-
         widget.setLayout(layout)
-    # Data Type is a Tuple
-    elif getattr(type, "__origin__", None) == tuple:
-        tuple_types = getattr(type, "__args__", ())
-        widget_group = QGroupBox()
-        group_layout = QVBoxLayout()
-        for i, subtype in enumerate(tuple_types):
-            sub_label = QLabel(f"{name}[{i}]")
-            sub_widget = QLineEdit()
-            sub_widget.setText("1")
-            sub_widget.setObjectName(f"{name}_{i}")
-            group_layout.addWidget(sub_label)
-            group_layout.addWidget(sub_widget)
-        widget_group.setLayout(group_layout)
-        widget = widget_group
-    # Data Type is a Scalar
     elif type in [int, float]:
-        widget = QWidget()
-
-        layout = QVBoxLayout()
-
-        label = QLabel(f"{name}")
-
         spin_box = QSpinBox() if type == int else QDoubleSpinBox()
         spin_box.setRange(0, 9999)
         spin_box.setSingleStep(1) if type == int else spin_box.setSingleStep(0.1)
         spin_box.setValue(preset) if preset is not None else 0
 
-        reference = spin_box
+        value_ref = spin_box
 
-        layout.addWidget(label)
         layout.addWidget(spin_box)
-
         widget.setLayout(layout)
     elif type == range:
-        widget = QWidget()
-
-        layout = QVBoxLayout()
-        label = QLabel(f"{name}")
-
         range_slider = QLabeledDoubleRangeSlider(Qt.Orientation.Horizontal)
         range_slider.setRange(-1, 1)
-        range_slider.setValue((-0.5, 0.5))
+        range_slider.setValue(preset) if preset is not None else range_slider.setValue((-0.5, 0.5))
 
-        reference = range_slider
+        value_ref = range_slider
 
-        layout.addWidget(label)
         layout.addWidget(range_slider)
-
-        widget.setLayout(layout)
-    elif type == bool:
-        widget = QWidget()
-
-        layout = QHBoxLayout()
-
-        label = QLabel(f"{name}")
-
-        checkbox = QCheckBox()
-        reference = checkbox
-
-        layout.addWidget(label)
-        layout.addStretch()
-        layout.addWidget(checkbox)
-
         widget.setLayout(layout)
     elif type == list:
-        widget = QWidget()
-
-        layout = QVBoxLayout()
-
-        label = QLabel(f"{name}")
-
         combo_box = QComboBox()
-        reference = combo_box
-
         if preset:
             for item in preset:
                 combo_box.addItem(item)
 
-        layout.addWidget(label)
-        layout.addWidget(combo_box)
+        value_ref = combo_box
 
+        layout.addWidget(combo_box)
         widget.setLayout(layout)
 
-    return widget, reference
+    return widget, value_ref, optional_ref

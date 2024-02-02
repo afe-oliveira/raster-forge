@@ -25,12 +25,12 @@ class _DistanceFieldPanel(_ProcessPanel):
         self._references = {}
 
         # Add Layer
-        self._widgets["Layer"], self._references["Layer"] = _adaptative_input(
+        self._widgets["Layer"], self._references["Layer"], _ = _adaptative_input(
             "Layer", ARRAY_TYPE
         )
 
         # Add Alpha
-        self._widgets["Alpha"], self._references["Alpha"] = _adaptative_input(
+        self._widgets["Alpha"], self._references["Alpha"], _ = _adaptative_input(
             "Alpha", ARRAY_TYPE, "None"
         )
 
