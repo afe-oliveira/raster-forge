@@ -8,7 +8,7 @@ from rforge.tools.exceptions import ErrorMessages
 
 
 def distance(
-    layer: Union[Layer, np.ndarray], alpha: Optional[Union[Layer, np.ndarray]] = None
+    layer: Union[Layer, np.ndarray], alpha: Optional[Union[Layer, np.ndarray]] = None, thresholds: Optional[tuple[float,float]] = None, invert: bool = False, mask_size: int = 3
 ):
     """Calculate the distance of terrain features.
 
@@ -36,7 +36,14 @@ def distance(
             )
         )
 
-    result = cv2.distanceTransform(array, cv2.DIST_L2, 5)
+    if thresholds is not None:
+        mask = np.logical_and(array >= thresholds[0], array <= thresholds[1])
+        if invert:
+            array = np.where(mask, 0, 255)
+        else:
+            array = np.where(mask, 255, 0)
+
+    result = cv2.distanceTransform(np.uint8(array), cv2.DIST_L2, mask_size)
     result = abs(result.max() - result)
 
     if alpha is not None:
