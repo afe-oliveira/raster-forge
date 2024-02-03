@@ -107,6 +107,9 @@ def _adaptative_input(
     label_layout = QHBoxLayout()
 
     label = QLabel(f"{name}")
+    label.setObjectName("simple-label")
+    label.setMinimumHeight(25)
+    label.setMaximumHeight(25)
 
     label_layout.addWidget(label)
     label_layout.addStretch(100)
@@ -134,6 +137,7 @@ def _adaptative_input(
         widget.setLayout(layout)
     elif type in [int, float]:
         spin_box = QSpinBox() if type == int else QDoubleSpinBox()
+        spin_box.setObjectName("spin-box")
         spin_box.setRange(0, 9999)
         spin_box.setSingleStep(1) if type == int else spin_box.setSingleStep(0.1)
         spin_box.setValue(preset) if preset is not None else 0
@@ -144,8 +148,10 @@ def _adaptative_input(
         widget.setLayout(layout)
     elif type == range:
         range_slider = QLabeledDoubleRangeSlider(Qt.Orientation.Horizontal)
-        range_slider.setRange(-1, 1)
-        range_slider.setValue(preset) if preset is not None else range_slider.setValue((-0.5, 0.5))
+        if preset is None:
+            preset = (-1, 1)
+        range_slider.setRange(preset[0], preset[1])
+        range_slider.setValue(preset)
 
         value_ref = range_slider
 

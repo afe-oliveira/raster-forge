@@ -68,7 +68,8 @@ class _ViewerPanel(QWidget):
         # Create Vertical Layout
         layout = QVBoxLayout(self)
 
-        _data.viewer_changed.connect(self.update_viewer)
+        _data.viewer_changed.connect(self._viewer_content_callback)
+        _data.viewer_changed.connect(self._control_callback)
 
         # Create Horizontal Top Save/Control Bar Layout
         top_layout = QHBoxLayout(self)
@@ -107,7 +108,7 @@ class _ViewerPanel(QWidget):
         self.colormap_combobox.setCurrentText("gray")
         control_layout.addWidget(colormap_label)
         control_layout.addWidget(self.colormap_combobox)
-        self.colormap_combobox.currentIndexChanged.connect(self.update_viewer)
+        self.colormap_combobox.currentIndexChanged.connect(self._viewer_content_callback)
         self.save_image_button.clicked.connect(
             lambda: _save_as_image(COLORMAPS[self.colormap_combobox.currentText()])
         )
@@ -304,7 +305,7 @@ class _ViewerPanel(QWidget):
         self.zoom_slider.setValue(0)
         self.update_zoom()
 
-    def update_viewer(self):
+    def _viewer_content_callback(self):
         self.colormap_combobox.setEnabled(False)
 
         if _data.viewer is not None and _data.viewer.array is not None:
@@ -363,3 +364,19 @@ class _ViewerPanel(QWidget):
     def show_info(self):
         info_window = _LayerInfoWindow("Viewer Data", _data.viewer, self)
         info_window.exec_()
+
+
+    def _control_callback(self):
+        status = True
+        if _data.viewer is None:
+            status = False
+
+        self.save_layer_button.setEnabled(status)
+        self.save_image_button.setEnabled(status)
+        self.save_tif_button.setEnabled(status)
+
+        self.colormap_combobox.setEnabled(status)
+        self.info_button.setEnabled(status)
+
+        self.zoom_slider.setEnabled(status)
+        self.restore_zoom_button.setEnabled(status)
