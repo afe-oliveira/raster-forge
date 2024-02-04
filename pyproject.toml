@@ -16,7 +16,6 @@ dependencies = [
     "rasterio",
     "spyndex",
     "opencv-python",
-    "tqdm",
     "scipy",
     "PySide6",
     "superqt",

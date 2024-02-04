@@ -1,7 +1,6 @@
 from typing import Dict, Optional, TypedDict
 
 import rasterio
-from tqdm import tqdm
 
 from rforge.tools.rescale_dataset import _rescale_dataset
 
@@ -55,7 +54,7 @@ class Raster:
                     aux_config["id"] = id
                     config.append(aux_config)
 
-            for i, item in enumerate(tqdm(config)):
+            for item in config:
                 array = dataset.read(item["id"])
 
                 bounds = {

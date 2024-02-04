@@ -113,6 +113,8 @@ class _ViewerPanel(QWidget):
             lambda: _save_as_image(COLORMAPS[self.colormap_combobox.currentText()])
         )
 
+        top_layout.addStretch(10)
+
         # Add Pixel Value Button
         self.pixel_value_button = QCheckBox()
         self.pixel_value_button.setToolTip("Show Pixel Value")
@@ -376,6 +378,7 @@ class _ViewerPanel(QWidget):
         self.save_tif_button.setEnabled(status)
 
         self.colormap_combobox.setEnabled(status)
+        self.pixel_value_button.setEnabled(status)
         self.info_button.setEnabled(status)
 
         self.zoom_slider.setEnabled(status)
