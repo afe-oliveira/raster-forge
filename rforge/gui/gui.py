@@ -33,6 +33,7 @@ def _initialize_application():
 
 def gui():
     """Launches the Raster Forge Graphical User Interface (GUI)."""
+    global main_window
     try:
         app = _initialize_application()
         main_window = _MainWindow()

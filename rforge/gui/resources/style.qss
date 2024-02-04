@@ -91,9 +91,8 @@ QCheckBox::indicator:checked {
     image: url(:/icons/check.svg);
 }
 QCheckBox::indicator:disabled {
-    background-color: #B3B3B3;
+    background-color: #FFFFFF;
     border: 1px solid #B3B3B3;
-    image: url(:/icons/check.svg);
 }
 
 #switch-toggle-pv::indicator {
@@ -124,13 +123,7 @@ QCheckBox::indicator:disabled {
   padding: 5px 5px;
 }
 #edit-line:focus {
-  border: none;
   border-bottom: 1px solid #DAAC3D;
-  border-radius: 10px;
-  background: #FFFFFF;
-  font-family: "Helvetica", sans-serif;
-  color: #000000;
-  padding: 5px 5px;
 }
 
 /* Buttons */

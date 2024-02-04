@@ -54,13 +54,21 @@ class _IndicesPanel(_ProcessPanel):
         self._widgets["Thresholds"], self._references["Thresholds"], self._references["Thresholds Toggle"] = _adaptative_input(
             "Thresholds", range, None, True
         )
+        self._references["Thresholds Toggle"].stateChanged.connect(self._threshold_callback)
 
         # Add Binarization
         self._widgets["Binarize"], self._references["Binarize"], _ = _adaptative_input(
             "Binarize", bool
         )
 
+        self._threshold_callback()
+
         super()._scroll_content_callback()
+
+    def _threshold_callback(self):
+        self._references["Thresholds"].setEnabled(self._references["Thresholds Toggle"].isChecked())
+        self._references["Binarize"].setEnabled(self._references["Thresholds Toggle"].isChecked())
+        self._references["Binarize"].setChecked(False)
 
     def _build_callback(self):
         selected_index = self.selector_combo.currentText()
