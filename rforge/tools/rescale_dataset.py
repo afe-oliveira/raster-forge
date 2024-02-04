@@ -18,12 +18,12 @@ def _rescale_dataset(dataset, pixel_size):
     resampling_factor_x = dataset.res[0] / pixel_size
     resampling_factor_y = dataset.res[1] / pixel_size
 
-    new_transform = dataset.transform * rasterio.Affine.scale(
-        resampling_factor_x, resampling_factor_y
-    )
-
     new_width = max(int(dataset.width * resampling_factor_x), 1)
     new_height = max(int(dataset.height * resampling_factor_y), 1)
+
+    new_transform = dataset.transform * rasterio.Affine.scale(
+        1 / resampling_factor_x, 1 / resampling_factor_y
+    )
 
     new_meta = dataset.meta.copy()
     new_meta.update(

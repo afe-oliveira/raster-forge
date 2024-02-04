@@ -1,6 +1,4 @@
 import sys
-import atexit
-import gc
 from PySide6.QtCore import QFile, QTextStream, QTimer, Qt
 from PySide6.QtWidgets import QApplication
 from .main_window import _MainWindow
@@ -9,9 +7,6 @@ from .resources import resources
 
 def _cleanup(main_window):
     main_window.close()
-
-
-atexit.register(_cleanup)
 
 
 def _show_main_window(main_window):

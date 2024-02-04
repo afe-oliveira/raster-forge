@@ -110,6 +110,7 @@ class Layer:
                 "no_data": self.no_data,
                 "transform": self.transform,
                 "units": self.units,
+                "resolution": self.resolution,
                 "width": self.width,
                 "height": self.height,
                 "count": self.count,
@@ -249,6 +250,13 @@ class Layer:
         if value is not None and not isinstance(value, str):
             raise TypeError(ERROR_MESSAGES["units"].format(units_type=type(value)))
         self._units = value
+
+    @property
+    def resolution(self) -> float:
+        if self._array is not None:
+            return self._transform[1]
+        else:
+            return 0
 
     @property
     def width(self) -> int:
