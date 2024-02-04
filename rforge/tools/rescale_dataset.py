@@ -4,7 +4,17 @@ from rasterio import MemoryFile
 from rasterio.enums import Resampling
 
 
-def rescale_dataset(dataset, pixel_size):
+def _rescale_dataset_preview(dataset, pixel_size):
+    resampling_factor_x = dataset.res[0] / pixel_size
+    resampling_factor_y = dataset.res[1] / pixel_size
+
+    new_width = max(int(dataset.width * resampling_factor_x), 1)
+    new_height = max(int(dataset.height * resampling_factor_y), 1)
+
+    return new_width, new_height
+
+
+def _rescale_dataset(dataset, pixel_size):
     resampling_factor_x = dataset.res[0] / pixel_size
     resampling_factor_y = dataset.res[1] / pixel_size
 

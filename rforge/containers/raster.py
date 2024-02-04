@@ -3,7 +3,7 @@ from typing import Dict, Optional, TypedDict
 import rasterio
 from tqdm import tqdm
 
-from rforge.tools.rescale_dataset import rescale_dataset
+from rforge.tools.rescale_dataset import _rescale_dataset
 
 from .layer import Layer
 
@@ -45,7 +45,7 @@ class Raster:
         self, path: str, config: Optional[list[RasterImportConfig]] = None
     ):
         with rasterio.open(path) as dataset:
-            dataset = rescale_dataset(dataset, self.scale)
+            dataset = _rescale_dataset(dataset, self.scale)
 
             if config is None:
                 config = []

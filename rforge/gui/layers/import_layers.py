@@ -27,6 +27,7 @@ from PySide6.QtWidgets import (
 
 from rforge.containers.raster import Raster
 from rforge.gui.data import _data
+from rforge.tools.rescale_dataset import _rescale_dataset_preview
 
 
 class _ImportWorkerSignals(QObject):
@@ -83,6 +84,7 @@ class _LayersImportWindow(QDialog):
 
         # Add File Explorer
         self.selected_file_label = QLabel("No File Selected")
+        self.selected_file_path = None
         self.selected_file_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.selected_file_label.setObjectName("simple-label")
         file_layout.addWidget(self.selected_file_label)
@@ -121,8 +123,22 @@ class _LayersImportWindow(QDialog):
         else:
             self.scale_spinbox.setValue(1)
             self.scale_spinbox.setEnabled(True)
+        self.scale_spinbox.valueChanged.connect(self._preview_callback)
         scale_layout.addWidget(self.scale_spinbox, stretch=1)
 
+        scale_layout.addStretch(100)
+
+        # Add Size Preview
+        self.new_width, x_label, self.new_height = QLabel("N/A"), QLabel("X"), QLabel("N/A")
+        self.new_width.setObjectName("simple-label")
+        self.new_width.setToolTip("Expected Width")
+        x_label.setObjectName("simple-label-no-bg")
+        self.new_height.setObjectName("simple-label")
+        self.new_height.setToolTip("Expected Height")
+
+        scale_layout.addWidget(self.new_width)
+        scale_layout.addWidget(x_label)
+        scale_layout.addWidget(self.new_height)
         self.layout.addLayout(scale_layout)
 
         # Add Bands Checklist
@@ -179,8 +195,19 @@ class _LayersImportWindow(QDialog):
                 self.selected_file_label.setText(f"{self.selected_file_path}")
 
                 with rasterio.open(self.selected_file_path) as dataset:
+                    x_resolution = abs(dataset.res[0])
                     num_bands = dataset.count
+                    self.scale_spinbox.setValue(int(x_resolution) + (x_resolution % 1 > 0))
+                    self._preview_callback()
                     self._populate_bands_checklist(num_bands)
+
+    def _preview_callback(self):
+        if self.selected_file_path is not None:
+            with rasterio.open(self.selected_file_path) as dataset:
+                new_width, new_height = _rescale_dataset_preview(dataset, self.scale_spinbox.value())
+
+                self.new_width.setText(str(new_width))
+                self.new_height.setText(str(new_height))
 
     def _populate_bands_checklist(self, num_bands):
         # Clear Existing items

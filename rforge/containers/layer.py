@@ -5,7 +5,7 @@ import numpy as np
 import rasterio
 
 from rforge.tools.exceptions import ErrorMessages
-from rforge.tools.rescale_dataset import rescale_dataset
+from rforge.tools.rescale_dataset import _rescale_dataset
 
 ERROR_MESSAGES = {
     "no_file": "Error: The file {file_path} does not exist.",
@@ -127,7 +127,7 @@ class Layer:
 
         with rasterio.open(path) as dataset:
             if scale is not None:
-                dataset = rescale_dataset(dataset, scale)
+                dataset = _rescale_dataset(dataset, scale)
 
             array = dataset.read(id)
 
