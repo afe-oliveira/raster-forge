@@ -105,7 +105,6 @@ class _ProcessPanel(QWidget):
             button.setToolTip(tooltip)
             button.setIcon(QIcon(icon_path))
             button.setFixedSize(GRID_BUTTON_SIZE, GRID_BUTTON_SIZE)
-            button.setObjectName("push-button-grid")
             button.clicked.connect(callback)
             return button
 

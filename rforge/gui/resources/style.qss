@@ -137,79 +137,43 @@ QCheckBox::indicator:checked {
 
 /* Buttons */
 
-#push-button {
+QPushButton {
     background-color: #3F5752;
     border: none;
     border-radius: 5px;
     padding: 10px;
     margin: 5px;
     color: #FFFFFF;
+    font-family: "Helvetica", sans-serif;
+}
+QPushButton:hover {
+    background-color: #4A6660;
+    cursor: pointer;
+}
+QPushButton:pressed {
+    background-color: #344844;
+}
+QPushButton:disabled {
+    background-color: #B3B3B3;
+}
+
+#push-button {
     min-width: 10px;
     max-width: 10px;
     min-height: 10px;
     max-height: 10px;
 }
-#push-button:hover {
-    background-color: #4A6660;
-    cursor: pointer;
-}
-#push-button:pressed {
-    background-color: #344844;
-}
 
 #push-button-text {
-    background-color: #3F5752;
-    border: none;
-    border-radius: 5px;
-    font-family: "Helvetica", sans-serif;
-    padding: 10px;
-    margin: 5px;
-    color: #FFFFFF;
     min-height: 10px;
     max-height: 10px;
 }
-#push-button-text:hover {
-    background-color: #4A6660;
-    cursor: pointer;
-}
-#push-button-text:pressed {
-    background-color: #344844;
-}
-
-#push-button-grid {
-    background-color: #3F5752;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 5px;
-    color: #FFFFFF;
-}
-#push-button-grid:hover {
-    background-color: #4A6660;
-    cursor: pointer;
-}
-#push-button-grid:pressed {
-    background-color: #344844;
-}
 
 #mini-push-button {
-    background-color: #3F5752;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 5px;
-    color: #FFFFFF;
     min-width: 5px;
     max-width: 5px;
     min-height: 5px;
     max-height: 5px;
-}
-#mini-push-button:hover {
-    background-color: #4A6660;
-    cursor: pointer;
-}
-#mini-push-button:pressed {
-    background-color: #344844;
 }
 
 /* Spin Box */

@@ -19,81 +19,44 @@ from superqt import QLabeledDoubleRangeSlider
 from rforge.gui.data import _data
 
 
-def adaptative_label(data, label, sub_labels=None):
-    widgets = []
+def _adaptative_label(data, label, sub_labels=None):
+    widget = QWidget()
+    layout = QVBoxLayout()
+
+    item_layout = QHBoxLayout()
 
     base_label = QLabel(label)
-    base_label.setObjectName("simple-label")
-    base_label.setFixedWidth(125)
+    base_label.setObjectName("simple-label") if not isinstance(data, (tuple, list, dict)) else base_label.setObjectName("title-label")
     base_label.setContentsMargins(5, 5, 5, 5)
 
-    if data is None:
-        widget = QWidget()
+    item_layout.addWidget(base_label)
+    item_layout.addStretch(100)
 
-        # Create Label for Data
-        value_label = QLabel("N/A")
-        value_label.setObjectName("simple-label-no-bg")
+    if data is None or isinstance(data, (str, int, float)):
+        if data is None:
+            value_label = QLabel("N/A")
+        else:
+            value_label = str(round(data, 4)) if isinstance(data, float) else str(data)
 
-        # Create Horizontal Layout for Row
-        layout = QHBoxLayout()
-
-        # Add Labels to Row
-        layout.addWidget(base_label)
-        layout.addWidget(value_label)
-
-        # Set the layout for the widget
-        widget.setLayout(layout)
-
-        widgets.append(widget)
-    elif isinstance(data, (str, int, float)):
-        widget = QWidget()
-
-        # Create Label for Data
-        label_text = str(round(data, 4)) if isinstance(data, float) else str(data)
-        value_label = QLabel(label_text)
-        value_label.setObjectName("simple-label-no-bg")
-
-        # Create Horizontal Layout for Row
-        layout = QHBoxLayout()
-
-        # Add Labels to Row
-        layout.addWidget(base_label)
-        layout.addWidget(value_label)
-
-        # Set the layout for the widget
-        widget.setLayout(layout)
-
-        widgets.append(widget)
+        item_layout.addWidget(QLabel(value_label))
+        layout.addLayout(item_layout)
     else:
         # Add Base Label
-        widget = QWidget()
-        layout = QHBoxLayout()
-        layout.addWidget(base_label)
-        widgets.append(widget)
+        layout.addLayout(item_layout)
 
-        # Add Inner Elements
-        if isinstance(data, tuple):
+        items = []
+        if isinstance(data, (tuple, list)):
             for i, item in enumerate(data):
-                # Create Label for Data
-                label_text = f"{sub_labels[i] if sub_labels else f'Item {i + 1}'}"
-
-                # Recursive Function
-                inner_widgets = adaptative_label(item, label_text)
-
-                # Append Inner Widgets to the Existing Widgets List
-                widgets.extend(inner_widgets)
+                items.append((f"{sub_labels[i] if sub_labels else f'Item {i + 1}'}", item))
         elif isinstance(data, dict):
             for key, value in data.items():
-                # Create Label for Data
-                label_text = f"{sub_labels[key] if sub_labels else key}"
+                items.append((f"{sub_labels[key] if sub_labels else key}", value))
 
-                # Recursive Function
-                inner_widgets = adaptative_label(value, label_text)
+        for item in items:
+            layout.addWidget(_adaptative_label(item[1], item[0]))
 
-                # Append Inner Widgets to the Existing Widgets List
-                widgets.extend(inner_widgets)
-
-    return widgets
+    widget.setLayout(layout)
+    return widget
 
 
 def _adaptative_input(

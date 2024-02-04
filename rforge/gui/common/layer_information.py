@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from rforge.gui.common.adaptative_elements import adaptative_label
+from rforge.gui.common.adaptative_elements import _adaptative_label
 
 
 class _LayerInfoWindow(QDialog):
@@ -94,9 +94,7 @@ class _LayerInfoWindow(QDialog):
                 separator.setFrameShadow(QFrame.Sunken)
                 scroll_layout.addWidget(separator)
             else:
-                widgets = adaptative_label(*items)
-                for widget in widgets:
-                    scroll_layout.addWidget(widget)
+                scroll_layout.addWidget(_adaptative_label(*items))
 
         scroll_content.setLayout(scroll_layout)
         self.tab_widget.addTab(scroll_area, name)
