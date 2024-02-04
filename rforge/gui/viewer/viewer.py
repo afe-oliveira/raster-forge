@@ -73,8 +73,6 @@ class _ViewerPanel(QWidget):
 
         # Create Horizontal Top Save/Control Bar Layout
         top_layout = QHBoxLayout(self)
-        control_layout = QHBoxLayout(self)
-        save_layout = QHBoxLayout(self)
 
         # Add Save Buttons
         self.save_layer_button = QPushButton("LAYER")
@@ -82,7 +80,7 @@ class _ViewerPanel(QWidget):
         self.save_layer_button.setIcon(QIcon(":/icons/device-floppy.svg"))
         self.save_layer_button.setObjectName("push-button-text")
         self.save_layer_button.setFixedWidth(80)
-        save_layout.addWidget(self.save_layer_button)
+        top_layout.addWidget(self.save_layer_button)
         self.save_layer_button.clicked.connect(_save_as_layer)
 
         self.save_image_button = QPushButton("IMAGE")
@@ -90,15 +88,17 @@ class _ViewerPanel(QWidget):
         self.save_image_button.setIcon(QIcon(":/icons/device-floppy.svg"))
         self.save_image_button.setObjectName("push-button-text")
         self.save_image_button.setFixedWidth(80)
-        save_layout.addWidget(self.save_image_button)
+        top_layout.addWidget(self.save_image_button)
 
         self.save_tif_button = QPushButton("TIFF")
         self.save_tif_button.setToolTip("Save Data as GeoTIFF")
         self.save_tif_button.setIcon(QIcon(":/icons/device-floppy.svg"))
         self.save_tif_button.setObjectName("push-button-text")
         self.save_tif_button.setFixedWidth(80)
-        save_layout.addWidget(self.save_tif_button)
+        top_layout.addWidget(self.save_tif_button)
         self.save_tif_button.clicked.connect(_save_as_geotiff)
+
+        top_layout.addStretch(100)
 
         # Add Colormap ComboBox
         colormap_label = QLabel("Colormap:")
@@ -106,8 +106,8 @@ class _ViewerPanel(QWidget):
         self.colormap_combobox = QComboBox()
         self.colormap_combobox.addItems(list(COLORMAPS.keys()))
         self.colormap_combobox.setCurrentText("gray")
-        control_layout.addWidget(colormap_label)
-        control_layout.addWidget(self.colormap_combobox)
+        top_layout.addWidget(colormap_label)
+        top_layout.addWidget(self.colormap_combobox)
         self.colormap_combobox.currentIndexChanged.connect(self._viewer_content_callback)
         self.save_image_button.clicked.connect(
             lambda: _save_as_image(COLORMAPS[self.colormap_combobox.currentText()])
@@ -117,21 +117,23 @@ class _ViewerPanel(QWidget):
         self.pixel_value_button = QCheckBox()
         self.pixel_value_button.setToolTip("Show Pixel Value")
         self.pixel_value_button.setObjectName("switch-toggle-pv")
-        control_layout.addWidget(self.pixel_value_button)
+        top_layout.addWidget(self.pixel_value_button)
         self.pixel_value_button.clicked.connect(self._pixel_values_toggle_callback)
+
+        separator = QFrame()
+        separator.setFrameShape(QFrame.VLine)
+        separator.setFrameShadow(QFrame.Sunken)
+        top_layout.addWidget(separator)
 
         # Add Info Button
         self.info_button = QPushButton()
         self.info_button.setToolTip("Show Information")
         self.info_button.setIcon(QIcon(":/icons/info-square-rounded.svg"))
         self.info_button.setObjectName("push-button")
-        control_layout.addWidget(self.info_button)
+        top_layout.addWidget(self.info_button)
         self.info_button.clicked.connect(self.show_info)
 
         # Add Top Bar
-        top_layout.addLayout(save_layout, Qt.AlignLeft)
-        top_layout.addStretch(100)
-        top_layout.addLayout(control_layout, Qt.AlignRight)
         layout.addLayout(top_layout, Qt.AlignTop)
 
         # Add Graphics Scene and Graphics View
@@ -176,17 +178,18 @@ class _ViewerPanel(QWidget):
 
         # Add Coordinate Display
         coordinates_layout = QHBoxLayout(self)
-        pixel_coordinates_layout = QHBoxLayout(self)
-        real_coordinates_layout = QHBoxLayout(self)
 
         self.pixel_coordinates_x = QLabel("N/A")
+        self.pixel_coordinates_x.setFixedHeight(20)
         self.pixel_coordinates_x.setToolTip("X Value (Pixels)")
         self.pixel_coordinates_x.setObjectName("simple-label")
         self.pixel_coordinates_y = QLabel("N/A")
         self.pixel_coordinates_y.setToolTip("Y Value (Pixels)")
         self.pixel_coordinates_y.setObjectName("simple-label")
-        pixel_coordinates_layout.addWidget(self.pixel_coordinates_x)
-        pixel_coordinates_layout.addWidget(self.pixel_coordinates_y)
+        coordinates_layout.addWidget(self.pixel_coordinates_x)
+        coordinates_layout.addWidget(self.pixel_coordinates_y)
+
+        coordinates_layout.addStretch(100)
 
         self.lat_coordinates_label = QLabel("N/A")
         self.lat_coordinates_label.setToolTip("Latitude")
@@ -194,12 +197,9 @@ class _ViewerPanel(QWidget):
         self.lng_coordinates_label = QLabel("N/A")
         self.lng_coordinates_label.setToolTip("Longitude")
         self.lng_coordinates_label.setObjectName("simple-label")
-        real_coordinates_layout.addWidget(self.lat_coordinates_label)
-        real_coordinates_layout.addWidget(self.lng_coordinates_label)
+        coordinates_layout.addWidget(self.lat_coordinates_label)
+        coordinates_layout.addWidget(self.lng_coordinates_label)
 
-        coordinates_layout.addLayout(pixel_coordinates_layout, Qt.AlignLeft)
-        coordinates_layout.addStretch(100)
-        coordinates_layout.addLayout(real_coordinates_layout, Qt.AlignRight)
         layout.addLayout(coordinates_layout)
 
         # Initialize a Label for Displaying Pixel Values
