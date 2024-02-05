@@ -50,22 +50,22 @@ class _ProcessPanel(QWidget):
         self.grid_layout.setAlignment(Qt.AlignCenter | Qt.AlignTop)
 
         self.buttons = [
-            ("Composites", ":/icons/stack-2.svg", self._composites_callback),
+            ("Composites", ":/icons/stack-2.svg", lambda: self._panel_callback(1)),
             (
                 "Multispectral Indices",
                 ":/icons/3d-cube-sphere.svg",
-                self._indices_callback,
+                lambda: self._panel_callback(2)
             ),
-            ("Topography", ":/icons/mountain.svg", self._topographical_callback),
-            ("Height Map", ":/icons/line-height.svg", self._height_callback),
-            ("Distance Field", ":/icons/arrows-diagonal.svg", self._distance_callback),
-            ("Fuel Map", ":/icons/flame.svg", self._fuel_callback),
+            ("Topography", ":/icons/mountain.svg", lambda: self._panel_callback(3)),
+            ("Height Map", ":/icons/line-height.svg", lambda: self._panel_callback(4)),
+            ("Distance Field", ":/icons/arrows-diagonal.svg", lambda: self._panel_callback(5)),
+            ("Fuel Map", ":/icons/flame.svg", lambda: self._panel_callback(6)),
         ]
 
         self._update_button_layout()
 
         self.stacked_widget.addWidget(main_process_panel)
-        _data.process_main.connect(self._main_panel_callback)
+        _data.process_main.connect(lambda: self._panel_callback(0))
 
         # Composites Panel
         self.composites_panel = _CompositesPanel(name="Composites", selector=True)
@@ -143,23 +143,5 @@ class _ProcessPanel(QWidget):
             except Exception as e:
                 print(e)
 
-    def _main_panel_callback(self):
-        self.stacked_widget.setCurrentIndex(0)
-
-    def _composites_callback(self):
-        self.stacked_widget.setCurrentIndex(1)
-
-    def _indices_callback(self):
-        self.stacked_widget.setCurrentIndex(2)
-
-    def _topographical_callback(self):
-        self.stacked_widget.setCurrentIndex(3)
-
-    def _height_callback(self):
-        self.stacked_widget.setCurrentIndex(4)
-
-    def _distance_callback(self):
-        self.stacked_widget.setCurrentIndex(5)
-
-    def _fuel_callback(self):
-        self.stacked_widget.setCurrentIndex(6)
+    def _panel_callback(self, index):
+        self.stacked_widget.setCurrentIndex(index)

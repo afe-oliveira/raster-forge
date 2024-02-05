@@ -16,7 +16,7 @@ def _show_main_window(main_window):
 
 
 def _initialize_application():
-    app = QApplication(sys.argv)
+    app = QApplication()
 
     # Set the Style Sheet
     style_file = QFile(":/style.qss")

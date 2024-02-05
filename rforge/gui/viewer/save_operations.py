@@ -39,7 +39,7 @@ def _save_as_image(colormap: str = "viridis"):
                 suffix=".png", prefix="temp_image_", dir=tempfile.gettempdir()
             )
 
-            image_data = _data.viewer.array.astype(np.uint8)
+            image_data = _data.viewer.array
             plt.imshow(image_data, cmap=colormap)
             plt.axis("off")
             plt.savefig(temp_file_path, format="png", transparent=True)

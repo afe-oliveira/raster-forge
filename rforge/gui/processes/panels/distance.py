@@ -24,23 +24,26 @@ class _DistanceFieldPanel(_ProcessPanel):
         self._widgets["Layer"], self._references["Layer"], _ = _adaptative_input(
             "Layer", ARRAY_TYPE
         )
-        self._references["Layer"].currentIndexChanged.connect(self._threshold_callback)
 
         # Add Alpha
         self._widgets["Alpha"], self._references["Alpha"], _ = _adaptative_input(
             "Alpha", ARRAY_TYPE, "None"
         )
 
-        # Add Binarization
-        (
-            self._widgets["Binarize"],
-            self._references["Binarize"],
-            self._references["Binarize Toggle"],
-        ) = _adaptative_input("Binarize", range, None, True)
-
         # Add Mask Size
         self._widgets["Mask Size"], self._references["Mask Size"], _ = (
             _adaptative_input("Mask Size", list, ["3", "5"])
+        )
+
+        # Add Binarization
+        self._widgets["Binarization"], self._references["Binarization"], _ = (
+            _adaptative_input("Binarize", bool)
+        )
+        self._widgets["Threshold Min"], self._references["Threshold Min"], _ = (
+            _adaptative_input("Threshold Minimum", float)
+        )
+        self._widgets["Threshold Max"], self._references["Threshold Max"], _ = (
+            _adaptative_input("Threshold Maximum", float)
         )
 
         # Add Inversion
@@ -48,12 +51,13 @@ class _DistanceFieldPanel(_ProcessPanel):
             _adaptative_input("Invert", bool)
         )
 
-        self._references["Binarize Toggle"].stateChanged.connect(
+        self._threshold_callback()
+        self._binarize_callback()
+
+        self._references["Layer"].currentIndexChanged.connect(self._threshold_callback)
+        self._references["Binarization"].stateChanged.connect(
             self._binarize_callback
         )
-        self._binarize_callback()
-        self._threshold_callback()
-
         super()._scroll_content_callback()
 
     def _build_callback(self):
@@ -64,8 +68,8 @@ class _DistanceFieldPanel(_ProcessPanel):
             else None
         )
         input_thresholds = (
-            self._references["Binarize"].value()
-            if self._references["Binarize Toggle"].isChecked()
+            (self._references["Threshold Min"].value(), self._references["Threshold Max"].value())
+            if self._references["Binarization"].isChecked()
             else None
         )
         input_mask_size = int(self._references["Mask Size"].currentText())
@@ -85,12 +89,25 @@ class _DistanceFieldPanel(_ProcessPanel):
         super()._build_callback()
 
     def _binarize_callback(self):
-        self._references["Binarize"].setEnabled(
-            self._references["Binarize Toggle"].isChecked()
+        self._references["Threshold Min"].setEnabled(
+            self._references["Binarization"].isChecked()
+        )
+        self._references["Threshold Max"].setEnabled(
+            self._references["Binarization"].isChecked()
         )
 
     def _threshold_callback(self):
         if self._references["Layer"].currentText():
             input_layer = _data.raster.layers[self._references["Layer"].currentText()]
-            self._references["Binarize"].setRange(input_layer.min, input_layer.max)
-            self._references["Binarize"].setValue((input_layer.min, input_layer.max))
+
+            self._references["Threshold Min"].setRange(input_layer.min, input_layer.max)
+            self._references["Threshold Min"].setValue(input_layer.min)
+
+            self._references["Threshold Max"].setRange(input_layer.min, input_layer.max)
+            self._references["Threshold Max"].setValue(input_layer.max)
+        else:
+            self._references["Threshold Min"].setRange(0, 0)
+            self._references["Threshold Min"].setValue(0)
+
+            self._references["Threshold Max"].setRange(0, 0)
+            self._references["Threshold Max"].setValue(0)

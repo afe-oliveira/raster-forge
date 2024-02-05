@@ -1,3 +1,5 @@
+import traceback
+
 import rasterio
 from PySide6.QtCore import (
     QMutex,
@@ -258,12 +260,15 @@ class _LayersImportWindow(QDialog):
             if checkbox.isChecked():
                 band_name = line_edit.text()
                 selected_layers.append({"id": index + 1, "name": band_name})
+        try:
+            if selected_layers:
+                # Disable the Import Button During the Import Process
+                self.import_button.setEnabled(False)
 
-        if selected_layers:
-            # Disable the Import Button During the Import Process
-            self.import_button.setEnabled(False)
-
-            # Start the Import Thread
-            self.import_thread.start_import(
-                _data.raster, self.selected_file_path, selected_layers, self.mutex
-            )
+                # Start the Import Thread
+                self.import_thread.start_import(
+                    _data.raster, self.selected_file_path, selected_layers, self.mutex
+                )
+        except Exception as e:
+            print(f"An Error Occurred During Layer List Updating: {e}")
+            traceback.print_exc()

@@ -50,32 +50,41 @@ class _IndicesPanel(_ProcessPanel):
         )
 
         # Add Threshold
-        (
-            self._widgets["Thresholds"],
-            self._references["Thresholds"],
-            self._references["Thresholds Toggle"],
-        ) = _adaptative_input("Thresholds", range, None, True)
-        self._references["Thresholds Toggle"].stateChanged.connect(
-            self._threshold_callback
+        self._widgets["Thresholds"], self._references["Thresholds"], _ = (
+            _adaptative_input("Thresholds", bool)
         )
+        self._widgets["Threshold Min"], self._references["Threshold Min"], _ = (
+            _adaptative_input("Threshold Minimum", float)
+        )
+        self._references["Threshold Min"].setRange(-1, 1)
+        self._references["Threshold Min"].setValue(-1)
+        self._widgets["Threshold Max"], self._references["Threshold Max"], _ = (
+            _adaptative_input("Threshold Maximum", float)
+        )
+        self._references["Threshold Max"].setRange(-1, 1)
+        self._references["Threshold Max"].setValue(1)
 
         # Add Binarization
-        self._widgets["Binarize"], self._references["Binarize"], _ = _adaptative_input(
+        self._widgets["Binarization"], self._references["Binarization"], _ = _adaptative_input(
             "Binarize", bool
         )
 
         self._threshold_callback()
+        self._references["Thresholds"].stateChanged.connect(self._threshold_callback)
 
         super()._scroll_content_callback()
 
     def _threshold_callback(self):
-        self._references["Thresholds"].setEnabled(
-            self._references["Thresholds Toggle"].isChecked()
+        self._references["Threshold Min"].setEnabled(
+            self._references["Thresholds"].isChecked()
         )
-        self._references["Binarize"].setEnabled(
-            self._references["Thresholds Toggle"].isChecked()
+        self._references["Threshold Max"].setEnabled(
+            self._references["Thresholds"].isChecked()
         )
-        self._references["Binarize"].setChecked(False)
+        self._references["Binarization"].setEnabled(
+            self._references["Thresholds"].isChecked()
+        )
+        self._references["Binarization"].setChecked(False)
 
     def _build_callback(self):
         selected_index = self.selector_combo.currentText()
@@ -95,11 +104,11 @@ class _IndicesPanel(_ProcessPanel):
             else None
         )
         thresholds = (
-            self._references["Thresholds"].value()
-            if self._references["Thresholds Toggle"].isChecked()
+            (self._references["Threshold Min"].value(), self._references["Threshold Max"].value())
+            if self._references["Thresholds"].isChecked()
             else None
         )
-        binarize = self._references["Binarize"].isChecked()
+        binarize = self._references["Binarization"].isChecked()
 
         layer = Layer()
         layer.array = index(selected_index, parameters, alpha, thresholds, binarize)

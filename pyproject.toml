@@ -13,7 +13,6 @@ license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
 dependencies = [
     "PySide6",
-    "superqt",
     "numpy",
     "rasterio",
     "spyndex",

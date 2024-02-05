@@ -1,7 +1,6 @@
 from typing import Any, Type
 
 import numpy as np
-from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -13,7 +12,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 from rforge.gui.data import _data
-from superqt import QLabeledDoubleRangeSlider
 
 
 def _adaptative_label(data, label, sub_labels=None):
@@ -111,17 +109,6 @@ def _adaptative_input(
         value_ref = spin_box
 
         layout.addWidget(spin_box)
-        widget.setLayout(layout)
-    elif type == range:
-        range_slider = QLabeledDoubleRangeSlider(Qt.Orientation.Horizontal)
-        if preset is None:
-            preset = (-1, 1)
-        range_slider.setRange(preset[0], preset[1])
-        range_slider.setValue(preset)
-
-        value_ref = range_slider
-
-        layout.addWidget(range_slider)
         widget.setLayout(layout)
     elif type == list:
         combo_box = QComboBox()

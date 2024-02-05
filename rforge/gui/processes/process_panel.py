@@ -36,15 +36,6 @@ class _ProcessPanel(QWidget):
             self.selector_combo.currentIndexChanged.connect(
                 self._scroll_content_callback
             )
-            self.selector_combo.setEditable(True)
-            self.selector_combo.setInsertPolicy(QComboBox.NoInsert)
-
-            line_edit = self.selector_combo.lineEdit()
-            line_edit.setPlaceholderText("Search...")
-
-            completer = QCompleter(self._widgets.keys(), self)
-            completer.setCaseSensitivity(Qt.CaseInsensitive)
-            self.selector_combo.setCompleter(completer)
 
             main_process_layout.addWidget(self.selector_combo)
         else:

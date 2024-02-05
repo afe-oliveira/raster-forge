@@ -1,3 +1,5 @@
+import traceback
+
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import (
     QGridLayout,
@@ -52,18 +54,22 @@ class _LayersPanel(QWidget):
         self.layout.addWidget(self.scroll_list, 2, 0, 18, 10)
 
     def update_layers(self):
-        # Clear Existing Layers
-        for i in reversed(range(self.list_layout.count())):
-            self.list_layout.itemAt(i).widget().setParent(None)
+        try:
+            # Clear Existing Layers
+            for i in reversed(range(self.list_layout.count())):
+                self.list_layout.itemAt(i).widget().setParent(None)
 
-        # Add Updated Layers
-        if _data.raster is not None:
-            for key, value in _data.raster.layers.items():
-                layer = _LayerElement(key)
-                self.list_layout.addWidget(layer)
+            # Add Updated Layers
+            if _data.raster is not None:
+                for key, value in _data.raster.layers.items():
+                    layer = _LayerElement(key)
+                    self.list_layout.addWidget(layer)
 
-        # Set the Alignment
-        self.list_layout.setAlignment(Qt.AlignTop)
+            # Set the Alignment
+            self.list_layout.setAlignment(Qt.AlignTop)
+        except Exception as e:
+            print(f"An Error Occurred During Layer List Updating: {e}")
+            traceback.print_exc()
 
     def import_layers_clicked(self):
         import_dialog = _LayersImportWindow(self)
