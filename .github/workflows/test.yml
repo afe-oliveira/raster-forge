@@ -15,10 +15,10 @@ jobs:
         python-version: '3.x'
     - name: Install Dependencies
       run: |
-        apt update
-        apt install -y libgl1-mesa-glx
         pip install pip --upgrade
         pip install -e .[devel]
+        sudo apt-get update
+        sudo apt-get install libgl1-mesa-glx
     - name: Test (PyTest + Coverage Report)
       run: pytest --cov=txtstats --cov-report=xml
     - name: Upload Coverage to Codecov
