@@ -77,7 +77,7 @@ def composite(
         else:
             raise TypeError(
                 ErrorMessages.bad_input(
-                    name="gamma", expected_type="a numerical Layer or array"
+                    name="alpha", expected_type="a numerical Layer or array"
                 )
             )
 

@@ -88,7 +88,7 @@ class _ProcessPanel(QWidget):
         self.stacked_widget.addWidget(self.distance_panel)
 
         # Fuel Feature Panel
-        self.fuel_panel = _FuelMapPanel(name="Distance Map")
+        self.fuel_panel = _FuelMapPanel(name="Fuel Map")
         self.stacked_widget.addWidget(self.fuel_panel)
 
         layout = QVBoxLayout(self)
