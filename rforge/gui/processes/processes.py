@@ -54,11 +54,15 @@ class _ProcessPanel(QWidget):
             (
                 "Multispectral Indices",
                 ":/icons/3d-cube-sphere.svg",
-                lambda: self._panel_callback(2)
+                lambda: self._panel_callback(2),
             ),
             ("Topography", ":/icons/mountain.svg", lambda: self._panel_callback(3)),
             ("Height Map", ":/icons/line-height.svg", lambda: self._panel_callback(4)),
-            ("Distance Field", ":/icons/arrows-diagonal.svg", lambda: self._panel_callback(5)),
+            (
+                "Distance Field",
+                ":/icons/arrows-diagonal.svg",
+                lambda: self._panel_callback(5),
+            ),
             ("Fuel Map", ":/icons/flame.svg", lambda: self._panel_callback(6)),
         ]
 

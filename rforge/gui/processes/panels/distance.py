@@ -55,9 +55,7 @@ class _DistanceFieldPanel(_ProcessPanel):
         self._binarize_callback()
 
         self._references["Layer"].currentIndexChanged.connect(self._threshold_callback)
-        self._references["Binarization"].stateChanged.connect(
-            self._binarize_callback
-        )
+        self._references["Binarization"].stateChanged.connect(self._binarize_callback)
         super()._scroll_content_callback()
 
     def _build_callback(self):
@@ -68,7 +66,10 @@ class _DistanceFieldPanel(_ProcessPanel):
             else None
         )
         input_thresholds = (
-            (self._references["Threshold Min"].value(), self._references["Threshold Max"].value())
+            (
+                self._references["Threshold Min"].value(),
+                self._references["Threshold Max"].value(),
+            )
             if self._references["Binarization"].isChecked()
             else None
         )

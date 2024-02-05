@@ -1,8 +1,11 @@
 from typing import Type
 
 import numpy as np
+from rforge.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
+from rforge.gui.data import _data
 from rforge.gui.processes.process_panel import _ProcessPanel
+from rforge.processes.fuel import fuel
 
 ARRAY_TYPE: Type[np.ndarray] = np.ndarray
 
@@ -46,15 +49,20 @@ class _FuelMapPanel(_ProcessPanel):
             _,
         ) = _adaptative_input("Artificial Structures", ARRAY_TYPE)
 
+        # Add Tree Height
+        self._widgets["Tree Height"], self._references["Tree Height"], _ = (
+            _adaptative_input("Tree Height", float, 1)
+        )
+
         # Add Fuel Models
         self._widgets["Fuel F"], self._references["Fuel F"], _ = _adaptative_input(
-            "Fuel Model (Trees)", int, 200
+            "Fuel Model (Trees)", int, 210
         )
-        self._widgets["Fuel V"], self._references["FuelV"], _ = _adaptative_input(
-            "Fuel Model (Vegetation)", int, 200
+        self._widgets["Fuel V"], self._references["Fuel V"], _ = _adaptative_input(
+            "Fuel Model (Vegetation)", int, 230
         )
         self._widgets["Fuel M"], self._references["Fuel M"], _ = _adaptative_input(
-            "Fuel Model (Mixed)", int, 200
+            "Fuel Model (Mixed)", int, 220
         )
 
         # Add Alpha
@@ -65,4 +73,46 @@ class _FuelMapPanel(_ProcessPanel):
         super()._scroll_content_callback()
 
     def _build_callback(self):
+        input_coverage = _data.raster.layers[
+            self._references["Vegetation Coverage"].currentText()
+        ].array
+        input_height = _data.raster.layers[
+            self._references["Canopy Height"].currentText()
+        ].array
+        input_distance = _data.raster.layers[
+            self._references["Distance Field"].currentText()
+        ].array
+        input_water = _data.raster.layers[
+            self._references["Water Features"].currentText()
+        ].array
+        input_artificial = _data.raster.layers[
+            self._references["Artificial Structures"].currentText()
+        ].array
+
+        input_alpha = (
+            _data.raster.layers[self._references["Alpha"].currentText()].array
+            if self._references["Alpha"].currentText() != "None"
+            else None
+        )
+
+        input_models = (
+            self._references["Fuel F"].value(),
+            self._references["Fuel M"].value(),
+            self._references["Fuel V"].value(),
+        )
+        input_tree_height = self._references["Tree Height"].value()
+
+        layer = Layer()
+        layer.array = fuel(
+            coverage=input_coverage,
+            distance=input_distance,
+            height=input_height,
+            water=input_water,
+            artificial=input_artificial,
+            alpha=input_alpha,
+            tree_height=input_tree_height,
+            models=input_models,
+        )
+        _data.viewer = layer
+        _data.viewer_changed.emit()
         super()._build_callback()

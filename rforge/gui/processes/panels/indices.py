@@ -65,8 +65,8 @@ class _IndicesPanel(_ProcessPanel):
         self._references["Threshold Max"].setValue(1)
 
         # Add Binarization
-        self._widgets["Binarization"], self._references["Binarization"], _ = _adaptative_input(
-            "Binarize", bool
+        self._widgets["Binarization"], self._references["Binarization"], _ = (
+            _adaptative_input("Binarize", bool)
         )
 
         self._threshold_callback()
@@ -104,7 +104,10 @@ class _IndicesPanel(_ProcessPanel):
             else None
         )
         thresholds = (
-            (self._references["Threshold Min"].value(), self._references["Threshold Max"].value())
+            (
+                self._references["Threshold Min"].value(),
+                self._references["Threshold Max"].value(),
+            )
             if self._references["Thresholds"].isChecked()
             else None
         )

@@ -26,19 +26,22 @@ def fuel(
       Fuel raster map.
     """
     is_array = False
-    if all((isinstance(layer, Layer) and layer.array is not None) for layer in [coverage, height, distance, water, artificial]):
+    if all(
+        (isinstance(layer, Layer) and layer.array is not None)
+        for layer in [coverage, height, distance, water, artificial]
+    ):
         coverage = coverage.array
         height = height.array
         distance = distance.array
         water = water.array
         artificial = artificial.array
     elif all(
-            (
-                    isinstance(layer, np.ndarray)
-                    and layer is not None
-                    and np.issubdtype(layer.dtype, np.number)
-            )
-            for layer in [coverage, height, distance, water, artificial]
+        (
+            isinstance(layer, np.ndarray)
+            and layer is not None
+            and np.issubdtype(layer.dtype, np.number)
+        )
+        for layer in [coverage, height, distance, water, artificial]
     ):
         is_array = True
     else:
@@ -62,7 +65,14 @@ def fuel(
 
     # Assign Bare Soil
     result = np.where(distance >= math.floor(distance.max()), 99, result)
-    result = np.where(np.logical_and(distance >= (math.floor(distance.max() * 0.95)), distance < (math.floor(distance.max()))), 224, result)
+    result = np.where(
+        np.logical_and(
+            distance >= (math.floor(distance.max() * 0.95)),
+            distance < (math.floor(distance.max())),
+        ),
+        224,
+        result,
+    )
 
     # Assign Artificial Structures
     result = np.where(np.logical_and(artificial > 0, result == 99), 91, result)
