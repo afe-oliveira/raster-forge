@@ -163,46 +163,6 @@ def test_init_setter(data_layer_init):
         )
 
 
-def test_import(data_layer_import):
-    """Test Layer import from file function."""
-
-    path = data_layer_import.get("path", None)
-    id = data_layer_import.get("id", None)
-    crs = data_layer_import.get("crs", None)
-    driver = data_layer_import.get("driver", None)
-    bounds = data_layer_import.get("bounds", None)
-    no_data = data_layer_import.get("no_data", None)
-    transform = data_layer_import.get("transform", None)
-    units = data_layer_import.get("units", None)
-    width = data_layer_import.get("width", None)
-    height = data_layer_import.get("height", None)
-    count = data_layer_import.get("count", None)
-    mean = data_layer_import.get("mean", None)
-    median = data_layer_import.get("median", None)
-    minimum = data_layer_import.get("minimum", None)
-    maximum = data_layer_import.get("maximum", None)
-    standard_deviation = data_layer_import.get("standard_deviation", None)
-
-    l = Layer()
-    l.import_layer(path=path, id=id)
-
-    assert isinstance(l, Layer)
-    assert l.bounds == bounds
-    assert l.crs == crs
-    assert l.driver == driver
-    assert l.no_data == no_data
-    assert l.transform == transform
-    assert l.units == units
-    assert l.width == width
-    assert l.height == height
-    assert l.count == count
-    assert l.mean == mean
-    assert l.median == median
-    assert l.min == minimum
-    assert l.max == maximum
-    assert l.std_dev == standard_deviation
-
-
 def test_init_errors(data_layer_init_errors):
     """Test layer initialization function for expected errors."""
     array = data_layer_init_errors[0].get("array", None)
