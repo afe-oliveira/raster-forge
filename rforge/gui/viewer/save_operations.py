@@ -4,7 +4,6 @@ import tempfile
 import numpy as np
 from matplotlib import pyplot as plt
 from PySide6.QtWidgets import QFileDialog
-
 from rforge.gui.data import _data
 
 

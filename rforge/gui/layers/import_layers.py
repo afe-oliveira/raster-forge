@@ -24,7 +24,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from rforge.containers.raster import Raster
 from rforge.gui.data import _data
 from rforge.tools.rescale_dataset import _rescale_dataset_preview
@@ -129,7 +128,11 @@ class _LayersImportWindow(QDialog):
         scale_layout.addStretch(100)
 
         # Add Size Preview
-        self.new_width, x_label, self.new_height = QLabel("N/A"), QLabel("X"), QLabel("N/A")
+        self.new_width, x_label, self.new_height = (
+            QLabel("N/A"),
+            QLabel("X"),
+            QLabel("N/A"),
+        )
         self.new_width.setObjectName("simple-label")
         self.new_width.setToolTip("Expected Width")
         x_label.setObjectName("simple-label-no-bg")
@@ -197,14 +200,18 @@ class _LayersImportWindow(QDialog):
                 with rasterio.open(self.selected_file_path) as dataset:
                     x_resolution = abs(dataset.res[0])
                     num_bands = dataset.count
-                    self.scale_spinbox.setValue(int(x_resolution) + (x_resolution % 1 > 0))
+                    self.scale_spinbox.setValue(
+                        int(x_resolution) + (x_resolution % 1 > 0)
+                    )
                     self._preview_callback()
                     self._populate_bands_checklist(num_bands)
 
     def _preview_callback(self):
         if self.selected_file_path is not None:
             with rasterio.open(self.selected_file_path) as dataset:
-                new_width, new_height = _rescale_dataset_preview(dataset, self.scale_spinbox.value())
+                new_width, new_height = _rescale_dataset_preview(
+                    dataset, self.scale_spinbox.value()
+                )
 
                 self.new_width.setText(str(new_width))
                 self.new_height.setText(str(new_height))

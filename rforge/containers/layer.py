@@ -3,7 +3,6 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import rasterio
-
 from rforge.tools.exceptions import ErrorMessages
 from rforge.tools.rescale_dataset import _rescale_dataset
 

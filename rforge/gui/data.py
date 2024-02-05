@@ -1,5 +1,4 @@
 from PySide6.QtCore import QObject, Signal
-
 from rforge.containers.layer import Layer
 from rforge.containers.raster import Raster
 

@@ -1,22 +1,17 @@
 import os
-import shutil
 import tempfile
 
 import numpy as np
-import rasterio
 from matplotlib import pyplot as plt
-from matplotlib.backends.backend_template import FigureCanvas
-from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QImage, QPixmap, QTransform
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
-    QFileDialog,
     QFrame,
     QGraphicsPixmapItem,
     QGraphicsScene,
     QGraphicsView,
-    QGridLayout,
     QHBoxLayout,
     QLabel,
     QPushButton,
@@ -25,7 +20,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 from rasterio.transform import from_origin
-
 from rforge.gui.common.layer_information import _LayerInfoWindow
 from rforge.gui.data import _data
 
@@ -108,7 +102,9 @@ class _ViewerPanel(QWidget):
         self.colormap_combobox.setCurrentText("gray")
         top_layout.addWidget(colormap_label)
         top_layout.addWidget(self.colormap_combobox)
-        self.colormap_combobox.currentIndexChanged.connect(self._viewer_content_callback)
+        self.colormap_combobox.currentIndexChanged.connect(
+            self._viewer_content_callback
+        )
         self.save_image_button.clicked.connect(
             lambda: _save_as_image(COLORMAPS[self.colormap_combobox.currentText()])
         )
@@ -335,7 +331,10 @@ class _ViewerPanel(QWidget):
                     normal_data = normalized_array[..., 0]
                     alpha_channel = np.interp(
                         normalized_array[..., 1],
-                        (normalized_array[..., 1].min(), normalized_array[..., 1].max()),
+                        (
+                            normalized_array[..., 1].min(),
+                            normalized_array[..., 1].max(),
+                        ),
                         (0, 1),
                     )
 
@@ -366,7 +365,6 @@ class _ViewerPanel(QWidget):
     def show_info(self):
         info_window = _LayerInfoWindow("Viewer Data", _data.viewer, self)
         info_window.exec_()
-
 
     def _control_callback(self):
         status = True

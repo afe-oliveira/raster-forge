@@ -1,9 +1,7 @@
-from enum import Enum
 from typing import Any, Optional, Union
 
 import numpy as np
 from numpy import dtype, generic, ndarray
-
 from rforge.containers.layer import Layer
 from rforge.tools.exceptions import ErrorMessages
 
@@ -16,7 +14,7 @@ PRESET_COMPOSITES = {
 def height(
     dtm: Union[Layer, np.ndarray],
     dsm: Union[Layer, np.ndarray],
-    alpha: Optional[Union[Layer, np.ndarray]] = None
+    alpha: Optional[Union[Layer, np.ndarray]] = None,
 ) -> ndarray[Any, dtype[generic | generic | Any]] | ndarray[Any, dtype[Any]] | Layer:
     """Stacks all provided layers into a single array in order. Applies gamma correction.
 
@@ -31,7 +29,9 @@ def height(
       Stacked composite layer.
     """
     is_array = False
-    if all((isinstance(layer, Layer) and layer.array is not None) for layer in [dsm, dtm]):
+    if all(
+        (isinstance(layer, Layer) and layer.array is not None) for layer in [dsm, dtm]
+    ):
         dtm = dtm.array
         dsm = dsm.array
     elif all(

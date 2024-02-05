@@ -1,15 +1,8 @@
 from typing import Type
 
 import numpy as np
-from matplotlib.colors import Normalize
-
-from rforge.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
-from rforge.gui.data import _data
 from rforge.gui.processes.process_panel import _ProcessPanel
-from rforge.processes.composite import PRESET_COMPOSITES, composite
-from rforge.processes.distance import distance
-from rforge.processes.topography import aspect, slope
 
 ARRAY_TYPE: Type[np.ndarray] = np.ndarray
 
@@ -27,7 +20,8 @@ class _FuelMapPanel(_ProcessPanel):
         # Add Vegetation Coverage
         (
             self._widgets["Vegetation Coverage"],
-            self._references["Vegetation Coverage"], _
+            self._references["Vegetation Coverage"],
+            _,
         ) = _adaptative_input("Vegetation Coverage", ARRAY_TYPE)
 
         # Add Canopy Height
@@ -48,7 +42,8 @@ class _FuelMapPanel(_ProcessPanel):
         # Add Artificial Structures
         (
             self._widgets["Artificial Structures"],
-            self._references["Artificial Structures"], _
+            self._references["Artificial Structures"],
+            _,
         ) = _adaptative_input("Artificial Structures", ARRAY_TYPE)
 
         # Add Fuel Models

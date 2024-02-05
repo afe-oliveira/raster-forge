@@ -9,7 +9,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from rforge.gui.common.layer_information import _LayerInfoWindow
 from rforge.gui.data import _data
 

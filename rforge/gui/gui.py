@@ -1,6 +1,8 @@
 import sys
-from PySide6.QtCore import QFile, QTextStream, QTimer, Qt
+
+from PySide6.QtCore import QFile, QTextStream, QTimer
 from PySide6.QtWidgets import QApplication
+
 from .main_window import _MainWindow
 from .resources import resources
 
@@ -37,7 +39,7 @@ def gui():
         app.aboutToQuit.connect(lambda: _cleanup(main_window))
 
         # Delay Showing the Main Window
-        delay_timer = QTimer.singleShot(1000, lambda: _show_main_window(main_window))
+        QTimer.singleShot(1000, lambda: _show_main_window(main_window))
 
         sys.exit(app.exec_())
 

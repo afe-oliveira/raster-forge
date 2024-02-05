@@ -1,7 +1,6 @@
 from typing import Optional, Union
 
 import numpy as np
-
 from rforge.containers.layer import Layer
 from rforge.tools.exceptions import ErrorMessages
 

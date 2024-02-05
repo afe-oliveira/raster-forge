@@ -1,15 +1,9 @@
 from PySide6.QtGui import QIcon, QPixmap, Qt
-from PySide6.QtWidgets import (
-    QFrame,
-    QGridLayout,
-    QMainWindow,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QFrame, QGridLayout, QMainWindow, QVBoxLayout, QWidget
 
-from .viewer.viewer import _ViewerPanel
 from .layers.layers import _LayersPanel
 from .processes.processes import _ProcessPanel
+from .viewer.viewer import _ViewerPanel
 
 
 class _OuterFrame(QFrame):

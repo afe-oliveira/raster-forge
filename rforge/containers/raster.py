@@ -1,7 +1,6 @@
 from typing import Dict, Optional, TypedDict
 
 import rasterio
-
 from rforge.tools.rescale_dataset import _rescale_dataset
 
 from .layer import Layer

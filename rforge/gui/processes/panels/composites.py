@@ -2,7 +2,6 @@ from typing import Type
 
 import numpy as np
 from matplotlib.colors import Normalize
-
 from rforge.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
 from rforge.gui.data import _data
@@ -37,7 +36,11 @@ class _CompositesPanel(_ProcessPanel):
 
         # Add Gammas
         for component in PRESET_COMPOSITES[self.selector_combo.currentText()]:
-            self._widgets[f"Gamma {component}"], self._references[f"Gamma {component}"], _ = _adaptative_input(f"Gamma {component}", float, 1)
+            (
+                self._widgets[f"Gamma {component}"],
+                self._references[f"Gamma {component}"],
+                _,
+            ) = _adaptative_input(f"Gamma {component}", float, 1)
 
         super()._scroll_content_callback()
 

@@ -2,13 +2,16 @@ from typing import Optional, Union
 
 import cv2
 import numpy as np
-
 from rforge.containers.layer import Layer
 from rforge.tools.exceptions import ErrorMessages
 
 
 def distance(
-    layer: Union[Layer, np.ndarray], alpha: Optional[Union[Layer, np.ndarray]] = None, thresholds: Optional[tuple[float,float]] = None, invert: bool = False, mask_size: int = 3
+    layer: Union[Layer, np.ndarray],
+    alpha: Optional[Union[Layer, np.ndarray]] = None,
+    thresholds: Optional[tuple[float, float]] = None,
+    invert: bool = False,
+    mask_size: int = 3,
 ):
     """Calculate the distance of terrain features.
 

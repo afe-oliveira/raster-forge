@@ -10,7 +10,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from rforge.gui.common.adaptative_elements import _adaptative_label
 
 

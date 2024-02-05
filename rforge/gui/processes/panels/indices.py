@@ -2,7 +2,6 @@ from typing import Type
 
 import numpy as np
 import spyndex
-
 from rforge.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
 from rforge.gui.data import _data
@@ -51,10 +50,14 @@ class _IndicesPanel(_ProcessPanel):
         )
 
         # Add Threshold
-        self._widgets["Thresholds"], self._references["Thresholds"], self._references["Thresholds Toggle"] = _adaptative_input(
-            "Thresholds", range, None, True
+        (
+            self._widgets["Thresholds"],
+            self._references["Thresholds"],
+            self._references["Thresholds Toggle"],
+        ) = _adaptative_input("Thresholds", range, None, True)
+        self._references["Thresholds Toggle"].stateChanged.connect(
+            self._threshold_callback
         )
-        self._references["Thresholds Toggle"].stateChanged.connect(self._threshold_callback)
 
         # Add Binarization
         self._widgets["Binarize"], self._references["Binarize"], _ = _adaptative_input(
@@ -66,8 +69,12 @@ class _IndicesPanel(_ProcessPanel):
         super()._scroll_content_callback()
 
     def _threshold_callback(self):
-        self._references["Thresholds"].setEnabled(self._references["Thresholds Toggle"].isChecked())
-        self._references["Binarize"].setEnabled(self._references["Thresholds Toggle"].isChecked())
+        self._references["Thresholds"].setEnabled(
+            self._references["Thresholds Toggle"].isChecked()
+        )
+        self._references["Binarize"].setEnabled(
+            self._references["Thresholds Toggle"].isChecked()
+        )
         self._references["Binarize"].setChecked(False)
 
     def _build_callback(self):
@@ -87,7 +94,11 @@ class _IndicesPanel(_ProcessPanel):
             if self._references["Alpha"].currentText() != "None"
             else None
         )
-        thresholds = self._references["Thresholds"].value() if self._references["Thresholds Toggle"].isChecked() else None
+        thresholds = (
+            self._references["Thresholds"].value()
+            if self._references["Thresholds Toggle"].isChecked()
+            else None
+        )
         binarize = self._references["Binarize"].isChecked()
 
         layer = Layer()

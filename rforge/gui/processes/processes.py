@@ -9,7 +9,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from rforge.gui.data import _data
 from rforge.gui.processes.panels.composites import _CompositesPanel
 from rforge.gui.processes.panels.distance import _DistanceFieldPanel

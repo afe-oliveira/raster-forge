@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, Union
+from typing import Optional
 
 import numpy as np
 import spyndex

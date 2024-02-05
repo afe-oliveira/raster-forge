@@ -12,9 +12,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from superqt import QLabeledDoubleRangeSlider
-
 from rforge.gui.data import _data
+from superqt import QLabeledDoubleRangeSlider
 
 
 def _adaptative_label(data, label, sub_labels=None):
@@ -24,7 +23,11 @@ def _adaptative_label(data, label, sub_labels=None):
     item_layout = QHBoxLayout()
 
     base_label = QLabel(label)
-    base_label.setObjectName("simple-label") if not isinstance(data, (tuple, list, dict)) else base_label.setObjectName("title-label")
+    (
+        base_label.setObjectName("simple-label")
+        if not isinstance(data, (tuple, list, dict))
+        else base_label.setObjectName("title-label")
+    )
     base_label.setContentsMargins(5, 5, 5, 5)
 
     item_layout.addWidget(base_label)
@@ -45,7 +48,9 @@ def _adaptative_label(data, label, sub_labels=None):
         items = []
         if isinstance(data, (tuple, list)):
             for i, item in enumerate(data):
-                items.append((f"{sub_labels[i] if sub_labels else f'Item {i + 1}'}", item))
+                items.append(
+                    (f"{sub_labels[i] if sub_labels else f'Item {i + 1}'}", item)
+                )
         elif isinstance(data, dict):
             for key, value in data.items():
                 items.append((f"{sub_labels[key] if sub_labels else key}", value))

@@ -1,9 +1,7 @@
-from enum import Enum
 from typing import Any, Optional, Union
 
 import numpy as np
 from numpy import dtype, generic, ndarray
-
 from rforge.containers.layer import Layer
 from rforge.tools.exceptions import ErrorMessages
 
