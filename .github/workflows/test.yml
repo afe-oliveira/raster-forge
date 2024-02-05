@@ -16,7 +16,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libgl1
+        sudo apt-get install libgl1-mesa-glx
         pip install pip --upgrade
         pip install -e .[devel]
     - name: Test (PyTest + Coverage Report)
