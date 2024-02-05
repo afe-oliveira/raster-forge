@@ -1,7 +1,4 @@
-import pytest
-
 from rforge.containers.raster import Raster
-from rforge.containers.layer import Layer
 
 
 def test_init(data_raster_init):

@@ -12,13 +12,13 @@ keywords = ["raster, gui"]
 license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
 dependencies = [
+    "PySide6",
+    "superqt",
     "numpy",
     "rasterio",
     "spyndex",
     "opencv-python",
     "scipy",
-    "PySide6",
-    "superqt",
     "matplotlib"
 ]
 
