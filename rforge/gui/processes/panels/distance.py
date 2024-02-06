@@ -30,11 +30,6 @@ class _DistanceFieldPanel(_ProcessPanel):
             "Alpha", ARRAY_TYPE, "None"
         )
 
-        # Add Mask Size
-        self._widgets["Mask Size"], self._references["Mask Size"], _ = (
-            _adaptative_input("Mask Size", list, ["3", "5"])
-        )
-
         # Add Binarization
         self._widgets["Binarization"], self._references["Binarization"], _ = (
             _adaptative_input("Binarize", bool)
@@ -73,7 +68,6 @@ class _DistanceFieldPanel(_ProcessPanel):
             if self._references["Binarization"].isChecked()
             else None
         )
-        input_mask_size = int(self._references["Mask Size"].currentText())
         input_invert = self._references["Inversion"].isChecked()
 
         layer = Layer()
@@ -81,7 +75,6 @@ class _DistanceFieldPanel(_ProcessPanel):
             layer=input_layer,
             alpha=input_alpha,
             thresholds=input_thresholds,
-            mask_size=input_mask_size,
             invert=input_invert,
         )
         _data.viewer = layer

@@ -42,6 +42,20 @@ class Layer:
         transform: Optional[Tuple[float, float, float, float, float, float]] = None,
         units: Optional[str] = None,
     ):
+        """Initialize Layer with provided parameters.
+
+        Args:
+            array (Optional[np.ndarray[np.int32]]): Layer data.
+            bounds (Optional[Dict[str, float]]): Area bounds in coordinates.
+            crs (Optional[str]): Coordinate reference system.
+            driver (Optional[str]): Data driver.
+            no_data (Optional[Union[int, float]]): No data value.
+            transform (Optional[Tuple[float, float, float, float, float, float]]): Geotransform values.
+            units (Optional[str]): Measurement units.
+
+        Raises:
+            TypeError: If input parameters are of incorrect types.
+        """
         if array is not None and not (
             isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.number)
         ):
