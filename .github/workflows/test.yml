@@ -15,8 +15,6 @@ jobs:
         python-version: '3.x'
     - name: Install Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
         pip install pip --upgrade
         pip install -e .[devel]
     - name: Test (PyTest + Coverage Report)
