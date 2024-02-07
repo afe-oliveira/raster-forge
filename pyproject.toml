@@ -15,9 +15,9 @@ dependencies = [
     "PySide6",
     "numpy",
     "rasterio",
-    "spyndex",
     "opencv-python",
-    "matplotlib"
+    "scipy",
+    "matplotlib",
 ]
 
 [project.optional-dependencies]
