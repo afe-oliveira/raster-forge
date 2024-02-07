@@ -16,7 +16,6 @@ dependencies = [
     "numpy",
     "rasterio",
     "spyndex",
-    "scipy",
     "matplotlib"
 ]
 
