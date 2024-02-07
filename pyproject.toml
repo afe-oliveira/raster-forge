@@ -17,7 +17,6 @@ dependencies = [
     "rasterio",
     "spyndex",
     "opencv-python",
-    "scipy",
     "matplotlib"
 ]
 
