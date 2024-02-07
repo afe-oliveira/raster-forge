@@ -1,8 +1,7 @@
 from typing import Optional, Union
 
+import cv2
 import numpy as np
-from scipy.ndimage import distance_transform_edt
-
 from rforge.containers.layer import Layer
 from rforge.tools.exceptions import ErrorMessages
 
@@ -11,7 +10,8 @@ def distance(
     layer: Union[Layer, np.ndarray],
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     thresholds: Optional[tuple[float, float]] = None,
-    invert: bool = False
+    invert: bool = False,
+    mask_size: int = 3,
 ):
     """Calculate the distance of terrain features.
 
@@ -42,11 +42,11 @@ def distance(
     if thresholds is not None:
         mask = np.logical_and(array >= thresholds[0], array <= thresholds[1])
         if invert:
-            array = np.uint8(np.where(mask, 0, 255))
+            array = np.where(mask, 0, 255)
         else:
-            array = np.uint8(np.where(mask, 255, 0))
+            array = np.where(mask, 255, 0)
 
-    result = distance_transform_edt(array)
+    result = cv2.distanceTransform(np.uint8(array), cv2.DIST_L2, mask_size)
     result = abs(result.max() - result)
 
     if alpha is not None:

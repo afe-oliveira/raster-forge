@@ -16,6 +16,7 @@ dependencies = [
     "numpy",
     "rasterio",
     "spyndex",
+    "opencv-python",
     "scipy",
     "matplotlib"
 ]
@@ -36,8 +37,6 @@ devel = [
     "pre-commit",
     "pytest >= 7.0.0",
     "pytest-cov",
-    "Sphinx",
-    "sphinxawesome-theme"
 ]
 
 [project.gui-scripts]
