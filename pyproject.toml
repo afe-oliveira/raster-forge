@@ -15,6 +15,7 @@ dependencies = [
     "PySide6",
     "numpy",
     "rasterio",
+    "spyndex",
     "opencv-python",
     "scipy",
     "matplotlib",
