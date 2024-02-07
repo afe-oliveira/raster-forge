@@ -17,6 +17,7 @@ jobs:
       run: |
         pip install pip --upgrade
         pip install -e .[devel]
+        apt install libegl1
     - name: Test (PyTest + Coverage Report)
       run: pytest --cov=txtstats --cov-report=xml
     - name: Upload Coverage to Codecov
