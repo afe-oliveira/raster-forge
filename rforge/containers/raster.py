@@ -1,3 +1,4 @@
+import os
 from typing import Dict, Optional, TypedDict
 
 import rasterio
@@ -16,12 +17,13 @@ class RasterImportConfig(TypedDict):
 
 
 class Raster:
-    _layers: Dict[str, Layer] = {}
-    _scale: int = None
+    _layers: Dict[str, Layer]
+    _scale: int
 
     def __init__(self, scale: int):
         if not isinstance(scale, int):
             raise TypeError(ERROR_MESSAGES["scale"].format(units_type=type(scale)))
+        self._layers = {}
         self._scale = scale
 
     def __str__(self):
@@ -42,6 +44,9 @@ class Raster:
     def import_layers(
         self, path: str, config: Optional[list[RasterImportConfig]] = None
     ):
+        if not os.path.exists(path):
+            raise FileNotFoundError(ERROR_MESSAGES["no_file"].format(file_path=path))
+
         with rasterio.open(path) as dataset:
             dataset = _rescale_dataset(dataset, self.scale)
 
@@ -62,7 +67,11 @@ class Raster:
                     "right": dataset.bounds[2],
                     "top": dataset.bounds[3],
                 }
-                crs = str(dataset.crs)
+                crs = (
+                    str(dataset.crs.to_epsg())
+                    if dataset.crs.to_epsg() is not None
+                    else "4326"
+                )
                 driver = dataset.meta["driver"].upper()
                 no_data = dataset.nodata
                 transform = (

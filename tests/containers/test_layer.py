@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pytest
 
@@ -36,6 +38,8 @@ def test_init(data_layer_init):
         assert l.width == array.shape[1]
         assert l.height == array.shape[0]
         assert l.count == array.shape[2] if len(array.shape) > 2 else l.count == 1
+        if transform is not None:
+            assert l.resolution == transform[2]
         assert (
             np.array_equal(l.mean, np.mean(array))
             if len(array.shape) <= 2
@@ -114,6 +118,8 @@ def test_init_setter(data_layer_init):
         assert l.width == array.shape[1]
         assert l.height == array.shape[0]
         assert l.count == array.shape[2] if len(array.shape) > 2 else l.count == 1
+        if transform is not None:
+            assert l.resolution == transform[2]
         assert (
             np.array_equal(l.mean, np.mean(array))
             if len(array.shape) <= 2
@@ -161,6 +167,37 @@ def test_init_setter(data_layer_init):
         )
 
 
+def test_init_import(data_import):
+    """Test Layer import function."""
+    data_path = data_import.get("data_path", None)
+    info_path = data_import.get("info_path", None)
+    scale = data_import.get("scale", None)
+
+    with open(info_path, 'r') as json_file:
+        info = json.load(json_file)
+
+    for i in range(1, info['band_num'] + 1):
+        l = Layer()
+        info_aux = info[f"Layer {i}"]
+        l.import_layer(data_path, i, scale)
+
+        assert np.array_equal(l.array, info_aux['array'])
+        assert l.bounds == info_aux['bounds']
+        assert l.crs == info_aux['crs']
+        assert l.driver == info_aux['driver']
+        assert l.no_data == info_aux['no_data']
+        assert l.resolution == info_aux['resolution']
+        assert l.transform == tuple(info_aux['transform'])
+        assert l.units == info_aux['units']
+        assert l.height == info_aux['height']
+        assert l.width == info_aux['width']
+        assert l.mean == info_aux['mean']
+        assert l.median == info_aux['median']
+        assert l.min == info_aux['minimum']
+        assert l.max == info_aux['maximum']
+        assert l.std_dev == info_aux['standard_deviation']
+
+
 def test_init_errors(data_layer_init_errors):
     """Test layer initialization function for expected errors."""
     array = data_layer_init_errors[0].get("array", None)
@@ -203,3 +240,14 @@ def test_init_setter_errors(data_layer_init_errors):
         l.no_data = no_data
         l.transform = transform
         l.units = units
+
+
+def test_init_import_errors(data_import_errors):
+    """Test Layer import function."""
+    data_path = data_import_errors.get("data_path", None)
+    error = data_import_errors.get("error", None)
+    scale = data_import_errors.get("scale", None)
+
+    with pytest.raises(error):
+        l = Layer()
+        l.import_layer(data_path, 1, scale)
