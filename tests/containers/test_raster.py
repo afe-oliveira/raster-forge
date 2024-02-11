@@ -88,16 +88,23 @@ def test_import(data_import):
     bands = []
     for r in range(1, info['band_num'] + 1):
         bands.extend(list(combinations(range(1, info['band_num'] + 1), r)))
+    bands.append(None)
 
     for combination in bands:
         import_config = []
-        for i in combination:
-            aux = {'id': i, 'name': f"Layer {i}"}
-            import_config.append(aux)
+        if combination is not None:
+            for i in combination:
+                aux = {'id': i, 'name': f"Layer {i}"}
+                import_config.append(aux)
+        else:
+            import_config = None
 
         r = Raster(scale)
         r.import_layers(data_path, import_config)
 
         assert isinstance(r, Raster)
         assert r.scale == scale
-        assert r.count == len(combination)
+        if combination is not None:
+            assert r.count == len(combination)
+        else:
+            assert r.count == info['band_num']
