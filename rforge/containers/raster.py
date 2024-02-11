@@ -5,10 +5,7 @@ import rasterio
 from rforge.tools.rescale_dataset import _rescale_dataset
 
 from .layer import Layer
-
-ERROR_MESSAGES = {
-    "scale": "ERROR: 'scale' argument is {scale_type}, but it must be an integer."
-}
+from ..tools.exceptions import ErrorMessages
 
 
 class RasterImportConfig(TypedDict):
@@ -20,10 +17,36 @@ class Raster:
     _layers: Dict[str, Layer]
     _scale: int
 
-    def __init__(self, scale: int):
-        if not isinstance(scale, int):
-            raise TypeError(ERROR_MESSAGES["scale"].format(units_type=type(scale)))
-        self._layers = {}
+    def __init__(self, scale: int, layers: Optional[Dict[str, Layer]] = None):
+        if not isinstance(scale, int) and scale <= 0:
+            raise TypeError(
+                ErrorMessages.bad_input(
+                    name="scale", expected_type="an integer larger than 0"
+                )
+            )
+        if layers is None:
+            layers = {}
+        else:
+            if not isinstance(layers, dict):
+                raise TypeError(
+                    ErrorMessages.bad_input(
+                        name="layers", expected_type="a dictionary"
+                    )
+                )
+            for key, value in layers.items():
+                if not isinstance(key, str):
+                    raise TypeError(
+                        ErrorMessages.bad_input(
+                            name="layers keys", expected_type="strings"
+                        )
+                    )
+                if not isinstance(value, Layer):
+                    raise TypeError(
+                        ErrorMessages.bad_input(
+                            name="layers values", expected_type="Layers"
+                        )
+                    )
+        self._layers = layers
         self._scale = scale
 
     def __str__(self):
@@ -45,7 +68,7 @@ class Raster:
         self, path: str, config: Optional[list[RasterImportConfig]] = None
     ):
         if not os.path.exists(path):
-            raise FileNotFoundError(ERROR_MESSAGES["no_file"].format(file_path=path))
+            raise FileNotFoundError(ErrorMessages.file_not_found(file_path=path))
 
         with rasterio.open(path) as dataset:
             dataset = _rescale_dataset(dataset, self.scale)
