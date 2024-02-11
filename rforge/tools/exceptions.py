@@ -1,4 +1,4 @@
-class ErrorMessages:
+class Errors:
     __TEMPLATE = "ERROR: {message}"
 
     @classmethod

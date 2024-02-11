@@ -5,7 +5,7 @@ import rasterio
 from rforge.tools.rescale_dataset import _rescale_dataset
 
 from .layer import Layer
-from ..tools.exceptions import ErrorMessages
+from ..tools.exceptions import Errors
 
 
 class RasterImportConfig(TypedDict):
@@ -20,7 +20,7 @@ class Raster:
     def __init__(self, scale: int, layers: Optional[Dict[str, Layer]] = None):
         if not isinstance(scale, int) and scale <= 0:
             raise TypeError(
-                ErrorMessages.bad_input(
+                Errors.bad_input(
                     name="scale", expected_type="an integer larger than 0"
                 )
             )
@@ -29,20 +29,20 @@ class Raster:
         else:
             if not isinstance(layers, dict):
                 raise TypeError(
-                    ErrorMessages.bad_input(
+                    Errors.bad_input(
                         name="layers", expected_type="a dictionary"
                     )
                 )
             for key, value in layers.items():
                 if not isinstance(key, str):
                     raise TypeError(
-                        ErrorMessages.bad_input(
+                        Errors.bad_input(
                             name="layers keys", expected_type="strings"
                         )
                     )
                 if not isinstance(value, Layer):
                     raise TypeError(
-                        ErrorMessages.bad_input(
+                        Errors.bad_input(
                             name="layers values", expected_type="Layers"
                         )
                     )
@@ -68,7 +68,7 @@ class Raster:
         self, path: str, config: Optional[list[RasterImportConfig]] = None
     ):
         if not os.path.exists(path):
-            raise FileNotFoundError(ErrorMessages.file_not_found(file_path=path))
+            raise FileNotFoundError(Errors.file_not_found(file_path=path))
 
         with rasterio.open(path) as dataset:
             dataset = _rescale_dataset(dataset, self.scale)
@@ -120,13 +120,23 @@ class Raster:
                 self._layers[item["name"]] = layer
 
     def add_layer(self, layer: Layer, name: str):
+        if not isinstance(layer, Layer):
+            raise TypeError(Errors.bad_input(name="layer", expected_type="a Layer"))
+        if not isinstance(name, str):
+            raise TypeError(Errors.bad_input(name="layer name", expected_type="a string"))
         if name not in self._layers.keys():
             self._layers[name] = layer
 
     def remove_layer(self, name: str):
+        if not isinstance(name, str):
+            raise TypeError(Errors.bad_input(name="layer name", expected_type="a string"))
         if name in self._layers.keys():
             self._layers.pop(name)
 
     def edit_layer(self, current_name: str, new_name: str):
+        if not isinstance(current_name, str):
+            raise TypeError(Errors.bad_input(name="current layer name", expected_type="a string"))
+        if not isinstance(new_name, str):
+            raise TypeError(Errors.bad_input(name="new layer name", expected_type="a string"))
         if current_name in self._layers.keys():
             self._layers[new_name] = self._layers.pop(current_name)

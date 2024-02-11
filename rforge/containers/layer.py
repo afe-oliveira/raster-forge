@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import rasterio
-from rforge.tools.exceptions import ErrorMessages
+from rforge.tools.exceptions import Errors
 from rforge.tools.rescale_dataset import _rescale_dataset
 
 ERROR_MESSAGES = {
@@ -46,7 +46,7 @@ class Layer:
             isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.number)
         ):
             raise TypeError(
-                ErrorMessages.bad_input(
+                Errors.bad_input(
                     name="array",
                     provided_type=type(array),
                     expected_type="a numeric array",
@@ -56,7 +56,7 @@ class Layer:
         if bounds is not None:
             if not isinstance(bounds, dict):
                 raise TypeError(
-                    ErrorMessages.bad_input(
+                    Errors.bad_input(
                         name="bounds",
                         provided_type=type(bounds),
                         expected_type="a dictionary",

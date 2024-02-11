@@ -3,7 +3,7 @@ from typing import Any, Optional, Union
 import numpy as np
 from numpy import dtype, generic, ndarray
 from rforge.containers.layer import Layer
-from rforge.tools.exceptions import ErrorMessages
+from rforge.tools.exceptions import Errors
 
 PRESET_COMPOSITES = {
     "True Color": ["Red", "Green", "Blue"],
@@ -45,7 +45,7 @@ def height(
         is_array = True
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="layers", expected_type="a list of numerical Layers or arrays"
             )
         )
@@ -63,7 +63,7 @@ def height(
             result = np.dstack([result, alpha])
         else:
             raise TypeError(
-                ErrorMessages.bad_input(
+                Errors.bad_input(
                     name="gamma", expected_type="a numerical Layer or array"
                 )
             )

@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 import numpy as np
 from rforge.containers.layer import Layer
-from rforge.tools.exceptions import ErrorMessages
+from rforge.tools.exceptions import Errors
 
 
 def fuel(
@@ -46,7 +46,7 @@ def fuel(
         is_array = True
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="layers", expected_type="a list of numerical Layers or arrays"
             )
         )
@@ -91,7 +91,7 @@ def fuel(
             result = np.dstack([result, alpha])
         else:
             raise TypeError(
-                ErrorMessages.bad_input(
+                Errors.bad_input(
                     name="alpha", expected_type="a numerical Layer or array"
                 )
             )

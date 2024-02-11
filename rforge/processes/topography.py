@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import numpy as np
 from rforge.containers.layer import Layer
-from rforge.tools.exceptions import ErrorMessages
+from rforge.tools.exceptions import Errors
 
 
 def slope(
@@ -33,7 +33,7 @@ def slope(
         is_array = True
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="dem", expected_type="a numerical Layer or array"
             )
         )
@@ -50,7 +50,7 @@ def slope(
             result = np.degrees(result)
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="units", expected_type="'degrees' or 'radians'"
             )
         )
@@ -92,7 +92,7 @@ def aspect(
         is_array = True
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="dem", expected_type="a numerical Layer or array"
             )
         )
@@ -104,7 +104,7 @@ def aspect(
             result = np.degrees(result)
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="units", expected_type="'degrees' or 'radians'"
             )
         )

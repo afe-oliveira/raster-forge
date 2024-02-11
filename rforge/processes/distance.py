@@ -3,7 +3,7 @@ from typing import Optional, Union
 import cv2
 import numpy as np
 from rforge.containers.layer import Layer
-from rforge.tools.exceptions import ErrorMessages
+from rforge.tools.exceptions import Errors
 
 
 def distance(
@@ -34,7 +34,7 @@ def distance(
         is_array = True
     else:
         raise TypeError(
-            ErrorMessages.bad_input(
+            Errors.bad_input(
                 name="layer", expected_type="a numerical Layer or array"
             )
         )
@@ -60,7 +60,7 @@ def distance(
             result[alpha == 0] = result.max()
         else:
             raise TypeError(
-                ErrorMessages.bad_input(
+                Errors.bad_input(
                     name="gamma", expected_type="a numerical Layer or array"
                 )
             )

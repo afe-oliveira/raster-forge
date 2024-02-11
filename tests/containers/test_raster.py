@@ -1,4 +1,6 @@
+import json
 import random
+from itertools import combinations
 
 import pytest
 
@@ -73,3 +75,29 @@ def test_edit(data_raster_init):
     for original_key, shuffled_key in keys.items():
         assert shuffled_key in r.layers
         assert r.layers[shuffled_key] == layers[original_key]
+
+
+def test_import(data_import):
+    data_path = data_import.get("data_path", None)
+    info_path = data_import.get("info_path", None)
+    scale = data_import.get("scale", None)
+
+    with open(info_path, 'r') as json_file:
+        info = json.load(json_file)
+
+    bands = []
+    for r in range(1, info['band_num'] + 1):
+        bands.extend(list(combinations(range(1, info['band_num'] + 1), r)))
+
+    for combination in bands:
+        import_config = []
+        for i in combination:
+            aux = {'id': i, 'name': f"Layer {i}"}
+            import_config.append(aux)
+
+        r = Raster(scale)
+        r.import_layers(data_path, import_config)
+
+        assert isinstance(r, Raster)
+        assert r.scale == scale
+        assert r.count == len(combination)
