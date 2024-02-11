@@ -166,10 +166,11 @@ def data_raster_init(request):
         {"scale": '1', "layers": {}, 'error': TypeError},
         {"scale": None, "layers": {}, 'error': TypeError},
         {"scale": [], "layers": {}, 'error': TypeError},
+        {"scale": 1, "layers": ['Layer 1'], 'error': TypeError},
         {"scale": 1, "layers": {'Layer 1': 'Layer'}, 'error': TypeError},
         {"scale": 1, "layers": {1: Layer()}, 'error': TypeError},
         {"scale": 1, "layers": {'Layer 1': Layer(), 'Layer 2': 'Layer'}, 'error': TypeError},
-        {"scale": 1, "layers": {'Layer 1': Layer(), 2: Layer()}, 'error': TypeError}
+        {"scale": 1, "layers": {'Layer 1': Layer(), 2: Layer()}, 'error': TypeError},
     ]
 )
 def data_raster_init_errors(request):

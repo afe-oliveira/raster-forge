@@ -18,34 +18,18 @@ class Raster:
     _scale: int
 
     def __init__(self, scale: int, layers: Optional[Dict[str, Layer]] = None):
-        if not isinstance(scale, int) and scale <= 0:
-            raise TypeError(
-                Errors.bad_input(
-                    name="scale", expected_type="an integer larger than 0"
-                )
-            )
+        if not isinstance(scale, int) or (isinstance(scale, int) and scale <= 0):
+            raise TypeError(Errors.bad_input(name="scale", expected_type="an integer larger than 0"))
         if layers is None:
             layers = {}
         else:
             if not isinstance(layers, dict):
-                raise TypeError(
-                    Errors.bad_input(
-                        name="layers", expected_type="a dictionary"
-                    )
-                )
+                raise TypeError(Errors.bad_input(name="layers", expected_type="a dictionary"))
             for key, value in layers.items():
                 if not isinstance(key, str):
-                    raise TypeError(
-                        Errors.bad_input(
-                            name="layers keys", expected_type="strings"
-                        )
-                    )
+                    raise TypeError(Errors.bad_input(name="layers keys", expected_type="strings"))
                 if not isinstance(value, Layer):
-                    raise TypeError(
-                        Errors.bad_input(
-                            name="layers values", expected_type="Layers"
-                        )
-                    )
+                    raise TypeError(Errors.bad_input(name="layers values", expected_type="Layers"))
         self._layers = layers
         self._scale = scale
 

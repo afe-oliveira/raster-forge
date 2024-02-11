@@ -108,3 +108,13 @@ def test_import(data_import):
             assert r.count == len(combination)
         else:
             assert r.count == info['band_num']
+
+
+def test_import_errors(data_import_errors):
+    data_path = data_import_errors.get("data_path", None)
+    scale = data_import_errors.get("scale", None)
+    error = data_import_errors.get("error", None)
+
+    with pytest.raises(error):
+        r = Raster(scale)
+        r.import_layers(data_path, None)
