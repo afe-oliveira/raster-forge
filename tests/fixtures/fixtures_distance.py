@@ -8,6 +8,6 @@ def data_distance(request):
 
 
 @pytest.fixture(params=[])
-def data_distance_errors(request):
+def data_distance_error(request):
     """Fixture that defines the raster initialization data to be tested."""
     return request.param

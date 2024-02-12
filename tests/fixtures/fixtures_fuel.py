@@ -8,6 +8,6 @@ def data_fuel(request):
 
 
 @pytest.fixture(params=[])
-def data_fuel_errors(request):
+def data_fuel_error(request):
     """Fixture that defines the raster initialization data to be tested."""
     return request.param

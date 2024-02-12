@@ -8,6 +8,6 @@ def data_index(request):
 
 
 @pytest.fixture(params=[])
-def data_index_errors(request):
+def data_index_error(request):
     """Fixture that defines the raster initialization data to be tested."""
     return request.param

@@ -29,13 +29,13 @@ def test(data_composite):
     assert c_alpha == alpha
 
 
-def test_errors(data_layer_init):
+def test_errors(data_composite_error):
     """Test composite creation function for expected errors."""
-    layers = data_layer_init.get("layers", None)
-    alpha = data_layer_init.get("alpha", None)
-    gamma = data_layer_init.get("gamma", None)
-    as_array = data_layer_init.get("as_array", None)
-    error = data_layer_init.get("error", None)
+    layers = data_composite_error.get("layers", None)
+    alpha = data_composite_error.get("alpha", None)
+    gamma = data_composite_error.get("gamma", None)
+    as_array = data_composite_error.get("as_array", None)
+    error = data_composite_error.get("error", None)
 
     with pytest.raises(error):
         c = composite(layers=layers, alpha=alpha, gamma=gamma, as_array=as_array)

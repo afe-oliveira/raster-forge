@@ -8,6 +8,6 @@ def data_height(request):
 
 
 @pytest.fixture(params=[])
-def data_height_errors(request):
+def data_height_error(request):
     """Fixture that defines the raster initialization data to be tested."""
     return request.param

@@ -8,6 +8,6 @@ def data_topography(request):
 
 
 @pytest.fixture(params=[])
-def data_topography_errors(request):
+def data_topography_error(request):
     """Fixture that defines the raster initialization data to be tested."""
     return request.param
