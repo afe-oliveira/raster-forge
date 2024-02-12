@@ -3,7 +3,6 @@ import random
 from itertools import combinations
 
 import pytest
-
 from rforge.containers.raster import Raster
 
 
@@ -82,19 +81,19 @@ def test_import(data_import):
     info_path = data_import.get("info_path", None)
     scale = data_import.get("scale", None)
 
-    with open(info_path, 'r') as json_file:
+    with open(info_path, "r") as json_file:
         info = json.load(json_file)
 
     bands = []
-    for r in range(1, info['band_num'] + 1):
-        bands.extend(list(combinations(range(1, info['band_num'] + 1), r)))
+    for r in range(1, info["band_num"] + 1):
+        bands.extend(list(combinations(range(1, info["band_num"] + 1), r)))
     bands.append(None)
 
     for combination in bands:
         import_config = []
         if combination is not None:
             for i in combination:
-                aux = {'id': i, 'name': f"Layer {i}"}
+                aux = {"id": i, "name": f"Layer {i}"}
                 import_config.append(aux)
         else:
             import_config = None
@@ -107,7 +106,7 @@ def test_import(data_import):
         if combination is not None:
             assert r.count == len(combination)
         else:
-            assert r.count == info['band_num']
+            assert r.count == info["band_num"]
 
 
 def test_import_errors(data_import_errors):

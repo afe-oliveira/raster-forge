@@ -4,8 +4,8 @@ from typing import Dict, Optional, TypedDict
 import rasterio
 from rforge.tools.rescale_dataset import _rescale_dataset
 
-from .layer import Layer
 from ..tools.exceptions import Errors
+from .layer import Layer
 
 
 class RasterImportConfig(TypedDict):
@@ -19,17 +19,25 @@ class Raster:
 
     def __init__(self, scale: int, layers: Optional[Dict[str, Layer]] = None):
         if not isinstance(scale, int) or (isinstance(scale, int) and scale <= 0):
-            raise TypeError(Errors.bad_input(name="scale", expected_type="an integer larger than 0"))
+            raise TypeError(
+                Errors.bad_input(name="scale", expected_type="an integer larger than 0")
+            )
         if layers is None:
             layers = {}
         else:
             if not isinstance(layers, dict):
-                raise TypeError(Errors.bad_input(name="layers", expected_type="a dictionary"))
+                raise TypeError(
+                    Errors.bad_input(name="layers", expected_type="a dictionary")
+                )
             for key, value in layers.items():
                 if not isinstance(key, str):
-                    raise TypeError(Errors.bad_input(name="layers keys", expected_type="strings"))
+                    raise TypeError(
+                        Errors.bad_input(name="layers keys", expected_type="strings")
+                    )
                 if not isinstance(value, Layer):
-                    raise TypeError(Errors.bad_input(name="layers values", expected_type="Layers"))
+                    raise TypeError(
+                        Errors.bad_input(name="layers values", expected_type="Layers")
+                    )
         self._layers = layers
         self._scale = scale
 
@@ -107,20 +115,28 @@ class Raster:
         if not isinstance(layer, Layer):
             raise TypeError(Errors.bad_input(name="layer", expected_type="a Layer"))
         if not isinstance(name, str):
-            raise TypeError(Errors.bad_input(name="layer name", expected_type="a string"))
+            raise TypeError(
+                Errors.bad_input(name="layer name", expected_type="a string")
+            )
         if name not in self._layers.keys():
             self._layers[name] = layer
 
     def remove_layer(self, name: str):
         if not isinstance(name, str):
-            raise TypeError(Errors.bad_input(name="layer name", expected_type="a string"))
+            raise TypeError(
+                Errors.bad_input(name="layer name", expected_type="a string")
+            )
         if name in self._layers.keys():
             self._layers.pop(name)
 
     def edit_layer(self, current_name: str, new_name: str):
         if not isinstance(current_name, str):
-            raise TypeError(Errors.bad_input(name="current layer name", expected_type="a string"))
+            raise TypeError(
+                Errors.bad_input(name="current layer name", expected_type="a string")
+            )
         if not isinstance(new_name, str):
-            raise TypeError(Errors.bad_input(name="new layer name", expected_type="a string"))
+            raise TypeError(
+                Errors.bad_input(name="new layer name", expected_type="a string")
+            )
         if current_name in self._layers.keys():
             self._layers[new_name] = self._layers.pop(current_name)

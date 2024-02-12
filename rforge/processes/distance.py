@@ -3,7 +3,7 @@ from typing import Optional, Union
 import cv2
 import numpy as np
 from rforge.containers.layer import Layer
-from rforge.tools.exceptions import Errors
+from rforge.tools.data_validation import check_layer
 
 
 def distance(
@@ -12,6 +12,7 @@ def distance(
     thresholds: Optional[tuple[float, float]] = None,
     invert: bool = False,
     mask_size: int = 3,
+    as_array: bool = False,
 ):
     """Calculate the distance of terrain features.
 
@@ -22,22 +23,7 @@ def distance(
     Returns:
       Distance raster map.
     """
-    is_array = False
-    if isinstance(layer, Layer) and layer.array is not None:
-        array = layer.array
-    elif (
-        isinstance(layer, np.ndarray)
-        and layer is not None
-        and np.issubdtype(layer.dtype, np.number)
-    ):
-        array = layer
-        is_array = True
-    else:
-        raise TypeError(
-            Errors.bad_input(
-                name="layer", expected_type="a numerical Layer or array"
-            )
-        )
+    array = check_layer(layer)
 
     if thresholds is not None:
         mask = np.logical_and(array >= thresholds[0], array <= thresholds[1])
@@ -50,22 +36,7 @@ def distance(
     result = abs(result.max() - result)
 
     if alpha is not None:
-        if isinstance(alpha, Layer) and alpha.array is not None:
-            result[alpha.array == 0] = result.max()
-        elif (
-            isinstance(alpha, np.ndarray)
-            and alpha is not None
-            and np.issubdtype(alpha.dtype, np.number)
-        ):
-            result[alpha == 0] = result.max()
-        else:
-            raise TypeError(
-                Errors.bad_input(
-                    name="gamma", expected_type="a numerical Layer or array"
-                )
-            )
+        alpha = check_layer(alpha)
+        result = np.dstack([result, alpha])
 
-    if is_array:
-        return result
-    else:
-        return Layer(result)
+    return result if as_array else Layer(result)

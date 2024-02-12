@@ -2,7 +2,6 @@ import json
 
 import numpy as np
 import pytest
-
 from rforge.containers.layer import Layer
 
 
@@ -173,29 +172,29 @@ def test_init_import(data_import):
     info_path = data_import.get("info_path", None)
     scale = data_import.get("scale", None)
 
-    with open(info_path, 'r') as json_file:
+    with open(info_path, "r") as json_file:
         info = json.load(json_file)
 
-    for i in range(1, info['band_num'] + 1):
+    for i in range(1, info["band_num"] + 1):
         l = Layer()
         info_aux = info[f"Layer {i}"]
         l.import_layer(data_path, i, scale)
 
-        assert np.array_equal(l.array, info_aux['array'])
-        assert l.bounds == info_aux['bounds']
-        assert l.crs == info_aux['crs']
-        assert l.driver == info_aux['driver']
-        assert l.no_data == info_aux['no_data']
-        assert l.resolution == info_aux['resolution']
-        assert l.transform == tuple(info_aux['transform'])
-        assert l.units == info_aux['units']
-        assert l.height == info_aux['height']
-        assert l.width == info_aux['width']
-        assert l.mean == info_aux['mean']
-        assert l.median == info_aux['median']
-        assert l.min == info_aux['minimum']
-        assert l.max == info_aux['maximum']
-        assert l.std_dev == info_aux['standard_deviation']
+        assert np.array_equal(l.array, info_aux["array"])
+        assert l.bounds == info_aux["bounds"]
+        assert l.crs == info_aux["crs"]
+        assert l.driver == info_aux["driver"]
+        assert l.no_data == info_aux["no_data"]
+        assert l.resolution == info_aux["resolution"]
+        assert l.transform == tuple(info_aux["transform"])
+        assert l.units == info_aux["units"]
+        assert l.height == info_aux["height"]
+        assert l.width == info_aux["width"]
+        assert l.mean == info_aux["mean"]
+        assert l.median == info_aux["median"]
+        assert l.min == info_aux["minimum"]
+        assert l.max == info_aux["maximum"]
+        assert l.std_dev == info_aux["standard_deviation"]
 
 
 def test_init_errors(data_layer_init_errors):

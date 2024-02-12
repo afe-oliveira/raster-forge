@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 import numpy as np
 from rforge.containers.layer import Layer
-from rforge.tools.exceptions import Errors
+from rforge.tools.data_validation import check_layer
 
 
 def fuel(
@@ -15,6 +15,7 @@ def fuel(
     models: tuple[int, int, int],
     tree_height: float,
     alpha: Optional[Union[Layer, np.ndarray]] = None,
+    as_array: bool = False,
 ):
     """Calculate the fuel of the terrain based on a fuel models.
 
@@ -25,31 +26,11 @@ def fuel(
     Returns:
       Fuel raster map.
     """
-    is_array = False
-    if all(
-        (isinstance(layer, Layer) and layer.array is not None)
-        for layer in [coverage, height, distance, water, artificial]
-    ):
-        coverage = coverage.array
-        height = height.array
-        distance = distance.array
-        water = water.array
-        artificial = artificial.array
-    elif all(
-        (
-            isinstance(layer, np.ndarray)
-            and layer is not None
-            and np.issubdtype(layer.dtype, np.number)
-        )
-        for layer in [coverage, height, distance, water, artificial]
-    ):
-        is_array = True
-    else:
-        raise TypeError(
-            Errors.bad_input(
-                name="layers", expected_type="a list of numerical Layers or arrays"
-            )
-        )
+    coverage = check_layer(coverage)
+    height = check_layer(height)
+    distance = check_layer(distance)
+    water = check_layer(water)
+    artificial = check_layer(artificial)
 
     # Estimate Sub Layer Average
     sub_coverage_average = np.mean(np.where(height < tree_height, coverage, 0))
@@ -81,22 +62,7 @@ def fuel(
     result = np.where(water > 0, 98, result)
 
     if alpha is not None:
-        if isinstance(alpha, Layer) and alpha.array is not None:
-            result = np.dstack([result, alpha.array])
-        elif (
-            isinstance(alpha, np.ndarray)
-            and alpha is not None
-            and np.issubdtype(alpha.dtype, np.number)
-        ):
-            result = np.dstack([result, alpha])
-        else:
-            raise TypeError(
-                Errors.bad_input(
-                    name="alpha", expected_type="a numerical Layer or array"
-                )
-            )
+        alpha = check_layer(alpha)
+        result = np.dstack([result, alpha])
 
-    if is_array:
-        return result
-    else:
-        return Layer(result)
+    return result if as_array else Layer(result)
