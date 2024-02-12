@@ -22,17 +22,18 @@ def test(data_distance):
         mask_size=mask_size,
         as_array=as_array,
     )
-    d_array = d.array if as_array else d
-    d_count = d_array.shape[-1] if len(d_array.shape) > 2 else 1
+    d_count = d.array.shape[-1] if len(d.array.shape) > 2 else 1
+    d_result = d.array[:, :, :-1] if d_count > 2 else d.array
+    d_alpha = d.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(d, np.ndarray)) or (
-        not as_array and isinstance(d, Layer)
+            not as_array and isinstance(d, Layer)
     )
-    assert (alpha is None and d_count == 1) or (alpha is not None and d_count == 2)
-    assert (d_count == 1 and d_array == result) or (
-        d_count == 2 and d_array[:, :, 0] == result
+    assert (alpha is None and d_count == 1) or (
+            alpha is not None and d_count == 2
     )
-    assert alpha is None or (alpha is not None and d_array[:, :, -1] == alpha)
+    assert d_result == result
+    assert d_alpha == alpha
 
 
 def test_errors(data_distance_error):

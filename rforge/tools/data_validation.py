@@ -5,7 +5,20 @@ from rforge.containers.layer import Layer
 
 
 def check_layer(layer: Union[Layer, np.ndarray]):
-    """Checks if a given input, which can be either a Layer object or a Numpy array, is numerical and non-empty. Returns the input array if it meets these criteria."""
+    """
+    Check if a given input, which can be either a Layer object or a NumPy array, is numerical and non-empty.
+
+    Args:
+      layer:
+        Input data, which can be a Layer object or a NumPy array.
+
+    Returns:
+      The input array if it meets the criteria.
+
+    Raises:
+      TypeError:
+        If the input is not a non-empty Layer object or a non-empty numerical NumPy array.
+    """
     if isinstance(layer, Layer) and layer.array is not None:
         return layer.array
     elif isinstance(layer, np.ndarray) and layer is not None:

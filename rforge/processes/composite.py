@@ -1,7 +1,6 @@
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
-from numpy import dtype, generic, ndarray
 from rforge.containers.layer import Layer
 from rforge.tools.data_validation import check_layer
 from rforge.tools.exceptions import Errors
@@ -17,18 +16,19 @@ def composite(
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     gamma: Optional[list[float]] = None,
     as_array: bool = False,
-) -> ndarray[Any, dtype[generic | generic | Any]] | ndarray[Any, dtype[Any]] | Layer:
+) -> np.ndarray | Layer:
     """Stacks all provided layers into a single array in order, including alpha. Applies gamma correction if provided.
 
     Args:
       layers:
         List of raster layers.
       alpha:
-        Alpha layer.
+        Alpha layer. Defaults to None.
       gamma:
-        List of gamma values.
-      array:
-        Indicates if result should be returned as a Numpy array instead of a Layer object.
+        List of gamma values to apply to each layer. Defaults to None.
+      as_array:
+        If True, returns the distance field as a Numpy array. Defaults to False.
+
     Returns:
       Stacked composite layer.
     """

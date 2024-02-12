@@ -13,6 +13,20 @@ def test(data_height):
     result = data_height.get("result", None)
 
     h = height(dtm=dtm, dsm=dsm, alpha=alpha, as_array=as_array)
+
+    h_count = h.array.shape[-1] if len(h.array.shape) > 2 else 1
+    h_result = h.array[:, :, :-1] if h_count > 2 else h.array
+    h_alpha = h.array[:, :, -1] if alpha is not None else None
+
+    assert (as_array and isinstance(h, np.ndarray)) or (
+            not as_array and isinstance(h, Layer)
+    )
+    assert (alpha is None and h_count == 1) or (
+            alpha is not None and h_count == 2
+    )
+    assert h_result == result
+    assert h_alpha == alpha
+
     h_array = h.array if as_array else h
     h_count = h_array.shape[-1] if len(h_array.shape) > 2 else 1
 

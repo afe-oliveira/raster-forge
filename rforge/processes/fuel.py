@@ -16,15 +16,31 @@ def fuel(
     tree_height: float,
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
-):
-    """Calculate the fuel of the terrain based on a fuel models.
+) -> np.ndarray | Layer :
+    """Calculate the fuel map of the terrain based on defined fuel models.
 
     Args:
-      layer:
-        Layer data of the terrain.
+      coverage:
+        Layer data representing vegetation coverage of the terrain.
+      height:
+        Layer data representing canopy height of the vegetation.
+      distance:
+        Layer data representing distance field of terrain features.
+      water:
+        Layer data representing water presence in the terrain.
+      artificial:
+        Layer data representing artificial structures in the terrain.
+      models:
+        Tuple of integers representing the fuel models.
+      tree_height:
+        Height of the trees.
+      alpha:
+        Alpha layer. Defaults to None.
+      as_array:
+        If True, returns the distance field as a Numpy array. Defaults to False.
 
     Returns:
-      Fuel raster map.
+      Fuel map.
     """
     coverage = check_layer(coverage)
     height = check_layer(height)

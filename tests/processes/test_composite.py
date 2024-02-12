@@ -12,18 +12,18 @@ def test(data_composite):
     as_array = data_composite.get("as_array", None)
 
     c = composite(layers=layers, alpha=alpha, gamma=gamma, as_array=as_array)
-    c_array = c.array if as_array else c
-    c_count = c_array.shape[-1] if len(c_array.shape) > 2 else 1
+    c_count = c.array.shape[-1] if len(c.array.shape) > 2 else 1
+    c_result = c.array[:, :, :-1] if c_count > 2 else c.array
+    c_alpha = c.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(c, np.ndarray)) or (
         not as_array and isinstance(c, Layer)
     )
-    assert (alpha is None and c_count == len(layers) + 1) or (
-        alpha is not None and c_count == len(layers)
+    assert (alpha is None and c_count == len(layers)) or (
+        alpha is not None and c_count == len(layers) + 1
     )
-    for i, layer in enumerate(c.array):
-        assert layer == layers[:, :, i]
-    assert alpha is None or (alpha is not None and c_array[:, :, -1] == alpha)
+    assert c_result == layers
+    assert c_alpha == alpha
 
 
 def test_errors(data_layer_init):

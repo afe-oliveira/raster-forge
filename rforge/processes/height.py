@@ -1,10 +1,8 @@
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
-from numpy import dtype, generic, ndarray
 from rforge.containers.layer import Layer
 from rforge.tools.data_validation import check_layer
-from rforge.tools.exceptions import Errors
 
 
 def height(
@@ -12,18 +10,21 @@ def height(
     dsm: Union[Layer, np.ndarray],
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
-) -> ndarray[Any, dtype[generic | generic | Any]] | ndarray[Any, dtype[Any]] | Layer:
-    """Stacks all provided layers into a single array in order. Applies gamma correction.
+) -> np.ndarray | Layer:
+    """Calculate the height difference between the Digital Terrain Model (DTM) and the Digital Surface Model (DSM).
 
     Args:
-      layers:
-        List of raster layers.
+      dtm:
+        Digital Terrain Model (DTM) layer data.
+      dsm:
+        Digital Surface Model (DSM) layer data.
       alpha:
-        Alpha layer.
-      gamma:
-        List of gamma values.
+        Alpha layer. Defaults to None.
+      as_array:
+        If True, returns the distance field as a Numpy array. Defaults to False.
+
     Returns:
-      Stacked composite layer.
+      Height difference raster map.
     """
     dtm = check_layer(dtm)
     dsm = check_layer(dsm)

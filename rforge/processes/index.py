@@ -7,18 +7,38 @@ from rforge.tools.data_validation import check_layer
 
 
 def index(
-    index: str,
+    index_id: str,
     parameters: dict,
     alpha: Optional[np.ndarray] = None,
     thresholds: Optional[tuple[float, float]] = None,
     binarize: bool = False,
     as_array: bool = False,
-) -> np.ndarray[np.float32]:
+) -> np.ndarray | Layer:
+    """
+    Compute an index from the input parameters.
+
+    Args:
+      index_id:
+        Identifier of index to compute
+      parameters:
+        Dictionary of parameters required for index computation.
+      alpha:
+        Alpha layer. Defaults to None.
+      thresholds:
+        Thresholds for binarization or clipping. Defaults to None.
+      binarize:
+        If True, binarize the result based on the thresholds defined. Defaults to False.
+      as_array:
+        If True, return the result as a Numpy array. Defaults to False.
+
+    Returns:
+      Computed index as a numpy array.
+    """
     for key, value in parameters.items():
         aux_value = check_layer(value)
         parameters[key] = aux_value
 
-    result = spyndex.computeIndex([index], parameters)
+    result = spyndex.computeIndex([index_id], parameters)
     result = np.nan_to_num(result, nan=0.0, posinf=0.0, neginf=0.0)
 
     if thresholds is not None:

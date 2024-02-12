@@ -13,15 +13,25 @@ def distance(
     invert: bool = False,
     mask_size: int = 3,
     as_array: bool = False,
-):
-    """Calculate the distance of terrain features.
+) -> np.ndarray | Layer:
+    """Calculate the distance field of a geographical region.
 
     Args:
       layer:
         Binary layer data.
+      alpha:
+        Alpha layer. Defaults to None.
+      thresholds:
+        Thresholds to use for image binarization. Defaults to None.
+      invert:
+        If True, inverts the binary layer data before processing. Defaults to False.
+      mask_size:
+        Size of the mask for distance calculation. Defaults to 3.
+      as_array:
+        If True, returns the distance field as a Numpy array. Defaults to False.
 
     Returns:
-      Distance raster map.
+      Distance field layer.
     """
     array = check_layer(layer)
 

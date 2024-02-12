@@ -18,10 +18,14 @@ def slope(
       dem:
         Digital elevation model data representing the terrain.
       units:
-        Units for computing the slope.
+        Units for computing the slope. Can be 'degrees' or 'radians'.
+      alpha:
+        Alpha layer. Defaults to None.
+      as_array:
+        If True, return the result as a Numpy array. Defaults to False.
 
     Returns:
-      Slope raster map in the desired unit.
+      Slope map in the desired unit.
     """
     array = check_layer(dem)
 
@@ -59,10 +63,14 @@ def aspect(
       dem:
         Digital elevation model data representing the terrain.
       units:
-        Units for computing the aspect.
+        Units for computing the slope. Can be 'degrees' or 'radians'.
+      alpha:
+        Alpha layer. Defaults to None.
+      as_array:
+        If True, return the result as a Numpy array. Defaults to False.
 
     Returns:
-      Aspect raster map.
+      Aspect map in the desired unit.
     """
     array = check_layer(dem)
 

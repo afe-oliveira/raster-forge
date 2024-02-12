@@ -28,15 +28,18 @@ def test(data_fuel):
         alpha=alpha,
         as_array=as_array,
     )
-    f_array = f.array if as_array else f
-    f_count = f_array.shape[-1] if len(f_array.shape) > 2 else 1
+    f_count = f.array.shape[-1] if len(f.array.shape) > 2 else 1
+    f_result = f.array[:, :, :-1] if f_count > 2 else f.array
+    f_alpha = f.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(f, np.ndarray)) or (
-        not as_array and isinstance(f, Layer)
+            not as_array and isinstance(f, Layer)
     )
-    assert (alpha is None and f_count == 1) or (alpha is not None and f_count == 2)
-    assert f_array == result
-    assert alpha is None or (alpha is not None and f_array[-1] == alpha)
+    assert (alpha is None and f_count == 1) or (
+            alpha is not None and f_count == 2
+    )
+    assert f_result == result
+    assert f_alpha == alpha
 
 
 def test_errors(data_fuel_error):
