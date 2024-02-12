@@ -29,7 +29,10 @@ def test(data_fuel):
         as_array=as_array,
     )
     f_count = f.array.shape[-1] if len(f.array.shape) > 2 else 1
-    f_result = f.array[:, :, :-1] if f_count > 2 else f.array
+    if as_array:
+        f_result = f[:, :, :-1] if f_count > 2 else f
+    else:
+        f_result = f.array[:, :, :-1] if f_count > 2 else f.array
     f_alpha = f.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(f, np.ndarray)) or (

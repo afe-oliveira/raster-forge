@@ -23,7 +23,10 @@ def test(data_distance):
         as_array=as_array,
     )
     d_count = d.array.shape[-1] if len(d.array.shape) > 2 else 1
-    d_result = d.array[:, :, :-1] if d_count > 2 else d.array
+    if as_array:
+        d_result = d[:, :, :-1] if d_count > 2 else d
+    else:
+        d_result = d.array[:, :, :-1] if d_count > 2 else d.array
     d_alpha = d.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(d, np.ndarray)) or (

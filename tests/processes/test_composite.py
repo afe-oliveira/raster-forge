@@ -13,7 +13,10 @@ def test(data_composite):
 
     c = composite(layers=layers, alpha=alpha, gamma=gamma, as_array=as_array)
     c_count = c.array.shape[-1] if len(c.array.shape) > 2 else 1
-    c_result = c.array[:, :, :-1] if c_count > 2 else c.array
+    if as_array:
+        c_result = c[:, :, :-1] if c_count > 2 else c
+    else:
+        c_result = c.array[:, :, :-1] if c_count > 2 else c.array
     c_alpha = c.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(c, np.ndarray)) or (

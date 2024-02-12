@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
 import spyndex
@@ -9,7 +9,7 @@ from rforge.tools.data_validation import check_layer
 def index(
     index_id: str,
     parameters: dict,
-    alpha: Optional[np.ndarray] = None,
+    alpha: Optional[Union[Layer, np.ndarray]] = None,
     thresholds: Optional[tuple[float, float]] = None,
     binarize: bool = False,
     as_array: bool = False,

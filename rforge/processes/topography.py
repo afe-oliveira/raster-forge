@@ -9,7 +9,7 @@ from rforge.tools.exceptions import Errors
 def slope(
     dem: Union[Layer, np.ndarray],
     units: str = "degrees",
-    alpha: Optional[np.ndarray] = None,
+    alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
 ) -> Layer | np.ndarray:
     """Calculate the slope of a terrain based on a Digital Elevation Model (DEM).
@@ -54,7 +54,7 @@ def slope(
 def aspect(
     dem: Union[Layer, np.ndarray],
     units: str = "degrees",
-    alpha: Optional[np.ndarray] = None,
+    alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
 ) -> Layer | np.ndarray:
     """Calculate the aspect of a terrain slope based on a Digital Elevation Model (DEM).

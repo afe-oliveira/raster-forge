@@ -13,15 +13,21 @@ def test_slope(data_topography):
     result = data_topography.get("result", None)
 
     s = slope(dem=dem, units=units, alpha=alpha, as_array=as_array)
-    s_array = s.array if as_array else s
-    s_count = s_array.shape[-1] if len(s_array.shape) > 2 else 1
+    s_count = s.array.shape[-1] if len(s.array.shape) > 2 else 1
+    if as_array:
+        s_result = s[:, :, :-1] if s_count > 2 else s
+    else:
+        s_result = s.array[:, :, :-1] if s_count > 2 else s.array
+    s_alpha = s.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(s, np.ndarray)) or (
-        not as_array and isinstance(s, Layer)
+            not as_array and isinstance(s, Layer)
     )
-    assert (alpha is None and s_count == 1) or (alpha is not None and s_count == 2)
-    assert s_array == result
-    assert alpha is None or (alpha is not None and s_array[-1] == alpha)
+    assert (alpha is None and s_count == 1) or (
+            alpha is not None and s_count == 2
+    )
+    assert s_result == result
+    assert s_alpha == alpha
 
 
 def test_aspect(data_topography):
@@ -33,15 +39,21 @@ def test_aspect(data_topography):
     result = data_topography.get("result", None)
 
     a = aspect(dem=dem, units=units, alpha=alpha, as_array=as_array)
-    a_array = a.array if as_array else a
-    a_count = a_array.shape[-1] if len(a_array.shape) > 2 else 1
+    a_count = a.array.shape[-1] if len(a.array.shape) > 2 else 1
+    if as_array:
+        a_result = a[:, :, :-1] if a_count > 2 else a
+    else:
+        a_result = a.array[:, :, :-1] if a_count > 2 else a.array
+    a_alpha = a.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(a, np.ndarray)) or (
-        not as_array and isinstance(a, Layer)
+            not as_array and isinstance(a, Layer)
     )
-    assert (alpha is None and a_count == 1) or (alpha is not None and a_count == 2)
-    assert a_array == result
-    assert alpha is None or (alpha is not None and a_array[-1] == alpha)
+    assert (alpha is None and a_count == 1) or (
+            alpha is not None and a_count == 2
+    )
+    assert a_result == result
+    assert a_alpha == alpha
 
 
 def test_slope_errors(data_topography_error):
