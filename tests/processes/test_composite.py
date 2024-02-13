@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-from rforge.containers.layer import Layer
 from rforge.processes.composite import composite
 
 
@@ -10,18 +9,10 @@ def test(data_composite):
     alpha = data_composite.get("alpha", None)
     gamma = data_composite.get("gamma", None)
     as_array = data_composite.get("as_array", None)
+    result = data_composite.get("result", None)
 
     c = composite(layers=layers, alpha=alpha, gamma=gamma, as_array=as_array)
-    c_result = c if as_array else c.array
-
-    for i in range(len(layers)):
-        layers[i] = layers[i].array if isinstance(layers[i], Layer) else layers[i]
-
-    alpha = alpha.array if isinstance(alpha, Layer) else alpha
-
-    assert (alpha is None and np.array_equal(c_result, np.dstack(layers))) or (
-        alpha is not None and np.array_equal(c_result, np.dstack([layers, alpha]))
-    )
+    assert (as_array and np.array_equal(c, result)) or (not as_array and c == result)
 
 
 def test_errors(data_composite_error):

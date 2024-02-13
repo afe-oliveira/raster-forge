@@ -1,14 +1,11 @@
-import numpy as np
+import pickle
 import pytest
 
-from rforge.containers.layer import Layer
-
-MIN = 0
-MAX = 25000
-SHAPE = (5, 5)
+with open("tests/files/composite.pkl", "rb") as file:
+    parameters = pickle.load(file)
 
 
-@pytest.fixture(params=[])
+@pytest.fixture(params=parameters)
 def data_composite(request):
     """Fixture that defines the raster initialization data to be tested."""
     return request.param
