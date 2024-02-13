@@ -25,6 +25,10 @@ def height(
 
     Returns:
       Height difference raster map.
+
+    Raises:
+      TypeError:
+        If inputs are not of the accepted type.
     """
     dtm = check_layer(dtm)
     dsm = check_layer(dsm)

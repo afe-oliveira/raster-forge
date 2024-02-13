@@ -26,6 +26,10 @@ def slope(
 
     Returns:
       Slope map in the desired unit.
+
+    Raises:
+      TypeError:
+        If inputs are not of the accepted type.
     """
     array = check_layer(dem)
 

@@ -32,6 +32,10 @@ def distance(
 
     Returns:
       Distance field layer.
+
+    Raises:
+      TypeError:
+        If inputs are not of the accepted type.
     """
     array = check_layer(layer)
 

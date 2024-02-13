@@ -31,6 +31,10 @@ def composite(
 
     Returns:
       Stacked composite layer.
+
+    Raises:
+      TypeError:
+        If inputs are not of the accepted type.
     """
     arrays = [check_layer(layer) for layer in layers]
     result = np.dstack(arrays)

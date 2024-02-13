@@ -41,6 +41,10 @@ def fuel(
 
     Returns:
       Fuel map.
+
+    Raises:
+      TypeError:
+        If inputs are not of the accepted type.
     """
     coverage = check_layer(coverage)
     height = check_layer(height)

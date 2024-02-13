@@ -33,6 +33,10 @@ def index(
 
     Returns:
       Computed index as a numpy array.
+
+    Raises:
+      TypeError:
+        If inputs are not of the accepted type.
     """
     for key, value in parameters.items():
         aux_value = check_layer(value)
