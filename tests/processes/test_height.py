@@ -21,11 +21,9 @@ def test(data_height):
     h_alpha = h.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(h, np.ndarray)) or (
-            not as_array and isinstance(h, Layer)
+        not as_array and isinstance(h, Layer)
     )
-    assert (alpha is None and h_count == 1) or (
-            alpha is not None and h_count == 2
-    )
+    assert (alpha is None and h_count == 1) or (alpha is not None and h_count == 2)
     assert h_result == result
     assert h_alpha == alpha
 

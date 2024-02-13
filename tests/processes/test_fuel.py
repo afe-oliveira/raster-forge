@@ -36,11 +36,9 @@ def test(data_fuel):
     f_alpha = f.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(f, np.ndarray)) or (
-            not as_array and isinstance(f, Layer)
+        not as_array and isinstance(f, Layer)
     )
-    assert (alpha is None and f_count == 1) or (
-            alpha is not None and f_count == 2
-    )
+    assert (alpha is None and f_count == 1) or (alpha is not None and f_count == 2)
     assert f_result == result
     assert f_alpha == alpha
 

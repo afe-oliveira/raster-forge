@@ -30,11 +30,9 @@ def test(data_index):
     i_alpha = i.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(i, np.ndarray)) or (
-            not as_array and isinstance(i, Layer)
+        not as_array and isinstance(i, Layer)
     )
-    assert (alpha is None and i_count == 1) or (
-            alpha is not None and i_count == 2
-    )
+    assert (alpha is None and i_count == 1) or (alpha is not None and i_count == 2)
     assert i_result == result
     assert i_alpha == alpha
 

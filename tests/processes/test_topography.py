@@ -21,11 +21,9 @@ def test_slope(data_topography):
     s_alpha = s.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(s, np.ndarray)) or (
-            not as_array and isinstance(s, Layer)
+        not as_array and isinstance(s, Layer)
     )
-    assert (alpha is None and s_count == 1) or (
-            alpha is not None and s_count == 2
-    )
+    assert (alpha is None and s_count == 1) or (alpha is not None and s_count == 2)
     assert s_result == result
     assert s_alpha == alpha
 
@@ -47,11 +45,9 @@ def test_aspect(data_topography):
     a_alpha = a.array[:, :, -1] if alpha is not None else None
 
     assert (as_array and isinstance(a, np.ndarray)) or (
-            not as_array and isinstance(a, Layer)
+        not as_array and isinstance(a, Layer)
     )
-    assert (alpha is None and a_count == 1) or (
-            alpha is not None and a_count == 2
-    )
+    assert (alpha is None and a_count == 1) or (alpha is not None and a_count == 2)
     assert a_result == result
     assert a_alpha == alpha
 
