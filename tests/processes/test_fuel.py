@@ -28,19 +28,7 @@ def test(data_fuel):
         alpha=alpha,
         as_array=as_array,
     )
-    f_count = f.array.shape[-1] if len(f.array.shape) > 2 else 1
-    if as_array:
-        f_result = f[:, :, :-1] if f_count > 2 else f
-    else:
-        f_result = f.array[:, :, :-1] if f_count > 2 else f.array
-    f_alpha = f.array[:, :, -1] if alpha is not None else None
-
-    assert (as_array and isinstance(f, np.ndarray)) or (
-        not as_array and isinstance(f, Layer)
-    )
-    assert (alpha is None and f_count == 1) or (alpha is not None and f_count == 2)
-    assert f_result == result
-    assert f_alpha == alpha
+    assert (as_array and np.array_equal(f, result)) or (not as_array and f == result)
 
 
 def test_errors(data_fuel_error):

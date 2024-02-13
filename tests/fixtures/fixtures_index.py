@@ -1,4 +1,10 @@
+import pickle
+
 import pytest
+
+
+with open("tests/files/index.pkl", "rb") as file:
+    parameters = pickle.load(file)
 
 
 @pytest.fixture(params=[])
