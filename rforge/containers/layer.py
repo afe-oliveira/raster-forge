@@ -100,6 +100,27 @@ class Layer:
         self._transform = transform
         self._units = units
 
+    def __eq__(self, other):
+        if isinstance(other, Layer):
+            return (
+                    np.array_equal(self._array, other.array)
+                    and self._bounds == other.bounds
+                    and self._crs == other.crs
+                    and self._driver == other.driver
+                    and self._no_data == other.no_data
+                    and self._transform == other.transform
+                    and self._units == other.units
+            )
+        elif isinstance(other, np.ndarray):
+            return (
+                    np.array_equal(self._array, other)
+                    and self.width == other.shape[1]
+                    and self.height == other.shape[0]
+                    and self.count == (other.shape[2] if len(other.shape) == 3 else 1)
+            )
+        else:
+            return False
+
     def __str__(self) -> str:
         return str(
             {
@@ -252,7 +273,7 @@ class Layer:
 
     @property
     def resolution(self) -> float:
-        if self._array is not None:
+        if self._array is not None and self._transform is not None:
             return self._transform[1]
         else:
             return 0
