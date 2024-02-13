@@ -13,7 +13,7 @@ def distance(
     invert: bool = False,
     mask_size: int = 3,
     as_array: bool = False,
-) -> np.ndarray | Layer:
+) -> Union[np.ndarray, Layer]:
     """Calculate the distance field of a geographical region.
 
     Args:

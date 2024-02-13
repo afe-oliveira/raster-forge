@@ -16,7 +16,7 @@ def composite(
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     gamma: Optional[list[float]] = None,
     as_array: bool = False,
-) -> np.ndarray | Layer:
+) -> Union[np.ndarray, Layer]:
     """Stacks all provided layers into a single array in order, including alpha. Applies gamma correction if provided.
 
     Args:

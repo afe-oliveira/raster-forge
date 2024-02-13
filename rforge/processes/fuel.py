@@ -16,7 +16,7 @@ def fuel(
     tree_height: float,
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
-) -> np.ndarray | Layer :
+) -> Union[np.ndarray, Layer]:
     """Calculate the fuel map of the terrain based on defined fuel models.
 
     Args:

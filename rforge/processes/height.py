@@ -10,7 +10,7 @@ def height(
     dsm: Union[Layer, np.ndarray],
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
-) -> np.ndarray | Layer:
+) -> Union[np.ndarray, Layer]:
     """Calculate the height difference between the Digital Terrain Model (DTM) and the Digital Surface Model (DSM).
 
     Args:

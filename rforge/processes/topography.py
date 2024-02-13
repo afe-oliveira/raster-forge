@@ -11,7 +11,7 @@ def slope(
     units: str = "degrees",
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
-) -> Layer | np.ndarray:
+) -> Union[np.ndarray, Layer]:
     """Calculate the slope of a terrain based on a Digital Elevation Model (DEM).
 
     Args:
@@ -56,7 +56,7 @@ def aspect(
     units: str = "degrees",
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
-) -> Layer | np.ndarray:
+) -> Union[np.ndarray, Layer]:
     """Calculate the aspect of a terrain slope based on a Digital Elevation Model (DEM).
 
     Args:

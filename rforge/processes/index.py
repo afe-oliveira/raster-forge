@@ -13,7 +13,7 @@ def index(
     thresholds: Optional[tuple[float, float]] = None,
     binarize: bool = False,
     as_array: bool = False,
-) -> np.ndarray | Layer:
+) -> Union[np.ndarray, Layer]:
     """
     Compute an index from the input parameters.
 
