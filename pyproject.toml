@@ -78,7 +78,7 @@ python_version = "3.8"
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-v --tb=long"
+addopts = "-v --tb=short --strict-markers"
 testpaths = [ "tests" ]
 xfail_strict = "true"
 markers = []
