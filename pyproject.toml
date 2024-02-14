@@ -35,7 +35,6 @@ devel = [
     "pre-commit",
     "pytest >= 7.0.0",
     "pytest-cov",
-    "pytest-qt",
 ]
 
 [project.gui-scripts]
@@ -74,8 +73,8 @@ docstring-convention = "google"
 
 [tool.mypy]
 python_version = "3.8"
-warn_unused_ignores = true
-ignore_missing_imports = true
+#warn_unused_ignores = true
+#ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"

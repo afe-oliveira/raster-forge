@@ -8,5 +8,3 @@ from tests.fixtures.fixtures_fuel import data_fuel, data_fuel_error
 from tests.fixtures.fixtures_height import data_height, data_height_error
 from tests.fixtures.fixtures_index import data_index, data_index_error
 from tests.fixtures.fixtures_topography import data_topography, data_topography_error
-
-from tests.fixtures.fixtures_gui import main_window
