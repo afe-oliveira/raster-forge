@@ -4,6 +4,8 @@ import pytest
 
 with open("tests/files/fuel.pkl", "rb") as file:
     parameters = pickle.load(file)
+
+
 @pytest.fixture(params=parameters)
 def data_fuel(request):
     """Fixture that defines the raster initialization data to be tested."""

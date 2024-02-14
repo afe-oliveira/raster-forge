@@ -113,8 +113,7 @@ class _IndicesPanel(_ProcessPanel):
         )
         binarize = self._references["Binarization"].isChecked()
 
-        layer = Layer()
-        layer.array = index(selected_index, parameters, alpha, thresholds, binarize)
+        layer = index(selected_index, parameters, alpha, thresholds, binarize)
         _data.viewer = layer
         _data.viewer_changed.emit()
 

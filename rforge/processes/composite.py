@@ -14,7 +14,7 @@ PRESET_COMPOSITES = {
 def composite(
     layers: Union[list[Layer], list[np.ndarray]],
     alpha: Optional[Union[Layer, np.ndarray]] = None,
-    gamma: Optional[list[float]] = None,
+    gamma: Optional[Union[list, tuple]] = None,
     as_array: bool = False,
 ) -> Union[np.ndarray, Layer]:
     """Stacks all provided layers into a single array in order, including alpha. Applies gamma correction if provided.
@@ -36,16 +36,28 @@ def composite(
       TypeError:
         If inputs are not of the accepted type.
     """
+    if not isinstance(as_array, bool):
+        raise TypeError(Errors.bad_input(name="as_array", expected_type="a boolean"))
     arrays = [check_layer(layer) for layer in layers]
     result = np.dstack(arrays)
 
-    if gamma is not None and isinstance(gamma, list) and len(arrays) == len(gamma):
-        if all(isinstance(element, (int, float)) for element in gamma):
-            gamma = [float(element) for element in gamma]
-            result = np.power(result, np.array(gamma)[:, np.newaxis, np.newaxis])
+    if gamma is not None:
+        if isinstance(gamma, (list, tuple)) and len(arrays) == len(gamma):
+            if all(isinstance(element, (int, float)) for element in gamma):
+                gamma = list(map(float, gamma))
+                result = np.power(result, np.array(gamma))
+            else:
+                raise TypeError(
+                    Errors.bad_input(
+                        name="gamma", expected_type="a list or tuple of numeric values"
+                    )
+                )
         else:
             raise TypeError(
-                Errors.bad_input(name="gamma", expected_type="a list of numeric values")
+                Errors.bad_input(
+                    name="gamma",
+                    expected_type="the same amount of elements as there are layers",
+                )
             )
 
     if alpha is not None:

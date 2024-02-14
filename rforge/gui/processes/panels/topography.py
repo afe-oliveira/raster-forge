@@ -49,11 +49,11 @@ class _TopographyPanel(_ProcessPanel):
             else None
         )
 
-        layer = Layer()
+        layer = None
         if self.selector_combo.currentText() == "Slope":
-            layer.array = slope(dem=input_dem, units=input_units, alpha=input_alpha)
+            layer = slope(dem=input_dem, units=input_units, alpha=input_alpha)
         elif self.selector_combo.currentText() == "Aspect":
-            layer.array = aspect(dem=input_dem, units=input_units, alpha=input_alpha)
+            layer = aspect(dem=input_dem, units=input_units, alpha=input_alpha)
         _data.viewer = layer
         _data.viewer_changed.emit()
 

@@ -140,4 +140,3 @@ def data_layer_init(request):
 def data_layer_init_errors(request):
     """Fixture that defines the layer initialization data to be tested."""
     return request.param
-

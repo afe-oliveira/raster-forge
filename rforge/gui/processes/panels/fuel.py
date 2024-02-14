@@ -102,8 +102,7 @@ class _FuelMapPanel(_ProcessPanel):
         )
         input_tree_height = self._references["Tree Height"].value()
 
-        layer = Layer()
-        layer.array = fuel(
+        layer = fuel(
             coverage=input_coverage,
             distance=input_distance,
             height=input_height,

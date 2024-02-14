@@ -76,8 +76,7 @@ class _DistanceFieldPanel(_ProcessPanel):
         input_mask_size = int(self._references["Mask Size"].currentText())
         input_invert = self._references["Inversion"].isChecked()
 
-        layer = Layer()
-        layer.array = distance(
+        layer = distance(
             layer=input_layer,
             alpha=input_alpha,
             thresholds=input_thresholds,

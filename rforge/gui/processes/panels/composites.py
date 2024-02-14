@@ -61,10 +61,7 @@ class _CompositesPanel(_ProcessPanel):
         for component in PRESET_COMPOSITES[self.selector_combo.currentText()]:
             input_gamma.append(self._references[f"Gamma {component}"].value())
 
-        layer = Layer()
-        layer.array = Normalize()(
-            composite(layers=input_layers, alpha=input_alpha, gamma=input_gamma)
-        )
+        layer = composite(layers=input_layers, alpha=input_alpha, gamma=input_gamma)
 
         _data.viewer = layer
         _data.viewer_changed.emit()

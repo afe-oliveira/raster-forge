@@ -46,8 +46,7 @@ class _HeightPanel(_ProcessPanel):
             else None
         )
 
-        layer = Layer()
-        layer.array = height(dtm=input_dtm, dsm=input_dsm, alpha=input_alpha)
+        layer = height(dtm=input_dtm, dsm=input_dsm, alpha=input_alpha)
         _data.viewer = layer
         _data.viewer_changed.emit()
 
