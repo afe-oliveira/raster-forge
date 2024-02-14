@@ -36,32 +36,32 @@ def composite(
       TypeError:
         If inputs are not of the accepted type.
     """
-    if not isinstance(as_array, bool):
-        raise TypeError(Errors.bad_input(name="as_array", expected_type="a boolean"))
+    # Data Validation
     arrays = [check_layer(layer) for layer in layers]
-    result = np.dstack(arrays)
-
+    if alpha is not None:
+        alpha = check_layer(alpha)
     if gamma is not None:
-        if isinstance(gamma, (list, tuple)) and len(arrays) == len(gamma):
-            if all(isinstance(element, (int, float)) for element in gamma):
-                gamma = list(map(float, gamma))
-                result = np.power(result, np.array(gamma))
-            else:
-                raise TypeError(
-                    Errors.bad_input(
-                        name="gamma", expected_type="a list or tuple of numeric values"
-                    )
-                )
-        else:
+        if (
+            not isinstance(gamma, (list, tuple))
+            or len(arrays) != len(gamma)
+            or not all(isinstance(element, (int, float)) for element in gamma)
+        ):
             raise TypeError(
                 Errors.bad_input(
                     name="gamma",
-                    expected_type="the same amount of elements as there are layers",
+                    expected_type="a list or tuple of numeric values with the same amount of elements as there are layers",
                 )
             )
+    if not isinstance(as_array, bool):
+        raise TypeError(Errors.bad_input(name="as_array", expected_type="a boolean"))
+
+    result = np.dstack(arrays)
+
+    if gamma is not None:
+        gamma = list(map(float, gamma))
+        result = np.power(result, np.array(gamma))
 
     if alpha is not None:
-        alpha = check_layer(alpha)
         result = np.dstack([result, alpha])
 
     return result if as_array else Layer(result)

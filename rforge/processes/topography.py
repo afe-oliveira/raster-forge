@@ -32,6 +32,14 @@ def slope(
         If inputs are not of the accepted type.
     """
     array = check_layer(dem)
+    if alpha is not None:
+        alpha = check_layer(alpha)
+    if units not in ["degrees", "radians"]:
+        raise TypeError(
+            Errors.bad_input(name="units", expected_type="'degrees' or 'radians'")
+        )
+    if not isinstance(as_array, bool):
+        raise TypeError(Errors.bad_input(name="as_array", expected_type="a boolean"))
 
     result = np.arctan(
         np.sqrt(
@@ -40,16 +48,10 @@ def slope(
         )
     )
 
-    if units in ["degrees", "radians"]:
-        if units == "degrees":
-            result = np.degrees(result)
-    else:
-        raise TypeError(
-            Errors.bad_input(name="units", expected_type="'degrees' or 'radians'")
-        )
+    if units == "degrees":
+        result = np.degrees(result)
 
     if alpha is not None:
-        alpha = check_layer(alpha)
         result = np.dstack([result, alpha])
 
     return result if as_array else Layer(result)
@@ -77,22 +79,21 @@ def aspect(
       Aspect map in the desired unit.
     """
     array = check_layer(dem)
-
-    result = np.arctan2(-np.gradient(array, axis=0), np.gradient(array, axis=1))
-
-    if units in ["degrees", "radians"]:
-        if units == "degrees":
-            result = np.degrees(result)
-    else:
+    if alpha is not None:
+        alpha = check_layer(alpha)
+    if units not in ["degrees", "radians"]:
         raise TypeError(
             Errors.bad_input(name="units", expected_type="'degrees' or 'radians'")
         )
+    if not isinstance(as_array, bool):
+        raise TypeError(Errors.bad_input(name="as_array", expected_type="a boolean"))
+
+    result = np.arctan2(-np.gradient(array, axis=0), np.gradient(array, axis=1))
+
+    if units == "degrees":
+        result = np.degrees(result)
 
     if alpha is not None:
-        result = np.dstack([result, alpha])
-
-    if alpha is not None:
-        alpha = check_layer(alpha)
         result = np.dstack([result, alpha])
 
     return result if as_array else Layer(result)

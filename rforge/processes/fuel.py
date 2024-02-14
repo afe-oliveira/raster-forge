@@ -4,6 +4,7 @@ from typing import Optional, Union
 import numpy as np
 from rforge.containers.layer import Layer
 from rforge.tools.data_validation import check_layer
+from rforge.tools.exceptions import Errors
 
 
 def fuel(
@@ -12,7 +13,7 @@ def fuel(
     distance: Union[Layer, np.ndarray],
     water: Union[Layer, np.ndarray],
     artificial: Union[Layer, np.ndarray],
-    models: tuple[int, int, int],
+    models: Union[list, tuple[int, int, int]],
     tree_height: float,
     alpha: Optional[Union[Layer, np.ndarray]] = None,
     as_array: bool = False,
@@ -51,6 +52,22 @@ def fuel(
     distance = check_layer(distance)
     water = check_layer(water)
     artificial = check_layer(artificial)
+    if models is None or not (
+        isinstance(models, (list, tuple))
+        and len(models) == 3
+        and all(isinstance(item, int) for item in models)
+    ):
+        raise TypeError(
+            Errors.bad_input(name="thresholds", expected_type="a tuple or list with three floats")
+        )
+    if not isinstance(tree_height, (float, int)):
+        raise TypeError(
+            Errors.bad_input(name="tree_height", expected_type="an int or float")
+        )
+    if alpha is not None:
+        alpha = check_layer(alpha)
+    if not isinstance(as_array, bool):
+        raise TypeError(Errors.bad_input(name="as_array", expected_type="a boolean"))
 
     # Estimate Sub Layer Average
     sub_coverage_average = np.mean(np.where(height < tree_height, coverage, 0))
@@ -82,7 +99,6 @@ def fuel(
     result = np.where(water > 0, 98, result)
 
     if alpha is not None:
-        alpha = check_layer(alpha)
         result = np.dstack([result, alpha])
 
     return result if as_array else Layer(result)
