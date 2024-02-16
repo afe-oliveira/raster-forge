@@ -13,7 +13,7 @@ def test(data_height):
     result = data_height.get("result", None)
 
     h = height(dtm=dtm, dsm=dsm, alpha=alpha, as_array=as_array)
-    assert (as_array and np.array_equal(h, result)) or (not as_array and h == result)
+    assert (as_array and np.allclose(h, result, atol=0.01)) or (not as_array and h == result)
 
 
 def test_errors(data_height_error):

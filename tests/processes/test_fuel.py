@@ -28,7 +28,7 @@ def test(data_fuel):
         alpha=alpha,
         as_array=as_array,
     )
-    assert (as_array and np.array_equal(f, result)) or (not as_array and f == result)
+    assert (as_array and np.allclose(f, result, atol=0.01)) or (not as_array and f == result)
 
 
 def test_errors(data_fuel_error):

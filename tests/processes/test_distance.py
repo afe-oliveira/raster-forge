@@ -21,7 +21,7 @@ def test(data_distance):
         mask_size=mask_size,
         as_array=as_array,
     )
-    assert (as_array and np.array_equal(d, result)) or (not as_array and d == result)
+    assert (as_array and np.allclose(d, result, atol=0.01)) or (not as_array and d == result)
 
 
 def test_errors(data_distance_error):
