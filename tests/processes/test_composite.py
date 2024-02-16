@@ -12,7 +12,10 @@ def test(data_composite):
     result = data_composite.get("result", None)
 
     c = composite(layers=layers, alpha=alpha, gamma=gamma, as_array=as_array)
-    assert (as_array and np.array_equal(c, result)) or (not as_array and c == result)
+    if as_array:
+        np.testing.assert_array_equal(c, result, verbose=True)
+    else:
+        assert c == result
 
 
 def test_errors(data_composite_error):
