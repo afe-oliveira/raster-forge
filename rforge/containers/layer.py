@@ -103,7 +103,7 @@ class Layer:
     def __eq__(self, other):
         if isinstance(other, Layer):
             return (
-                np.array_equal(self._array, other.array)
+                np.allclose(self._array, other.array, atol=0.01)
                 and self._bounds == other.bounds
                 and self._crs == other.crs
                 and self._driver == other.driver
@@ -113,7 +113,7 @@ class Layer:
             )
         elif isinstance(other, np.ndarray):
             return (
-                np.array_equal(self._array, other)
+                np.allclose(self._array, other, atol=0.01)
                 and self.width == other.shape[1]
                 and self.height == other.shape[0]
                 and self.count == (other.shape[2] if len(other.shape) == 3 else 1)
