@@ -35,6 +35,7 @@ devel = [
     "pre-commit",
     "pytest >= 7.0.0",
     "pytest-cov",
+    "pytest-qt",
 ]
 
 [project.gui-scripts]
