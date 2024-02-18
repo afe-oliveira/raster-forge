@@ -82,6 +82,32 @@ def artificial(request):
     return request.param
 
 
+@pytest.fixture(
+    params=[
+        Layer(np.random.randint(0, MAX, size=SIZE)),
+        np.random.randint(0, MAX, size=SIZE),
+        Layer(np.random.rand(7, 7) * MAX),
+        np.random.rand(7, 7) * MAX,
+    ]
+)
+def dsm(request):
+    """Fixture that defines the raster initialization data to be tested."""
+    return request.param
+
+
+@pytest.fixture(
+    params=[
+        Layer(np.random.randint(0, MAX, size=SIZE)),
+        np.random.randint(0, MAX, size=SIZE),
+        Layer(np.random.rand(7, 7) * MAX),
+        np.random.rand(7, 7) * MAX,
+    ]
+)
+def dtm(request):
+    """Fixture that defines the raster initialization data to be tested."""
+    return request.param
+
+
 @pytest.fixture(params=[[np.full(SIZE, "A"), TypeError]])
 def layer_error(request):
     """Fixture that defines the raster initialization data to be tested."""

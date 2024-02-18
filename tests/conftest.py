@@ -8,6 +8,8 @@ from tests.fixtures.layer import (
     height,
     water,
     artificial,
+    dtm,
+    dsm,
 )
 from tests.fixtures.alpha import alpha, alpha_error
 from tests.fixtures.thresholds import thresholds, thresholds_error
