@@ -22,7 +22,9 @@ def test(data_index):
         binarize=binarize,
         as_array=as_array,
     )
-    assert (as_array and np.allclose(i, result, atol=0.01)) or (not as_array and i == result)
+    assert (as_array and np.allclose(i, result, atol=0.01)) or (
+        not as_array and i == result
+    )
 
 
 def test_errors(data_index_error):

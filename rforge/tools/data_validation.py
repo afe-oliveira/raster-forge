@@ -19,7 +19,11 @@ def check_layer(layer: Union[Layer, np.ndarray]):
       TypeError:
         If the input is not a non-empty Layer object or a non-empty numerical NumPy array.
     """
-    if isinstance(layer, Layer) and layer.array is not None and np.isreal(layer.array).all():
+    if (
+        isinstance(layer, Layer)
+        and layer.array is not None
+        and np.isreal(layer.array).all()
+    ):
         return layer.array
     elif isinstance(layer, np.ndarray) and layer is not None and np.isreal(layer).all():
         return layer

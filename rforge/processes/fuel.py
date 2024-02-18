@@ -58,7 +58,9 @@ def fuel(
         and all(isinstance(item, int) for item in models)
     ):
         raise TypeError(
-            Errors.bad_input(name="thresholds", expected_type="a tuple or list with three floats")
+            Errors.bad_input(
+                name="thresholds", expected_type="a tuple or list with three floats"
+            )
         )
     if not isinstance(tree_height, (float, int)):
         raise TypeError(

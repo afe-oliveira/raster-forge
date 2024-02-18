@@ -47,12 +47,14 @@ def index(
         alpha = check_layer(alpha)
     if thresholds is not None:
         if thresholds is not None and not (
-                isinstance(thresholds, (list, tuple))
-                and len(thresholds) == 2
-                and all(isinstance(item, (int, float)) for item in thresholds)
+            isinstance(thresholds, (list, tuple))
+            and len(thresholds) == 2
+            and all(isinstance(item, (int, float)) for item in thresholds)
         ):
             raise TypeError(
-                Errors.bad_input(name="thresholds", expected_type="a tuple with two numericalw")
+                Errors.bad_input(
+                    name="thresholds", expected_type="a tuple with two numericalw"
+                )
             )
     if not isinstance(binarize, bool):
         raise TypeError(Errors.bad_input(name="binarize", expected_type="a boolean"))

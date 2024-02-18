@@ -13,7 +13,9 @@ def test_slope(data_topography):
     result = data_topography.get("result_slope", None)
 
     s = slope(dem=dem, units=units, alpha=alpha, as_array=as_array)
-    assert (as_array and np.allclose(s, result, atol=0.01)) or (not as_array and s == result)
+    assert (as_array and np.allclose(s, result, atol=0.01)) or (
+        not as_array and s == result
+    )
 
 
 def test_aspect(data_topography):
@@ -25,7 +27,9 @@ def test_aspect(data_topography):
     result = data_topography.get("result_aspect", None)
 
     a = aspect(dem=dem, units=units, alpha=alpha, as_array=as_array)
-    assert (as_array and np.allclose(a, result, atol=0.01)) or (not as_array and a == result)
+    assert (as_array and np.allclose(a, result, atol=0.01)) or (
+        not as_array and a == result
+    )
 
 
 def test_slope_errors(data_topography_error):

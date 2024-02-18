@@ -1,10 +1,43 @@
-from tests.fixtures.fixtures_layer import data_layer_init, data_layer_init_errors
-from tests.fixtures.fixtures_raster import data_raster_init, data_raster_init_errors
-from tests.fixtures.fixtures_import import data_import, data_import_errors
+import pickle
 
-from tests.fixtures.fixtures_composite import data_composite, data_composite_error
-from tests.fixtures.fixtures_distance import data_distance, data_distance_error
-from tests.fixtures.fixtures_fuel import data_fuel, data_fuel_error
-from tests.fixtures.fixtures_height import data_height, data_height_error
-from tests.fixtures.fixtures_index import data_index, data_index_error
-from tests.fixtures.fixtures_topography import data_topography, data_topography_error
+from tests.fixtures.layer import (
+    layer,
+    layer_error,
+    coverage,
+    distance,
+    height,
+    water,
+    artificial,
+)
+from tests.fixtures.alpha import alpha, alpha_error
+from tests.fixtures.thresholds import thresholds, thresholds_error
+from tests.fixtures.mask_size import mask_size, mask_size_error
+from tests.fixtures.invert import invert, invert_error
+from tests.fixtures.as_array import as_array, as_array_error
+from tests.fixtures.fuel_models import fuel_models, fuel_models_error
+from tests.fixtures.tree_height import tree_height, tree_height_error
+
+from tests.files.benchmarks.test_data import (
+    COMPOSITE_TEST_DATA,
+    DISTANCE_TEST_DATA,
+    FUEL_TEST_DATA,
+    HEIGHT_TEST_DATA,
+    INDEX_TEST_DATA,
+    SLOPE_TEST_DATA,
+    ASPECT_TEST_DATA,
+)
+
+
+def pytest_sessionfinish(session, exitstatus):
+    COMPOSITE_TEST_DATA.dump("tests/files/benchmarks/composite.pkl")
+
+    DISTANCE_TEST_DATA.dump("tests/files/benchmarks/distance.pkl")
+
+    FUEL_TEST_DATA.dump("tests/files/benchmarks/fuel.pkl")
+
+    HEIGHT_TEST_DATA.dump("tests/files/benchmarks/height.pkl")
+
+    INDEX_TEST_DATA.dump("tests/files/benchmarks/index.pkl")
+
+    SLOPE_TEST_DATA.dump("tests/files/benchmarks/slope.pkl")
+    ASPECT_TEST_DATA.dump("tests/files/benchmarks/aspect.pkl")

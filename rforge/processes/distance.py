@@ -47,10 +47,13 @@ def distance(
     if thresholds is not None and not (
         isinstance(thresholds, (list, tuple))
         and len(thresholds) == 2
-        and all(isinstance(item, (int, float)) for item in thresholds)
+        and all(isinstance(item, (np.number, int, float)) for item in thresholds)
+        and thresholds[0] < thresholds[1]
     ):
         raise TypeError(
-            Errors.bad_input(name="thresholds", expected_type="a tuple with two numericalw")
+            Errors.bad_input(
+                name="thresholds", expected_type="a tuple with two numericalw"
+            )
         )
     if not isinstance(invert, bool):
         raise TypeError(Errors.bad_input(name="invert", expected_type="a boolean"))

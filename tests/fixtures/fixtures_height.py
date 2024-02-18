@@ -5,7 +5,7 @@ import pytest
 
 from rforge.containers.layer import Layer
 
-with open("tests/files/height.pkl", "rb") as file:
+with open("benchmarks/files/height.pkl", "rb") as file:
     parameters = pickle.load(file)
 
 
