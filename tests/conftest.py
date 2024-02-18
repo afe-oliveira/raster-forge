@@ -22,6 +22,8 @@ from tests.fixtures.index_id import index_id, index_id_error
 from tests.fixtures.index_parameters import index_parameters, index_parameters_error
 from tests.fixtures.binarize import binarize, binarize_error
 from tests.fixtures.angle_units import angle_units, angle_units_error
+from tests.fixtures.layer_list import layer_list, layer_list_error
+from tests.fixtures.gamma import gamma
 
 from tests.files.benchmarks.test_data import (
     COMPOSITE_TEST_DATA,
@@ -35,6 +37,7 @@ from tests.files.benchmarks.test_data import (
 
 
 def pytest_sessionfinish(session, exitstatus):
+    return
     COMPOSITE_TEST_DATA.dump("tests/files/benchmarks/composite.pkl")
 
     DISTANCE_TEST_DATA.dump("tests/files/benchmarks/distance.pkl")
