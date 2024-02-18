@@ -18,6 +18,9 @@ from tests.fixtures.invert import invert, invert_error
 from tests.fixtures.as_array import as_array, as_array_error
 from tests.fixtures.fuel_models import fuel_models, fuel_models_error
 from tests.fixtures.tree_height import tree_height, tree_height_error
+from tests.fixtures.index_id import index_id, index_id_error
+from tests.fixtures.index_parameters import index_parameters, index_parameters_error
+from tests.fixtures.binarize import binarize, binarize_error
 
 from tests.files.benchmarks.test_data import (
     COMPOSITE_TEST_DATA,

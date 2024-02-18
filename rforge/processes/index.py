@@ -49,7 +49,8 @@ def index(
         if thresholds is not None and not (
             isinstance(thresholds, (list, tuple))
             and len(thresholds) == 2
-            and all(isinstance(item, (int, float)) for item in thresholds)
+            and all(isinstance(item, (np.number, int, float)) for item in thresholds)
+            and thresholds[0] < thresholds[1]
         ):
             raise TypeError(
                 Errors.bad_input(
