@@ -60,6 +60,7 @@ from tests.files.benchmarks.test_data import (
 
 def pytest_sessionfinish(session, exitstatus):
     return
+    """
     COMPOSITE_TEST_DATA.dump("tests/files/benchmarks/composite.pkl")
 
     DISTANCE_TEST_DATA.dump("tests/files/benchmarks/distance.pkl")
@@ -72,3 +73,4 @@ def pytest_sessionfinish(session, exitstatus):
 
     SLOPE_TEST_DATA.dump("tests/files/benchmarks/slope.pkl")
     ASPECT_TEST_DATA.dump("tests/files/benchmarks/aspect.pkl")
+    """
