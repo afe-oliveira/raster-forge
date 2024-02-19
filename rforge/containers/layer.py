@@ -35,7 +35,7 @@ class Layer:
     def __init__(
         self,
         array: Optional[np.ndarray[np.int32]] = None,
-        bounds: Optional[Dict[str, float]] = None,
+        bounds: Optional[Dict[str, Union[float, int]]] = None,
         crs: Optional[str] = None,
         driver: Optional[str] = None,
         no_data: Optional[Union[int, float]] = None,

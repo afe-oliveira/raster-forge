@@ -5,16 +5,8 @@ import pytest
 from rforge.containers.layer import Layer
 
 
-def test_init(data_layer_init):
+def test_init(array, bounds, crs, driver, no_data, transform, layer_units):
     """Test Layer initialization function and variable setting."""
-    array = data_layer_init.get("array", None)
-    bounds = data_layer_init.get("bounds", None)
-    crs = data_layer_init.get("crs", None)
-    driver = data_layer_init.get("driver", None)
-    no_data = data_layer_init.get("no_data", None)
-    transform = data_layer_init.get("transform", None)
-    units = data_layer_init.get("units", None)
-
     l = Layer(
         array=array,
         bounds=bounds,
@@ -22,7 +14,7 @@ def test_init(data_layer_init):
         driver=driver,
         transform=transform,
         no_data=no_data,
-        units=units,
+        units=layer_units,
     )
 
     assert isinstance(l, Layer)
@@ -32,13 +24,13 @@ def test_init(data_layer_init):
     assert l.driver == driver
     assert l.no_data == no_data
     assert l.transform == transform
-    assert l.units == units
+    assert l.units == layer_units
     if l.array is not None:
         assert l.width == array.shape[1]
         assert l.height == array.shape[0]
         assert l.count == array.shape[2] if len(array.shape) > 2 else l.count == 1
         if transform is not None:
-            assert l.resolution == transform[2]
+            assert l.resolution == transform[1]
         assert (
             np.array_equal(l.mean, np.mean(array))
             if len(array.shape) <= 2
@@ -86,16 +78,64 @@ def test_init(data_layer_init):
         )
 
 
-def test_init_setter(data_layer_init):
-    """Test Layer initialization function and variable setting."""
-    array = data_layer_init.get("array", None)
-    bounds = data_layer_init.get("bounds", None)
-    crs = data_layer_init.get("crs", None)
-    driver = data_layer_init.get("driver", None)
-    no_data = data_layer_init.get("no_data", None)
-    transform = data_layer_init.get("transform", None)
-    units = data_layer_init.get("units", None)
+def test_init_array_error(array_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(array_error[1]):
+        Layer(
+            array=array_error[0],
+        )
 
+
+def test_init_bounds_error(bounds_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(bounds_error[1]):
+        Layer(
+            bounds=bounds_error[0],
+        )
+
+
+def test_init_crs_error(crs_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(crs_error[1]):
+        Layer(
+            crs=crs_error[0],
+        )
+
+
+def test_init_driver_error(driver_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(driver_error[1]):
+        Layer(
+            driver=driver_error[0],
+        )
+
+
+def test_init_no_data_error(no_data_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(no_data_error[1]):
+        Layer(
+            no_data=no_data_error[0],
+        )
+
+
+def test_init_transform_error(transform_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(transform_error[1]):
+        Layer(
+            transform=transform_error[0],
+        )
+
+
+def test_init_layer_units_error(layer_units_error):
+    """Test layer initialization function for expected errors."""
+    with pytest.raises(layer_units_error[1]):
+        Layer(
+            units=layer_units_error[0],
+        )
+
+
+def test_setter(array, bounds, crs, driver, no_data, transform, layer_units):
+    """Test Layer initialization function and variable setting."""
     l = Layer()
     l.array = array
     l.bounds = bounds
@@ -103,7 +143,7 @@ def test_init_setter(data_layer_init):
     l.driver = driver
     l.no_data = no_data
     l.transform = transform
-    l.units = units
+    l.units = layer_units
 
     assert isinstance(l, Layer)
     assert np.array_equal(l.array, array)
@@ -112,13 +152,13 @@ def test_init_setter(data_layer_init):
     assert l.driver == driver
     assert l.no_data == no_data
     assert l.transform == transform
-    assert l.units == units
+    assert l.units == layer_units
     if l.array is not None:
         assert l.width == array.shape[1]
         assert l.height == array.shape[0]
         assert l.count == array.shape[2] if len(array.shape) > 2 else l.count == 1
         if transform is not None:
-            assert l.resolution == transform[2]
+            assert l.resolution == transform[1]
         assert (
             np.array_equal(l.mean, np.mean(array))
             if len(array.shape) <= 2
@@ -166,7 +206,56 @@ def test_init_setter(data_layer_init):
         )
 
 
-def test_init_import(data_import):
+def test_setter_array_error(array_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(array_error[1]):
+        l.array = array_error[0]
+
+
+def test_setter_bounds_error(bounds_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(bounds_error[1]):
+        l.bounds = bounds_error[0]
+
+
+def test_setter_crs_error(crs_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(crs_error[1]):
+        l.crs = crs_error[0]
+
+
+def test_setter_driver_error(driver_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(driver_error[1]):
+        l.driver = driver_error[0]
+
+
+def test_setter_no_data_error(no_data_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(no_data_error[1]):
+        l.no_data = no_data_error[0]
+
+
+def test_setter_transform_error(transform_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(transform_error[1]):
+        l.transform = transform_error[0]
+
+
+def test_setter_layer_units_error(layer_units_error):
+    """Test layer initialization function for expected errors."""
+    l = Layer()
+    with pytest.raises(layer_units_error[1]):
+        l.units = layer_units_error[0]
+
+
+def test_import(data_import):
     """Test Layer import function."""
     data_path = data_import.get("data_path", None)
     info_path = data_import.get("info_path", None)
@@ -197,55 +286,11 @@ def test_init_import(data_import):
         assert l.std_dev == info_aux["standard_deviation"]
 
 
-def test_init_errors(data_layer_init_errors):
-    """Test layer initialization function for expected errors."""
-    array = data_layer_init_errors[0].get("array", None)
-    bounds = data_layer_init_errors[0].get("bounds", None)
-    crs = data_layer_init_errors[0].get("crs", None)
-    driver = data_layer_init_errors[0].get("driver", None)
-    no_data = data_layer_init_errors[0].get("no_data", None)
-    transform = data_layer_init_errors[0].get("transform", None)
-    units = data_layer_init_errors[0].get("units", None)
-
-    with pytest.raises(data_layer_init_errors[1]):
-        Layer(
-            array=array,
-            bounds=bounds,
-            crs=crs,
-            driver=driver,
-            transform=transform,
-            no_data=no_data,
-            units=units,
-        )
-
-
-def test_init_setter_errors(data_layer_init_errors):
-    """Test Layer initialization function and variable setting for expected errors."""
-    array = data_layer_init_errors[0].get("array", None)
-    bounds = data_layer_init_errors[0].get("bounds", None)
-    crs = data_layer_init_errors[0].get("crs", None)
-    driver = data_layer_init_errors[0].get("driver", None)
-    no_data = data_layer_init_errors[0].get("no_data", None)
-    transform = data_layer_init_errors[0].get("transform", None)
-    units = data_layer_init_errors[0].get("units", None)
-
-    l = Layer()
-
-    with pytest.raises(data_layer_init_errors[1]):
-        l.array = array
-        l.bounds = bounds
-        l.crs = crs
-        l.driver = driver
-        l.no_data = no_data
-        l.transform = transform
-        l.units = units
-
-
-def test_init_import_errors(data_import_errors):
+def test_import_error(data_import_error):
     """Test Layer import function."""
-    data_path = data_import_errors.get("data_path", None)
-    error = data_import_errors.get("error", None)
-    scale = data_import_errors.get("scale", None)
+    data_path = data_import_error.get("data_path", None)
+    error = data_import_error.get("error", None)
+    scale = data_import_error.get("scale", None)
 
     with pytest.raises(error):
         l = Layer()

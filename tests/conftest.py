@@ -1,6 +1,15 @@
 import pickle
 
-from tests.fixtures.layer import (
+from tests.fixtures.containers.array import array, array_error
+from tests.fixtures.containers.bounds import bounds, bounds_error
+from tests.fixtures.containers.crs import crs, crs_error
+from tests.fixtures.containers.data_import import data_import, data_import_error
+from tests.fixtures.containers.driver import driver, driver_error
+from tests.fixtures.containers.layer_units import layer_units, layer_units_error
+from tests.fixtures.containers.no_data import no_data, no_data_error
+from tests.fixtures.containers.transform import transform, transform_error
+
+from tests.fixtures.processes.layer import (
     layer,
     layer_error,
     coverage,
@@ -11,19 +20,15 @@ from tests.fixtures.layer import (
     dtm,
     dsm,
 )
-from tests.fixtures.alpha import alpha, alpha_error
-from tests.fixtures.thresholds import thresholds, thresholds_error
-from tests.fixtures.mask_size import mask_size, mask_size_error
-from tests.fixtures.invert import invert, invert_error
-from tests.fixtures.as_array import as_array, as_array_error
-from tests.fixtures.fuel_models import fuel_models, fuel_models_error
-from tests.fixtures.tree_height import tree_height, tree_height_error
-from tests.fixtures.index_id import index_id, index_id_error
-from tests.fixtures.index_parameters import index_parameters, index_parameters_error
-from tests.fixtures.binarize import binarize, binarize_error
-from tests.fixtures.angle_units import angle_units, angle_units_error
-from tests.fixtures.layer_list import layer_list, layer_list_error
-from tests.fixtures.gamma import gamma
+from tests.fixtures.processes.alpha import alpha, alpha_error
+from tests.fixtures.processes.thresholds import thresholds, thresholds_error
+from tests.fixtures.processes.mask_size import mask_size, mask_size_error
+from tests.fixtures.processes.as_array import as_array, as_array_error
+from tests.fixtures.processes.fuel_models import fuel_models, fuel_models_error
+from tests.fixtures.processes.index_id import index_id, index_id_error
+from tests.fixtures.processes.binarize import binarize, binarize_error
+from tests.fixtures.processes.layer_list import layer_list, layer_list_error
+from tests.fixtures.processes.gamma import gamma
 
 from tests.files.benchmarks.test_data import (
     COMPOSITE_TEST_DATA,
