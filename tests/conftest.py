@@ -29,6 +29,10 @@ from tests.fixtures.processes.index_id import index_id, index_id_error
 from tests.fixtures.processes.binarize import binarize, binarize_error
 from tests.fixtures.processes.layer_list import layer_list, layer_list_error
 from tests.fixtures.processes.gamma import gamma
+from tests.fixtures.processes.angle_units import angle_units, angle_units_error
+from tests.fixtures.processes.index_parameters import index_parameters, index_parameters_error
+from tests.fixtures.processes.tree_height import tree_height, tree_height_error
+from tests.fixtures.processes.invert import invert, invert_error
 
 from tests.files.benchmarks.test_data import (
     COMPOSITE_TEST_DATA,
