@@ -8,6 +8,16 @@ from tests.fixtures.containers.driver import driver, driver_error
 from tests.fixtures.containers.layer_units import layer_units, layer_units_error
 from tests.fixtures.containers.no_data import no_data, no_data_error
 from tests.fixtures.containers.transform import transform, transform_error
+from tests.fixtures.containers.scale import scale, scale_error
+from tests.fixtures.containers.layer_dict import (
+    layer_dict,
+    layer_dict_error,
+    layer_dict_name,
+    layer_dict_name_alt,
+    layer_dict_name_error,
+    layer_dict_value,
+    layer_dict_value_error,
+)
 
 from tests.fixtures.processes.layer import (
     layer,
@@ -30,7 +40,10 @@ from tests.fixtures.processes.binarize import binarize, binarize_error
 from tests.fixtures.processes.layer_list import layer_list, layer_list_error
 from tests.fixtures.processes.gamma import gamma
 from tests.fixtures.processes.angle_units import angle_units, angle_units_error
-from tests.fixtures.processes.index_parameters import index_parameters, index_parameters_error
+from tests.fixtures.processes.index_parameters import (
+    index_parameters,
+    index_parameters_error,
+)
 from tests.fixtures.processes.tree_height import tree_height, tree_height_error
 from tests.fixtures.processes.invert import invert, invert_error
 
