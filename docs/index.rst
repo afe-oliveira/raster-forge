@@ -8,11 +8,14 @@ Raster Forge
 
 .. rst-class:: lead
 
-   Raster manipulation library and GUI for python.
+   Raster Manipulation Library and GUI for python.
 
 ----
 
+Raster Forge is a Python library with an intuitive graphical user interface (GUI), designed for raster data manipulation.
+
 .. toctree::
+   :hidden:
    :maxdepth: 2
 
    library/index

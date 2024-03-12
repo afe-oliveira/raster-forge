@@ -31,4 +31,13 @@ default_role = "literal"
 
 html_theme = "sphinxawesome_theme"
 extensions += ["sphinxawesome_theme.highlighting"]
+
+html_title = 'Raster Forge'
+html_last_updated_fmt = ""
+html_use_index = False
+html_domain_indices = False
+html_copy_source = False
+html_logo = "_static/logo-flat.svg"
+html_favicon = "_static/logo-flat.svg"
+
 html_static_path = ['_static']
