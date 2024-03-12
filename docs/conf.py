@@ -28,8 +28,8 @@ default_role = "literal"
 
 # HTML Output
 
-html_theme = "sphinxawesome_theme"
-extensions += ["sphinxawesome_theme.highlighting"]
+html_theme = "alabaster" #"sphinxawesome_theme"
+#extensions += ["sphinxawesome_theme.highlighting"]
 
 html_title = 'Raster Forge'
 html_last_updated_fmt = ""
