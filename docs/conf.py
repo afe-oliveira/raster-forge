@@ -27,7 +27,6 @@ nitpicky = True
 default_role = "literal"
 
 # HTML Output
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinxawesome_theme"
 extensions += ["sphinxawesome_theme.highlighting"]
