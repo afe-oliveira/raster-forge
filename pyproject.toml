@@ -36,6 +36,9 @@ devel = [
     "pytest >= 7.0.0",
     "pytest-cov",
     "pytest-qt",
+    "Sphinx",
+    "sphinxawesome-theme",
+    "sphinx-design2"
 ]
 
 [project.gui-scripts]
@@ -47,7 +50,7 @@ target-version = ['py38']
 
 [tool.isort]
 profile = "black"
-src_paths = ["raster-forge", "tests"]
+src_paths = ["rforge", "tests"]
 line_length = 88
 skip_gitignore = "True"
 
