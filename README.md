@@ -14,7 +14,7 @@ Raster Forge is a Python library with an intuitive graphical user interface (GUI
 
 - **GitHub:** https://github.com/afe-oliveira/raster-forge
 - **PyPI:** https://pypi.org/project/raster-forge/
-- **Documentation:** [PLACEHOLDER]
+- **Documentation:** https://afe-oliveira.github.io/raster-forge/
 
 ---
 

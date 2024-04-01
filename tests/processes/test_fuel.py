@@ -3,7 +3,7 @@ import pickle
 
 import numpy as np
 import pytest
-from rforge.processes.fuel import fuel
+from rforge.lib.processes.fuel import fuel
 
 from tests.files.benchmarks.test_data import FUEL_TEST_DATA
 

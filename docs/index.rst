@@ -18,4 +18,6 @@ Raster Forge is a Python library with an intuitive graphical user interface (GUI
    :hidden:
    :maxdepth: 2
 
-   library/index
+   user-guide/index
+   api-reference/index
+   development

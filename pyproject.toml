@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "raster-forge"
-version = "0.5.1"
+version = "0.5.2"
 description = "Raster Forge is an package for the manipulation of raster data. It includes a library and a graphical user interface (GUI) application."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -12,15 +12,19 @@ keywords = ["raster, gui"]
 license = {text = "MIT"}
 authors = [ { name = "Afonso Oliveira", email = "afe.oliveira@campus.fct.unl.pt" } ]
 dependencies = [
-    "PySide6",
     "numpy",
     "rasterio",
     "spyndex",
     "opencv-python",
-    "matplotlib",
+    "dask[dataframe]",
 ]
 
 [project.optional-dependencies]
+gui = [
+    "matplotlib",
+    "PySide6",
+]
+
 devel = [
     "black",
     "coverage",
@@ -37,8 +41,7 @@ devel = [
     "pytest-cov",
     "pytest-qt",
     "Sphinx",
-    "sphinxawesome-theme",
-    "sphinx-design2"
+    "sphinx-material"
 ]
 
 [project.gui-scripts]

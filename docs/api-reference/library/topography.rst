@@ -1,5 +1,5 @@
 Topographic Features
 ====================
 
-.. automodule:: rforge.processes.topography
+.. automodule:: rforge.lib.processes.topography
     :members:
