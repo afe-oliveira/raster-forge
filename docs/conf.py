@@ -18,7 +18,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx_design",
-    "sphinxawesome_theme.highlighting",
 ]
 
 templates_path = ["_templates"]
