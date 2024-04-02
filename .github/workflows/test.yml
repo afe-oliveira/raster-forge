@@ -16,7 +16,7 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install pip --upgrade
-        pip install -e .[devel, gui]
+        pip install -e .[devel,gui]
         sudo apt-get update
         sudo apt-get install libegl1
     - name: Test (PyTest + Coverage Report)
