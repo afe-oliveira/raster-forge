@@ -5,3 +5,5 @@ User Guide
     :maxdepth: 2
 
     instalation.rst
+
+    library/index.rst

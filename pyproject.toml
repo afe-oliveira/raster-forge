@@ -41,7 +41,8 @@ devel = [
     "pytest-cov",
     "pytest-qt",
     "Sphinx",
-    "sphinx-material"
+    "sphinx-material",
+    "sphinx_design"
 ]
 
 [project.gui-scripts]
