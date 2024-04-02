@@ -1,5 +1,5 @@
 Height Map
 ==========
 
-.. automodule:: rforge.lib.processes.height
+.. automodule:: rforge.library.processes.height
     :members:

@@ -1,5 +1,5 @@
 Composite
 =========
 
-.. automodule:: rforge.lib.processes.composite
+.. automodule:: rforge.library.processes.composite
     :members:

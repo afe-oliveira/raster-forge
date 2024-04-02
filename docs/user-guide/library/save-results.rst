@@ -1,7 +1,7 @@
 Saving Results
 ==============
 
-The :py:class:`Layer <rforge.lib.containers.layer.Layer>` data is stored within inner NumPy_ N-dimensional arrays. Therefore, we can utilize any conventional method to save it. In this particular example, we employ the tifffile_ package.
+The :py:class:`Layer <rforge.library.containers.layer.Layer>` data is stored within inner NumPy_ N-dimensional arrays. Therefore, we can utilize any conventional method to save it. In this particular example, we employ the tifffile_ package.
 
 .. _NumPy: https://numpy.org/doc/stable/reference/arrays.ndarray.html
 .. _tifffile: https://pypi.org/project/tifffile/

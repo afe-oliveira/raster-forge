@@ -9,21 +9,21 @@ Main Winow
     :width: 800
     :alt: Main Window Map
 
-1. Import :py:class:`Layer <rforge.lib.containers.layer.Layer>` Button
-2. :py:class:`Layer <rforge.lib.containers.layer.Layer>` List Panel
+1. Import :py:class:`Layer <rforge.library.containers.layer.Layer>` Button
+2. :py:class:`Layer <rforge.library.containers.layer.Layer>` List Panel
 3. Processes Panel
 4. Viewer Panel
-5. :py:class:`Layer <rforge.lib.containers.layer.Layer>` Name
-6. :py:class:`Layer <rforge.lib.containers.layer.Layer>` View Button
-7. :py:class:`Layer <rforge.lib.containers.layer.Layer>` Name Edit Button
-8. :py:class:`Layer <rforge.lib.containers.layer.Layer>` Information Button
-9. :py:class:`Layer <rforge.lib.containers.layer.Layer>` Delete Button
-10. Save Viewer :py:class:`Layer <rforge.lib.containers.layer.Layer>` in the :py:class:`Layer <rforge.lib.containers.layer.Layer>` Collection Button
-11. Save Viewer :py:class:`Layer <rforge.lib.containers.layer.Layer>` as GeoTIFF Button
-12. Save Viewer :py:class:`Layer <rforge.lib.containers.layer.Layer>` (w/ Colormap) as PNG Button
+5. :py:class:`Layer <rforge.library.containers.layer.Layer>` Name
+6. :py:class:`Layer <rforge.library.containers.layer.Layer>` View Button
+7. :py:class:`Layer <rforge.library.containers.layer.Layer>` Name Edit Button
+8. :py:class:`Layer <rforge.library.containers.layer.Layer>` Information Button
+9. :py:class:`Layer <rforge.library.containers.layer.Layer>` Delete Button
+10. Save Viewer :py:class:`Layer <rforge.library.containers.layer.Layer>` in the :py:class:`Layer <rforge.library.containers.layer.Layer>` Collection Button
+11. Save Viewer :py:class:`Layer <rforge.library.containers.layer.Layer>` as GeoTIFF Button
+12. Save Viewer :py:class:`Layer <rforge.library.containers.layer.Layer>` (w/ Colormap) as PNG Button
 13. Colormap Selector
 14. Pixel Value on Cursor Toggle
-15. Viewer :py:class:`Layer <rforge.lib.containers.layer.Layer>` Information Button
+15. Viewer :py:class:`Layer <rforge.library.containers.layer.Layer>` Information Button
 16. Reset Zoom Button
 17. Coordinates in CRS (if Designated)
 18. Zoom Ratio
@@ -61,5 +61,5 @@ Layer Information Window
 
 1. General Information Tab
 2. Statistical Information Tab
-3. :py:class:`Layer <rforge.lib.containers.layer.Layer>` Values Line Graph Tab
+3. :py:class:`Layer <rforge.library.containers.layer.Layer>` Values Line Graph Tab
 4. Contents Panel

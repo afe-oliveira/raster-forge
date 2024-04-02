@@ -1,5 +1,5 @@
 Distance Field
 ==============
 
-.. automodule:: rforge.lib.processes.distance
+.. automodule:: rforge.library.processes.distance
     :members:

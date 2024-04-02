@@ -26,9 +26,9 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from rforge.lib.containers.raster import Raster
+from rforge.library.containers.raster import Raster
 from rforge.gui.data import _data
-from rforge.lib.tools.rescale_dataset import rescale_dataset_preview
+from rforge.library.tools.rescale_dataset import rescale_dataset_preview
 
 
 class _ImportWorkerSignals(QObject):

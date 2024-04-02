@@ -4,7 +4,7 @@ import numpy as np
 from rforge.gui.common.adaptative_elements import _adaptative_input
 from rforge.gui.data import _data
 from rforge.gui.processes.process_panel import _ProcessPanel
-from rforge.lib.processes.fuel import fuel
+from rforge.library.processes.fuel import fuel
 
 ARRAY_TYPE: Type[np.ndarray] = np.ndarray
 

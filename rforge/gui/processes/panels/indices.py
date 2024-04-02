@@ -2,11 +2,11 @@ from typing import Type
 
 import numpy as np
 import spyndex
-from rforge.lib.containers.layer import Layer
+from rforge.library.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
 from rforge.gui.data import _data
 from rforge.gui.processes.process_panel import _ProcessPanel
-from rforge.lib.processes.index import index
+from rforge.library.processes.index import index
 
 ARRAY_TYPE: Type[np.ndarray] = np.ndarray
 

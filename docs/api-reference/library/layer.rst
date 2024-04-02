@@ -1,6 +1,6 @@
 Layer
 =====
 
-.. autoclass:: rforge.lib.containers.layer.Layer
+.. autoclass:: rforge.library.containers.layer.Layer
     :members:
     :undoc-members:

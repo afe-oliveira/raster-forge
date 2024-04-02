@@ -1,5 +1,5 @@
 Multispectral Index
 ===================
 
-.. automodule:: rforge.lib.processes.index
+.. automodule:: rforge.library.processes.index
     :members:

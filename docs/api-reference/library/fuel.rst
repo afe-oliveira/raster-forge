@@ -1,5 +1,5 @@
 Fuel Map
 ========
 
-.. automodule:: rforge.lib.processes.fuel
+.. automodule:: rforge.library.processes.fuel
     :members:

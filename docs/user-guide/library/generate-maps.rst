@@ -30,7 +30,7 @@ The initial step in every algorithm is data loading. Here, we utilize the contai
 Creating Composites
 -------------------
 
-Here we employ the :py:meth:`composite <rforge.lib.processes.composite>` function to generate a true color composite:
+Here we employ the :py:meth:`composite <rforge.library.processes.composite>` function to generate a true color composite:
 
 .. code-block:: python
 
@@ -40,7 +40,7 @@ Here we employ the :py:meth:`composite <rforge.lib.processes.composite>` functio
     composite_layer = composite(layers=layers, alpha=raster.layers['alpha'], gamma=gamma)
     raster.add_layer(layer=composite_layer, name='rgb')
 
-In the above example, the result is returned as a :py:class:`Layer <rforge.lib.containers.layer.Layer>` and added to the :py:class:`Raster <rforge.lib.containers.raster.Raster>` collection. However, it is also possible to directly receive just a NumPy_ N-dimentional array.
+In the above example, the result is returned as a :py:class:`Layer <rforge.library.containers.layer.Layer>` and added to the :py:class:`Raster <rforge.library.containers.raster.Raster>` collection. However, it is also possible to directly receive just a NumPy_ N-dimentional array.
 
 .. _NumPy: https://numpy.org/doc/stable/reference/arrays.ndarray.html
 
@@ -52,7 +52,7 @@ In the above example, the result is returned as a :py:class:`Layer <rforge.lib.c
 
 Generating Multipsectral Index
 ------------------------------
-The :py:meth:`index <rforge.lib.processes.index>` fuction draws on arguments sourced from the Spyndex_ package. Specifically, it utilizes the same indices identifiers and the parameter dictionary structure. The :py:meth:index <rforge.lib.processes.index> function facilitates index thresholding, enabling the retention of only the pertinent data, while also offering the capability to convert the resultant data into a binary mask for subsequent processing.
+The :py:meth:`index <rforge.library.processes.index>` fuction draws on arguments sourced from the Spyndex_ package. Specifically, it utilizes the same indices identifiers and the parameter dictionary structure. The :py:meth:index <rforge.library.processes.index> function facilitates index thresholding, enabling the retention of only the pertinent data, while also offering the capability to convert the resultant data into a binary mask for subsequent processing.
 
 .. _Spyndex: https://spyndex.readthedocs.io/en/latest/
 

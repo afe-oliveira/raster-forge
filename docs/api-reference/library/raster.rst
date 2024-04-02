@@ -1,6 +1,6 @@
 Raster
 ======
 
-.. autoclass:: rforge.lib.containers.raster.Raster
+.. autoclass:: rforge.library.containers.raster.Raster
     :members:
     :undoc-members:
