@@ -38,11 +38,14 @@ html_theme = "sphinx_material"
 
 html_title = "Raster Forge"
 
+html_logo = "_static/logo-flat.svg"
+html_favicon = "_static/logo-flat.svg"
+
 html_theme_options = {
     "nav_title": "Raster Forge",
     "base_url": "https://afe-oliveira.github.io/raster-forge/",
-    "color_primary": "teal",
-    "color_accent": "yellow",
+    "color_primary": "yellow",
+    "color_accent": "teal",
     "repo_type": "github",
     "repo_url": "https://github.com/afe-oliveira/raster-forge",
     "repo_name": "raster-forge",
@@ -52,8 +55,6 @@ html_theme_options = {
 }
 
 html_last_updated_fmt = ""
-html_logo = "_static/logo-flat.svg"
-html_favicon = "_static/logo-flat.svg"
 
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]

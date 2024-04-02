@@ -1,12 +1,10 @@
 from typing import Type
 
 import numpy as np
-from matplotlib.colors import Normalize
-from rforge.containers.layer import Layer
 from rforge.gui.common.adaptative_elements import _adaptative_input
 from rforge.gui.data import _data
 from rforge.gui.processes.process_panel import _ProcessPanel
-from rforge.processes.composite import PRESET_COMPOSITES, composite
+from rforge.lib.processes.composite import PRESET_COMPOSITES, composite
 
 ARRAY_TYPE: Type[np.ndarray] = np.ndarray
 

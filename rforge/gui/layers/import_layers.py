@@ -26,9 +26,9 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from rforge.containers.raster import Raster
+from rforge.lib.containers.raster import Raster
 from rforge.gui.data import _data
-from rforge.tools.rescale_dataset import _rescale_dataset_preview
+from rforge.lib.tools.rescale_dataset import rescale_dataset_preview
 
 
 class _ImportWorkerSignals(QObject):
@@ -211,7 +211,7 @@ class _LayersImportWindow(QDialog):
     def _preview_callback(self):
         if self.selected_file_path is not None:
             with rasterio.open(self.selected_file_path) as dataset:
-                new_width, new_height = _rescale_dataset_preview(
+                new_width, new_height = rescale_dataset_preview(
                     dataset, self.scale_spinbox.value()
                 )
 

@@ -10,9 +10,12 @@ Raster Forge
 
    Raster Manipulation Library and GUI for python.
 
-----
+   .. image:: _static/raster-forge.png
+    :align: center
+    :width: 800
+    :alt: Raster Forge Logo
 
-Raster Forge is a Python library with an intuitive graphical user interface (GUI), designed for raster data manipulation.
+----
 
 .. toctree::
    :hidden:

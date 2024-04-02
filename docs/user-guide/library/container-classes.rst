@@ -1,6 +1,13 @@
 Using the Container Classes
 ===========================
 
+All generation processes can directly utilize NumPy_ N-dimensional arrays as inputs. However, Raster Forge provides two container classes, :py:class:`Layer <rforge.lib.containers.layer.Layer>` and :py:class:`Raster <rforge.lib.containers.raster.Raster>`, primarily to streamline the management of metadata.
+
+.. _NumPy: https://numpy.org/doc/stable/reference/arrays.ndarray.html
+
+Import Single Layers
+--------------------
+
 .. code-block:: python
 
     from rforge import Layer
@@ -15,6 +22,9 @@ Using the Container Classes
 
     green = Layer()
     green.import_layer(file_path, 3, 1)
+
+Import Layers in Bulk
+---------------------
 
 .. code-block:: python
 

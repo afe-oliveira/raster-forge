@@ -2,6 +2,7 @@ __all__ = [
     "Layer",
     "Raster",
     "composite",
+    "index",
     "slope",
     "aspect",
     "height",
@@ -10,11 +11,14 @@ __all__ = [
     "gui",
 ]
 
-from .containers.layer import Layer
-from .containers.raster import Raster
-from .gui.gui import gui
-from .processes.composite import composite
-from .processes.distance import distance
-from .processes.fuel import fuel
-from .processes.height import height
-from .processes.topography import aspect, slope
+from rforge.lib.containers.layer import Layer
+from rforge.lib.containers.raster import Raster
+
+from rforge.lib.processes.composite import composite
+from rforge.lib.processes.index import index
+from rforge.lib.processes.topography import slope, aspect
+from rforge.lib.processes.height import height
+from rforge.lib.processes.distance import distance
+from rforge.lib.processes.fuel import fuel
+
+from rforge.gui.gui import gui

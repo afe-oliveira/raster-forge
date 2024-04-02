@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Signal
-from rforge.containers.layer import Layer
-from rforge.containers.raster import Raster
+from rforge.lib.containers.layer import Layer
+from rforge.lib.containers.raster import Raster
 
 
 class _DataGUI(QObject):

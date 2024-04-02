@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from rforge.containers.layer import Layer
+from rforge.lib.containers.layer import Layer
 
 np.random.seed(42)
 

@@ -7,3 +7,4 @@ User Guide
     instalation.rst
 
     library/index.rst
+    gui/index.rst

@@ -1,10 +1,15 @@
 import sys
 
-from PySide6.QtCore import QFile, QTextStream, QTimer
-from PySide6.QtWidgets import QApplication
+try:
+    from PySide6.QtCore import QFile, QTextStream, QTimer
+    from PySide6.QtWidgets import QApplication
 
-from .main_window import _MainWindow
-from .resources import resources
+    from .main_window import _MainWindow
+    from .resources import resources
+
+    GUI_COMPONENT = True
+except ImportError:
+    GUI_COMPONENT = False
 
 
 def _cleanup(main_window):
@@ -30,20 +35,23 @@ def _initialize_application():
 
 def gui():
     """Launches the Raster Forge Graphical User Interface (GUI)."""
-    global main_window
-    try:
-        app = _initialize_application()
-        main_window = _MainWindow()
+    if GUI_COMPONENT:
+        global main_window
+        try:
+            app = _initialize_application()
+            main_window = _MainWindow()
 
-        # Connect the Cleanup Function
-        app.aboutToQuit.connect(lambda: _cleanup(main_window))
+            # Connect the Cleanup Function
+            app.aboutToQuit.connect(lambda: _cleanup(main_window))
 
-        # Delay Showing the Main Window
-        QTimer.singleShot(1000, lambda: _show_main_window(main_window))
+            # Delay Showing the Main Window
+            QTimer.singleShot(1000, lambda: _show_main_window(main_window))
 
-        sys.exit(app.exec_())
+            sys.exit(app.exec_())
 
-    except Exception as e:
-        print(f"An Error Occurred During Initialization: {e}")
-    finally:
-        _cleanup(main_window)
+        except Exception as e:
+            print(f"An Error Occurred During Initialization: {e}")
+        finally:
+            _cleanup(main_window)
+    else:
+        print("ERROR: GUI COMPONENT NOT INSTALLED")
