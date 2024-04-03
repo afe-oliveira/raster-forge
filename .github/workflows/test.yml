@@ -2,7 +2,7 @@ name: Tests
 on:
   push:
     branches: [main]
-    paths: [ 'rforge/**', 'tests/**', 'pyproject.toml', '.github/workflows/tests.yml' ]
+    paths: [ 'rforge/**', 'tests/**', 'pyproject.toml', '.github/workflows/test.yml' ]
     tags: '*'
 jobs:
   build-and-test:
