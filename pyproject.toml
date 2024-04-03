@@ -42,7 +42,7 @@ devel = [
     "pytest-qt",
     "Sphinx",
     "sphinx-material",
-    "sphinx_design"
+    "pydata-sphinx-theme"
 ]
 
 [project.gui-scripts]
