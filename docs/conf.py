@@ -49,6 +49,19 @@ html_theme_options = {
     },
     "navbar_align": "left",
     "show_prev_next": False,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/afe-oliveira/raster-forge",
+            "icon": "fa-brands fa-square-github",
+            "type": "fontawesome",
+        }, {
+            "name": "PyPi",
+            "url": "https://pypi.org/project/raster-forge/",
+            "icon": "fa-solid fa-box",
+            "type": "fontawesome",
+        }
+   ]
 }
 
 html_static_path = ["_static"]

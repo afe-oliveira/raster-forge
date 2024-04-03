@@ -6,19 +6,18 @@
 Raster Forge
 ============
 
-.. rst-class:: lead
-
-   Raster Manipulation Library and GUI for python.
-
-   .. image:: _static/raster-forge.png
+.. image:: _static/raster-forge.png
     :align: center
     :width: 800
     :alt: Raster Forge Logo
 
+.. rst-class:: lead
+
+   Raster Manipulation Library and GUI for python.
+
 ----
 
 .. toctree::
-   :hidden:
    :maxdepth: 2
 
    user-guide/index

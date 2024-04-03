@@ -4,7 +4,7 @@ User Guide
 .. toctree::
     :maxdepth: 2
 
-    instalation.rst
+    installation.rst
 
     library/index.rst
     gui/index.rst
