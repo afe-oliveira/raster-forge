@@ -24,7 +24,7 @@ jobs:
         run: |
           pip install pip --upgrade
           pip install .[devel,gui]
-          if [ matrix.os == 'ubuntu-latest' ]; then
+          if [ "$RUNNER_OS" == "Linux" ]; then
             sudo apt-get update
             sudo apt-get install libegl1
       - name: Test (PyTest + Coverage Report)
