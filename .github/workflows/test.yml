@@ -24,6 +24,9 @@ jobs:
         run: |
           pip install pip --upgrade
           pip install .[devel,gui]
+          if [ matrix.os == 'ubuntu-latest' ]; then
+            sudo apt-get update
+            sudo apt-get install libegl1
       - name: Test (PyTest + Coverage Report)
         run: pytest --cov=rforge --cov-report=xml
       - name: Upload Coverage to Codecov
