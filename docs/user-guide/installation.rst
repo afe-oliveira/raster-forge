@@ -33,13 +33,13 @@ The recommended method for installing RasterForge is via pip, the Python package
 
 .. code-block:: bash
 
-    pip install rforge
+    pip install raster-forge
 
 This will download and install the latest version of Raster Forge. **If you intend to utilize the graphic user interface** (GUI) component of Raster Forge, ensure that the GUI dependencies are installed using the following command instead:
 
 .. code-block:: bash
 
-    pip install rforge[gui]
+    pip install raster-forge[gui]
 
 Source Instalation
 ------------------
