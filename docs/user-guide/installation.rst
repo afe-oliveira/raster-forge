@@ -4,6 +4,8 @@ Installation
 Requirements
 ------------
 
+**Python 3.9+**
+
 A. Library
 
 - NumPy_

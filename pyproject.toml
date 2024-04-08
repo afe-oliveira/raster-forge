@@ -80,9 +80,9 @@ exclude = [
 docstring-convention = "google"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 #warn_unused_ignores = true
-#ignore_missing_imports = true
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"

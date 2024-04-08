@@ -25,6 +25,12 @@ To install the package, use the following **_pip_** command:
 pip install raster-forge
 ```
 
+If you want to make use of the GUI, please install the required dependency instead:
+
+```bash
+pip install raster-forge[gui]
+```
+
 ## Library
 
 ## Graphical User Interface (GUI)
