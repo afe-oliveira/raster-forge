@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Any
 
 
 class Errors:
@@ -9,7 +9,7 @@ class Errors:
         return cls.__TEMPLATE.format(message=f"File '{file_path}' not found.")
 
     @classmethod
-    def bad_input(cls, name: str, expected_type: str, provided_type: Union[str,None] = None):
+    def bad_input(cls, name: str, expected_type: str, provided_type: Union[str, Any, None] = None):
         if provided_type is not None:
             return cls.__TEMPLATE.format(
                 message=f"'{name}' is {provided_type}, but it must be {expected_type}."

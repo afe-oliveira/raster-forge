@@ -333,7 +333,7 @@ class Layer:
             return 0
 
     @property
-    def mean(self) -> Optional[List[float]]:
+    def mean(self) -> Optional[Union[float, int, list[Union[int, float]]]]:
         if self._array is not None:
             return (
                 float(np.mean(self._array))
@@ -347,7 +347,7 @@ class Layer:
             return None
 
     @property
-    def median(self) -> Optional[List[float]]:
+    def median(self) -> Optional[Union[float, int, list[Union[int, float]]]]:
         if self._array is not None:
             return (
                 float(np.median(self._array))
@@ -361,7 +361,7 @@ class Layer:
             return None
 
     @property
-    def min(self) -> Optional[List[Union[int, float]]]:
+    def min(self) -> Optional[Union[float, int, list[Union[int, float]]]]:
         if self._array is not None:
             return (
                 float(np.min(self._array))
@@ -375,7 +375,7 @@ class Layer:
             return None
 
     @property
-    def max(self) -> Optional[List[Union[int, float]]]:
+    def max(self) -> Optional[Union[float, int, list[Union[int, float]]]]:
         if self._array is not None:
             return (
                 float(np.max(self._array))
@@ -389,7 +389,7 @@ class Layer:
             return None
 
     @property
-    def std_dev(self) -> Optional[List[float]]:
+    def std_dev(self) -> Optional[Union[float, int, list[Union[int, float]]]]:
         if self._array is not None:
             return (
                 float(np.std(self._array))

@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Optional, TypedDict
+from typing import Dict, Optional, TypedDict, Union
 
 import rasterio
 
@@ -75,7 +75,7 @@ class Raster:
         return self._scale
 
     def import_layers(
-        self, path: str, config: Optional[list[Dict[str, str | int]]] = None
+        self, path: str, config: Optional[list[Dict[str, Union[str, int]]]] = None
     ):
         if not os.path.exists(path):
             raise FileNotFoundError(Errors.file_not_found(file_path=path))
@@ -86,9 +86,7 @@ class Raster:
             if config is None:
                 config = []
                 for id in range(1, dataset.count + 1):
-                    aux_config = {}
-                    aux_config["name"] = f"Layer {id}"
-                    aux_config["id"] = id
+                    aux_config: Dict[str, Union[str, int]] = {"name": f"Layer {id}", "id": id}
                     config.append(aux_config)
 
             for item in config:
@@ -115,7 +113,7 @@ class Raster:
                     dataset.transform.d,
                     dataset.transform.e,
                 )
-                units = dataset.units[item["id"] - 1]
+                units = dataset.units[int(item["id"]) - 1]
 
                 layer = Layer(
                     array=array,
@@ -127,7 +125,7 @@ class Raster:
                     units=units,
                 )
 
-                self._layers[item["name"]] = layer
+                self._layers[str(item["name"])] = layer
 
     def add_layer(self, layer: Layer, name: str):
         if not isinstance(layer, Layer):
