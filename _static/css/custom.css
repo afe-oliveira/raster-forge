@@ -1,0 +1,11 @@
+html {
+    --pst-font-size-base: 15px;
+}
+
+html[data-theme="light"] {
+    --pst-color-link-hover: rgb(219,171,59);
+}
+
+html[data-theme="dark"] {
+    --pst-color-link-hover: rgb(219,171,59);
+}
