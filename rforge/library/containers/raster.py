@@ -32,6 +32,7 @@ class Raster:
         remove_layer: Removes a layer from the raster dataset.
         edit_layer: Renames a layer in the raster dataset.
     """
+
     _layers: Dict[str, Layer]
     _scale: int
 
@@ -86,7 +87,10 @@ class Raster:
             if config is None:
                 config = []
                 for id in range(1, dataset.count + 1):
-                    aux_config: Dict[str, Union[str, int]] = {"name": f"Layer {id}", "id": id}
+                    aux_config: Dict[str, Union[str, int]] = {
+                        "name": f"Layer {id}",
+                        "id": id,
+                    }
                     config.append(aux_config)
 
             for item in config:

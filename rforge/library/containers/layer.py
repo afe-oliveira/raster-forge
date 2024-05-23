@@ -56,6 +56,7 @@ class Layer:
         max: Computes the maximum value(s) of the layer data.
         std_dev: Computes the standard deviation value(s) of the layer data.
     """
+
     _array: Optional[np.ndarray[Union[np.uint8, np.int32]]] = None
 
     _bounds: Optional[Dict[str, float]] = None

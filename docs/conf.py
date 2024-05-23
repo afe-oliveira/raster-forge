@@ -55,16 +55,17 @@ html_theme_options = {
             "url": "https://github.com/afe-oliveira/raster-forge",
             "icon": "fa-brands fa-square-github",
             "type": "fontawesome",
-        }, {
+        },
+        {
             "name": "PyPi",
             "url": "https://pypi.org/project/raster-forge/",
             "icon": "fa-solid fa-box",
             "type": "fontawesome",
-        }
-   ]
+        },
+    ],
 }
 
 html_static_path = ["_static"]
 html_css_files = [
-    'css/custom.css',
+    "css/custom.css",
 ]
