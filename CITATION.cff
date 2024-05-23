@@ -1,0 +1,54 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Raster Forge
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Afonso
+    family-names: Oliveira
+    email: afonso.oliveira@ulusofona.pt
+    affiliation: 'Lusófona University, COPELABS'
+    orcid: 'https://orcid.org/0009-0001-1132-564X'
+repository-code: 'https://github.com/afe-oliveira/raster-forge'
+abstract: >-
+  Raster Forge is a Python library with an intuitive graphical user interface (GUI), designed for raster data manipulation.
+keywords:
+  - python
+  - graphical user interface
+  - remote sensing
+  - geosciences
+  - wildfire
+  - raster
+license: MIT
+preferred-citation:
+  type: article
+  authors:
+    - given-names: Afonso
+      family-names: Oliveira
+      email: afonso.oliveira@ulusofona.pt
+      affiliation: 'Lusófona University, COPELABS'
+      orcid: 'https://orcid.org/0009-0001-1132-564X'
+    - given-names: Nuno
+      family-names: Fachada
+      email: nuno.fachada@ulusofona.pt
+      affiliation: 'Lusófona University, COPELABS'
+      orcid: 'https://orcid.org/0000-0002-8487-5837'
+    - given-names: João
+      family-names: P. Matos-Carvalho
+      email: joao.matos.carvalho@ulusofona.pt
+      affiliation: 'Lusófona University, COPELABS'
+      orcid: 'https://orcid.org/0000-0001-9409-7736'
+  title: Raster Forge: Interactive raster manipulation library and GUI for Python
+  journal: Software Impacts
+  doi: 0.1016/j.simpa.2024.100657
+  volume: 20
+  start: 100657
+  month: 5
+  year: 2024
+  url: 'https://doi.org/10.1016/j.simpa.2024.100657'
+  publisher:
+    name: Elsevier
