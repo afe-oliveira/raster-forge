@@ -44,4 +44,4 @@ rforge
 
 If you use this software, please cite the following reference:
 
-* Oliveira, A., Fachada, N., & P. Matos-Carvalho, J. (2024). Raster Forge: Interactive raster manipulation library and GUI for Python. Software Impacts, 20, 100657. https://doi.org/0.1016/j.simpa.2024.100657
+* Oliveira, A., Fachada, N., & P. Matos-Carvalho, J. (2024). Raster Forge: Interactive raster manipulation library and GUI for Python. Software Impacts, 20, 100657. https://doi.org/10.1016/j.simpa.2024.100657
