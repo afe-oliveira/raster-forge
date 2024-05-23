@@ -42,7 +42,7 @@ preferred-citation:
       email: joao.matos.carvalho@ulusofona.pt
       affiliation: 'Lusófona University, COPELABS'
       orcid: 'https://orcid.org/0000-0001-9409-7736'
-  title: Raster Forge: Interactive raster manipulation library and GUI for Python
+  title: 'Raster Forge: Interactive raster manipulation library and GUI for Python'
   journal: Software Impacts
   doi: 0.1016/j.simpa.2024.100657
   volume: 20
